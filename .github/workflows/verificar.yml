@@ -74,3 +74,55 @@ jobs:
       # parcial, 127 o ferramental quebrou — todos derrubam o job.
       - name: régua do rebar
         run: npx --yes github:Navesz/rebar .
+
+  # ─────────────────────────────────────────────────────────────── publicação
+  #
+  # `needs: verificar` é a linha inteira do desenho: o deploy NÃO é um caminho
+  # paralelo ao portão, é o que vem depois dele. Um workflow de publicação
+  # separado subiria a página com o lint quebrado, e o portão viraria o que
+  # este projeto existe para não ser — relatório que ninguém lê.
+  #
+  # A matriz roda nos dois sistemas; `needs` espera as DUAS pernas. Vermelho no
+  # Windows não publica.
+  publicar:
+    name: publicar no GitHub Pages
+    needs: verificar
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Só este job recebe a permissão de escrever no Pages. O `contents: read`
+    # do topo continua valendo para os outros.
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    # Um deploy por vez, e o mais novo espera em vez de cancelar o que já está
+    # subindo: `cancel-in-progress` aqui deixaria a página no meio do caminho.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacao.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+
+      # O mesmo `next build` que a régua já rodou. O `out/` não é versionado —
+      # artefato de build no repositório é uma das coisas que o rebar acusa.
+      - run: npm run build
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: out
+      - id: publicacao
+        uses: actions/deploy-pages@v4
