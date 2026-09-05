@@ -55,9 +55,22 @@ jobs:
           # Verificação que só vê o último commit não é verificação.
           fetch-depth: 0
 
+      # A versao do Node vem do `.nvmrc`, e nao cravada aqui, porque cravada
+      # aqui ela DIVERGE da maquina de quem desenvolve -- e divergiu: o
+      # gerador emitia `node-version: 22`, a maquina rodava 24, e as duas
+      # versoes de npm que vem junto (10 e 11) resolvem as dependencias wasm
+      # opcionais de forma diferente. O `npm install` local escrevia um
+      # lockfile que o `npm ci` do CI recusava, com uma lista de pacotes
+      # faltando que MUDAVA a cada tentativa. Duas execucoes vermelhas ate a
+      # causa aparecer, porque o sintoma apontava para o lockfile e o defeito
+      # estava no par de versoes.
+      #
+      # Um arquivo, lido pelos dois lados: `nvm use` na maquina, 
+      # `node-version-file` aqui. E a mesma regra do `basePath` derivado de
+      # `meta.urlBase` -- fato que aparece em dois lugares e um so escreve.
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: '.nvmrc'
           cache: 'npm'
 
       # `npm ci` e não `npm install`: o lockfile é a fonte, e o CI não decide
@@ -112,7 +125,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version-file: '.nvmrc'
           cache: 'npm'
       - run: npm ci
 
