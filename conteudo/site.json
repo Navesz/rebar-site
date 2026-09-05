@@ -1,0 +1,58 @@
+{
+  "identidade": {
+    "nome": "rebar",
+    "repositorio": {
+      "url": "https://github.com/Navesz/rebar",
+      "rotulo": "Navesz/rebar no GitHub"
+    }
+  },
+  "meta": {
+    "urlBase": "https://navesz.github.io/rebar-site",
+    "idioma": "pt-BR",
+    "titulo": "rebar — faz código errado não passar",
+    "gabaritoDeTitulo": "%s · rebar",
+    "descricao": "Checker, portão de commit e gerador de projeto que fazem código errado não passar. Zero dependência de runtime, Apache-2.0.",
+    "nomeCurto": "rebar",
+    "atualizadoEm": "2026-09-02",
+    "cores": {
+      "tema": "#0f172a",
+      "fundo": "#ffffff"
+    },
+    "og": {
+      "caminho": "/og.png",
+      "largura": 1200,
+      "altura": 630,
+      "alt": "Cartão de compartilhamento de rebar — faz código errado não passar"
+    }
+  },
+  "home": {
+    "titulo": "rebar",
+    "subtitulo": "Um checker que roda contra qualquer repositório, um portão que barra o commit quando a regra é ignorada, e um gerador que fabrica o próximo projeto já do lado certo da régua.",
+    "destaques": [
+      {
+        "titulo": "O problema, medido em 161 commits",
+        "texto": "Forense de seis repositórios, 25/08/2026: 3 sem CI, e os mesmos 3 com o lint quebrado. O que tinha mais documento de governança — AGENTS.md, SECURITY.md, GOVERNANCE.md — tinha 35 erros de lint."
+      },
+      {
+        "titulo": "Regra em markdown tem cumprimento perto de zero",
+        "texto": "Aquele repositório tinha um script check encadeando formato, lint, tipos, teste e build. Nada nunca o executava. Se a regra pode descer de prosa para enforcement, ela desce — e o enforcement tem de ser o mais confiável dos dois."
+      },
+      {
+        "titulo": "O checker: um placar de qualquer repositório",
+        "texto": "npx github:Navesz/rebar . — sem instalar nada, e sem escrever uma linha no repositório auditado. Regra que não se aplica sai do denominador, porque placar que conta o que não existe é placar que mente."
+      },
+      {
+        "titulo": "O portão: hook, CI nos dois sistemas, e o servidor",
+        "texto": "O que o CI roda é a mesma sequência que você roda antes dele, num comando só. Acima dela, um ruleset do GitHub com a lista de quem pode passar por cima vazia — nem o dono passa. Abaixo, o hook, na sua máquina."
+      },
+      {
+        "titulo": "O gerador: esta página saiu dele",
+        "texto": "npx github:Navesz/rebar novo meu-site cria um Next estático já com o portão dentro e um servidor MCP que serve as regras à IA que abrir o projeto. Depois roda a régua no que acabou de criar e imprime o placar."
+      },
+      {
+        "titulo": "O que ainda não está provado",
+        "texto": "O rebar impõe em um repositório: ele mesmo. A meta escrita era dois até D+30, e está em 1 de 2. Uma regra continua só avisando porque perto de 12% do que ela acusa é ruído. Se não virar, o critério de abandono manda parar."
+      }
+    ]
+  }
+}
