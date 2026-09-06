@@ -1,11 +1,10 @@
-import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Terminal } from "lucide-react"
 
 import { Comando } from "@/components/comando"
 import { Revelar } from "@/components/revelar"
 import { Badge } from "@/components/ui/badge"
-import { site } from "@/conteudo/carregar"
+import { textos, type Idioma } from "@/conteudo/carregar"
 
 /**
  * `paginas` é bloco condicional no esquema, então pode não existir — e o tipo
@@ -13,10 +12,8 @@ import { site } from "@/conteudo/carregar"
  * responde 200 com nada dentro é pior que uma que não existe, porque entra no
  * índice de busca e o visitante chega numa página em branco.
  */
-export const metadata: Metadata = { title: "Instalação" }
-
-export default function Pagina() {
-  const p = site.paginas?.instalacao
+export function Instalacao({ idioma }: { idioma: Idioma }) {
+  const p = textos(idioma).paginas?.instalacao
   if (!p) notFound()
 
   return (

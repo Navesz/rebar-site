@@ -1,4 +1,3 @@
-import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Check } from "lucide-react"
 
@@ -9,9 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { site } from "@/conteudo/carregar"
-
-export const metadata: Metadata = { title: "Documentação" }
+import { textos, type Idioma } from "@/conteudo/carregar"
 
 /**
  * O ÍNDICE E O CORPO SAEM DA MESMA LISTA, e por isso não podem divergir.
@@ -26,8 +23,9 @@ const ancora = (titulo: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "")
 
-export default function Pagina() {
-  const p = site.paginas?.docs
+export function Documentacao({ idioma }: { idioma: Idioma }) {
+  const t = textos(idioma)
+  const p = t.paginas?.docs
   if (!p) notFound()
 
   return (
@@ -40,9 +38,9 @@ export default function Pagina() {
       </Revelar>
 
       <Revelar atraso={0.08}>
-        <nav aria-label="Nesta página" className="mt-10">
+        <nav aria-label={t.rotulos.nestaPagina} className="mt-10">
           <h2 className="text-xs tracking-wide text-muted-foreground uppercase">
-            Nesta página
+            {t.rotulos.nestaPagina}
           </h2>
           <ul className="mt-3 space-y-1.5">
             {p.secoes.map((s) => (

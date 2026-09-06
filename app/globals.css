@@ -4,129 +4,411 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * ACO FRIO + LARANJA OXIDO.
+ *
+ * O neutro que veio do `shadcn create` era `oklch(L 0 0)` — croma ZERO em cada
+ * token. Cinza absoluto não existe em material nenhum: é o que faz um site
+ * parecer template. Aqui a base inteira é aço, matiz 255–258 (azulado) com
+ * croma baixo mas presente (0.004 a 0.02), e o acento é o óxido do vergalhão
+ * exposto, matiz 44–54, usado com parcimônia.
+ *
+ * Toda razão de contraste anotada abaixo foi MEDIDA (oklch → sRGB linear →
+ * luminância relativa → fórmula WCAG 2.x), não estimada, e todos os valores
+ * estão dentro do gamut sRGB — nenhum depende do recorte do navegador para
+ * render, então o número medido é o número que a pessoa vê.
+ */
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: var(--font-sans);
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+  /*
+   * O Geist Mono é baixado em `app/layout.tsx` e a variável chega no
+   * `<html>`, mas `--font-mono` não era mapeado aqui: a utilitária
+   * `font-mono` caía no stack padrão do Tailwind e a fonte baixada nunca
+   * pintava um glifo. O fallback existe porque bloco de comando alinhado em
+   * fonte proporcional mente sobre o que o terminal mostra.
+   */
+  --font-mono: var(--font-mono, ui-monospace, "Cascadia Mono", monospace);
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  /* Óxido. Nomes NOVOS de propósito: `--accent` do shadcn é a superfície de
+     hover dos menus, não a cor da marca — sequestrar aquele nome pintaria de
+     laranja todo item de dropdown. */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-subtle-foreground: var(--brand-subtle-foreground);
+  --color-brand-border: var(--brand-border);
+
+  /* Painel de código: grafite nos DOIS temas. Bloco de comando é uma janela
+     de terminal, e terminal não vira branco porque o sistema está no claro. */
+  --color-code: var(--code);
+  --color-code-foreground: var(--code-foreground);
+  --color-code-border: var(--code-border);
+  --color-code-chrome: var(--code-chrome);
+  --color-code-chrome-foreground: var(--code-chrome-foreground);
+  --color-code-tab-foreground: var(--code-tab-foreground);
+  --color-code-prompt: var(--code-prompt);
+  --color-code-line: var(--code-line);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /*
+   * Escala de documentação. O texto do site é técnico e denso, então a
+   * entrelinha do corpo é 1.75 (e não o 1.5 padrão): em parágrafo longo é a
+   * entrelinha, não o tamanho, que decide se o olho reencontra a linha
+   * seguinte. Os títulos andam no sentido oposto — quanto maior, mais
+   * apertados o `line-height` e o `letter-spacing`, senão a caixa alta abre
+   * buracos entre as palavras.
+   *
+   * `clamp()` nos três primeiros: no celular um h1 de 3rem quebra em quatro
+   * linhas e come a dobra inteira.
+   */
+  --text-h1: clamp(2.125rem, 1.55rem + 2.4vw, 3rem);
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.028em;
+  --text-h1--font-weight: 700;
+  --text-h2: clamp(1.625rem, 1.35rem + 1.2vw, 2.125rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 600;
+  --text-h3: clamp(1.25rem, 1.15rem + 0.5vw, 1.4375rem);
+  --text-h3--line-height: 1.35;
+  --text-h3--letter-spacing: -0.012em;
+  --text-h3--font-weight: 600;
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.45;
+  --text-h4--letter-spacing: -0.006em;
+  --text-h4--font-weight: 600;
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-lead--line-height: 1.65;
+  --text-lead--letter-spacing: -0.008em;
+  --text-lead--font-weight: 400;
+  --text-body: 1rem;
+  --text-body--line-height: 1.75;
+  --text-body--letter-spacing: 0em;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.55;
+  --text-caption--letter-spacing: 0.006em;
+
+  /* Elevação em duas alturas só. Sombra é profundidade, e profundidade com
+     sete degraus deixa de informar hierarquia. */
+  --shadow-raised: 0 1px 1px var(--elevacao), 0 4px 10px -4px var(--elevacao);
+  --shadow-overlay:
+    0 2px 4px var(--elevacao), 0 16px 40px -12px var(--elevacao);
+
+  /* O cabeçalho é sticky: vira unidade de espaçamento para o desvio do
+     cabeçalho e o `scroll-padding` saírem sempre do MESMO número. */
+  --spacing-header: var(--desvio-do-cabecalho);
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  --desvio-do-cabecalho: 5rem;
+
+  /* Aço claro. `background` não é branco puro: 0.985 com um fio de azul
+     (0.004) tira o brilho de folha de papel sob leitura longa. */
+  --background: oklch(0.985 0.004 255);
+  --foreground: oklch(0.21 0.016 258); /* 16.97:1 sobre background */
+  --card: oklch(0.995 0.0015 255);
+  --card-foreground: oklch(0.21 0.016 258); /* 17.46:1 sobre card */
+  --popover: oklch(0.995 0.0015 255);
+  --popover-foreground: oklch(0.21 0.016 258); /* 17.46:1 sobre popover */
+
+  /*
+   * `--primary` FICA TINTA DE AÇO, não vira óxido, e a razão é hierarquia:
+   * `--primary` é o preenchimento padrão de `Button`, `Badge` e de tudo que
+   * o shadcn considera "principal". Óxido aqui pintaria de laranja cada
+   * botão da página e o acento deixaria de acentuar — é o erro que
+   * tailwindcss.com/docs e nextjs.org não cometem: os dois usam botão de
+   * tinta escura e reservam a cor para link, foco e estado ativo. O óxido
+   * mora em `--ring`, `--sidebar-primary` e na família `--brand-*`, que é
+   * onde ele significa "aqui, olhe".
+   */
+  --primary: oklch(0.245 0.019 258);
+  --primary-foreground: oklch(0.985 0.004 255); /* 15.54:1 sobre primary */
+  --secondary: oklch(0.952 0.007 258);
+  --secondary-foreground: oklch(0.28 0.017 258); /* 12.68:1 */
+  --muted: oklch(0.958 0.006 258);
+  --muted-foreground: oklch(0.505 0.019 258); /* 5.19:1 sobre muted */
+
+  /* Superfície de hover, morna: o mesmo aço com um resto de óxido (matiz 62)
+     para o hover parecer da casa sem ser laranja. */
+  --accent: oklch(0.948 0.016 62);
+  --accent-foreground: oklch(0.3 0.05 46); /* 11.87:1 sobre accent */
+  --destructive: oklch(0.55 0.212 27); /* 5.18:1 sobre background */
+  --destructive-foreground: oklch(0.99 0.005 60); /* 5.25:1 */
+
+  /* `--border` é hairline decorativa (separador, aresta de card): 1.44:1,
+     abaixo de 3:1 de propósito, porque não é ela que identifica controle
+     nenhum. `--input` é a borda do campo de formulário, ESSA identifica, e
+     por isso vai a 3.78:1. */
+  --border: oklch(0.865 0.011 258); /* 1.44:1 sobre background */
+  --input: oklch(0.6 0.02 258); /* 3.78:1 sobre background */
+  --ring: oklch(0.575 0.15 46); /* 4.45:1 sobre background */
+
+  /* Óxido. `--brand` preenche (CTA de destaque, badge sólido, barra do item
+     ativo); `--brand-subtle-foreground` é a versão que aguenta ser TEXTO
+     corrido — link em meio a parágrafo —, por isso é mais escura que o
+     preenchimento. */
+  --brand: oklch(0.545 0.155 44); /* 5.07:1 sobre background */
+  --brand-foreground: oklch(0.99 0.005 60); /* 5.14:1 sobre brand */
+  --brand-subtle: oklch(0.955 0.028 66);
+  --brand-subtle-foreground: oklch(0.48 0.14 42); /* 6.67:1 sobre bg */
+  --brand-border: oklch(0.665 0.145 50); /* 3.07:1 sobre background */
+
+  --sidebar: oklch(0.968 0.006 258);
+  --sidebar-foreground: oklch(0.24 0.016 258); /* 14.99:1 sobre sidebar */
+  --sidebar-primary: oklch(0.545 0.155 44); /* 4.82:1 sobre sidebar */
+  --sidebar-primary-foreground: oklch(0.99 0.005 60); /* 5.14:1 */
+  --sidebar-accent: oklch(0.94 0.018 62);
+  --sidebar-accent-foreground: oklch(0.3 0.05 46); /* 11.59:1 */
+  --sidebar-border: oklch(0.895 0.009 258);
+  --sidebar-ring: oklch(0.575 0.15 46);
+
+  --code: oklch(0.225 0.017 258);
+  --code-foreground: oklch(0.925 0.008 258); /* 13.71:1 sobre code */
+  --code-border: oklch(0.305 0.019 258);
+  --code-chrome: oklch(0.272 0.018 258);
+  --code-chrome-foreground: oklch(0.715 0.015 258); /* 5.93:1 no chrome */
+  --code-tab-foreground: oklch(0.96 0.008 258); /* 13.33:1 no chrome */
+  --code-prompt: oklch(0.79 0.125 62); /* 8.61:1 sobre code */
+  /* Realce de linha a 10% de alfa: acima disso o `$` do prompt cai de 8.61:1
+     para menos de 4.5:1 sobre a linha composta. Em 10% ele fica em 5.57:1. */
+  --code-line: oklch(0.715 0.155 54 / 0.1);
+
+  /* Do óxido ao aço, e não cinco cinzas iguais como vinha do template. */
+  --chart-1: oklch(0.575 0.15 46); /* 4.45:1 sobre background */
+  --chart-2: oklch(0.665 0.125 68); /* 3.00:1 */
+  --chart-3: oklch(0.55 0.055 245); /* 4.61:1 */
+  --chart-4: oklch(0.395 0.03 255); /* 9.00:1 */
+  --chart-5: oklch(0.755 0.025 255);
+
+  --elevacao: oklch(0.21 0.05 258 / 0.09);
+  --nervura-linha: oklch(0.21 0.016 258 / 0.055);
+  --nervura-costela: oklch(0.575 0.15 46 / 0.05);
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+  /* Aço escuro. `background` a 0.178 e não a 0.145: no escuro o texto claro
+     espalha (halation), e um fundo carvão em vez de quase-preto reduz o
+     borrão sem perder a impressão de escuro. */
+  --background: oklch(0.178 0.013 258);
+  --foreground: oklch(0.962 0.005 255); /* 16.90:1 sobre background */
+  --card: oklch(0.218 0.015 258);
+  --card-foreground: oklch(0.962 0.005 255); /* 15.58:1 sobre card */
+  --popover: oklch(0.228 0.015 258);
+  --popover-foreground: oklch(0.962 0.005 255); /* 15.20:1 */
+
+  /* Inverte para tinta clara, como no claro inverte para escura: o botão
+     principal continua sendo o de maior contraste, não o mais colorido. */
+  --primary: oklch(0.928 0.008 258);
+  --primary-foreground: oklch(0.208 0.016 258); /* 14.40:1 sobre primary */
+  --secondary: oklch(0.278 0.016 258);
+  --secondary-foreground: oklch(0.955 0.005 255); /* 12.88:1 */
+  --muted: oklch(0.278 0.016 258);
+  --muted-foreground: oklch(0.735 0.017 258); /* 6.26:1 sobre muted */
+  --accent: oklch(0.298 0.028 52);
+  --accent-foreground: oklch(0.945 0.02 66); /* 11.75:1 sobre accent */
+  --destructive: oklch(0.7 0.19 22); /* 6.48:1 sobre background */
+  --destructive-foreground: oklch(0.185 0.02 25); /* 6.42:1 */
+
+  /* Sólido, e não `oklch(1 0 0 / 10%)` como vinha do template: borda
+     translúcida sobre superfícies de luminância diferente (background, card,
+     popover) rende três contrastes distintos, e nenhum deles é mensurável
+     sem saber o que está atrás. */
+  --border: oklch(0.325 0.015 258); /* 1.52:1 sobre background */
+  --input: oklch(0.5 0.019 258); /* 3.15:1 sobre background */
+  --ring: oklch(0.715 0.155 54); /* 7.13:1 sobre background */
+
+  /* Mesmo óxido, empurrado para cima na luminância: sobre carvão o laranja
+     de 0.545 vira marrom e some. */
+  --brand: oklch(0.715 0.155 54); /* 7.13:1 sobre background */
+  --brand-foreground: oklch(0.2 0.035 48); /* 6.88:1 sobre brand */
+  --brand-subtle: oklch(0.315 0.055 46);
+  --brand-subtle-foreground: oklch(0.815 0.115 62); /* 10.38:1 sobre bg */
+  --brand-border: oklch(0.53 0.115 50); /* 3.42:1 sobre background */
+
+  --sidebar: oklch(0.198 0.014 258);
+  --sidebar-foreground: oklch(0.945 0.005 255); /* 15.48:1 sobre sidebar */
+  /* Era `oklch(0.488 0.243 264.376)` — um roxo do template `neutral`, a
+     única cor saturada do arquivo e de família nenhuma. Agora é o óxido. */
+  --sidebar-primary: oklch(0.715 0.155 54); /* 6.86:1 sobre sidebar */
+  --sidebar-primary-foreground: oklch(0.2 0.035 48); /* 6.88:1 */
+  --sidebar-accent: oklch(0.292 0.028 52);
+  --sidebar-accent-foreground: oklch(0.935 0.025 66); /* 11.63:1 */
+  --sidebar-border: oklch(0.305 0.015 258);
+  --sidebar-ring: oklch(0.715 0.155 54);
+
+  /* Mais escuro que `--background`, ao contrário do claro: aqui o painel
+     AFUNDA na página em vez de flutuar sobre ela. */
+  --code: oklch(0.152 0.012 258);
+  --code-foreground: oklch(0.925 0.008 258); /* 15.73:1 sobre code */
+  --code-border: oklch(0.278 0.015 258);
+  --code-chrome: oklch(0.205 0.014 258);
+  --code-chrome-foreground: oklch(0.7 0.015 258); /* 6.71:1 no chrome */
+  --code-tab-foreground: oklch(0.96 0.008 258); /* 15.95:1 no chrome */
+  --code-prompt: oklch(0.79 0.125 62); /* 9.88:1 sobre code */
+  --code-line: oklch(0.715 0.155 54 / 0.1); /* prompt em 6.02:1 na linha */
+
+  /* Escala própria do escuro: o `chart-4` do claro (0.395) sumiria contra o
+     carvão, e o `chart-5` claro só existe como fundo de área. */
+  --chart-1: oklch(0.715 0.155 54); /* 7.13:1 sobre background */
+  --chart-2: oklch(0.815 0.11 74); /* 10.48:1 */
+  --chart-3: oklch(0.66 0.06 245); /* 6.11:1 */
+  --chart-4: oklch(0.5 0.035 255); /* 3.15:1 */
+  --chart-5: oklch(0.845 0.02 255); /* 11.75:1 */
+
+  --elevacao: oklch(0.06 0.02 258 / 0.6);
+  --nervura-linha: oklch(0.962 0.005 255 / 0.05);
+  --nervura-costela: oklch(0.715 0.155 54 / 0.055);
+}
+
+/*
+ * A nervura do vergalhão: malha de eixo mais as costelas na diagonal. Tudo em
+ * gradiente — nenhuma imagem, nenhum SVG, nenhuma dependência, e o padrão
+ * troca de tema sozinho porque as duas cores são tokens.
+ */
+@utility nervura {
+  --nervura-passo: 4rem;
+  --nervura-costela-passo: 0.875rem;
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--nervura-linha) 0 1px,
+      transparent 1px var(--nervura-passo)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--nervura-linha) 0 1px,
+      transparent 1px var(--nervura-passo)
+    ),
+    repeating-linear-gradient(
+      116deg,
+      var(--nervura-costela) 0 2px,
+      transparent 2px var(--nervura-costela-passo)
+    );
+  background-position: center top;
+}
+
+/* A malha tem de MORRER antes da borda: grade que encosta na aresta da tela
+   lê como erro de renderização, não como textura. */
+@utility nervura-mascara {
+  --nervura-mascara: radial-gradient(
+    ellipse 85% 65% at 50% 0%,
+    oklch(0 0 0) 25%,
+    transparent 100%
+  );
+  -webkit-mask-image: var(--nervura-mascara);
+  mask-image: var(--nervura-mascara);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
-  body {
-    @apply bg-background text-foreground;
-    }
-  button:not(:disabled), [role="button"]:not(:disabled) {
-    cursor: pointer;
-    }
+  }
+
   html {
     @apply font-sans;
+    /* O cabeçalho é sticky: sem isto, âncora de sumário para o título
+       EMBAIXO dele. Era `scroll-mt-20` solto numa página só. */
+    scroll-padding-top: var(--desvio-do-cabecalho);
+  }
+
+  /* Rolagem suave é conforto, não requisito: para quem pediu menos
+     movimento no sistema, o salto instantâneo é o comportamento correto. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
     }
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Seleção na cor da marca. Medido: 5.14:1 no claro, 6.88:1 no escuro —
+     texto selecionado continua legível, que é onde a maioria dos sites com
+     `::selection` colorido falha. */
+  ::selection {
+    background-color: var(--brand);
+    color: var(--brand-foreground);
+  }
+
+  /* Rede de segurança para o que NÃO é componente do shadcn: link, `summary`,
+     elemento com `tabindex`. Os componentes zeram isto com `outline-none` na
+     camada de utilitárias, que vence a camada base, e desenham o próprio
+     anel — então esta regra não duplica o foco deles. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* `balance` no título distribui as palavras entre as linhas em vez de
+     deixar uma órfã; `pretty` no corpo só evita a órfã, que é o que se pode
+     pagar em parágrafo longo sem custo de layout. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  blockquote,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  /* Agora que `--font-mono` existe no tema, os elementos de código herdam a
+     fonte certa sem precisar de `className="font-mono"` em cada um. */
+  code,
+  kbd,
+  samp,
+  pre {
+    @apply font-mono;
+  }
 }

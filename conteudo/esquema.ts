@@ -1,13 +1,13 @@
 /**
- * O contrato de `conteudo/site.json`, escrito à mão em TypeScript puro.
+ * O contrato do conteúdo, escrito à mão em TypeScript puro.
  *
  * ZERO DEPENDÊNCIA — não é zod, e não é por gosto. A regra da casa vale para
  * tudo que o `npx` executa, e este arquivo executa dentro do `next build`.
  *
  * Ele é N2 e N0 ao mesmo tempo: a mesma declaração VALIDA em tempo de build
- * (lança e reprova o build se o JSON divergir) e PRODUZ o tipo — `Site` sai de
- * `typeof esquemaSite`, então não existe a segunda declaração que envelhece
- * separada do dado.
+ * (lança e reprova o build se o JSON divergir) e PRODUZ o tipo — `Compartilhado`
+ * sai de `typeof formaDoSite`, então não existe a segunda declaração que
+ * envelhece separada do dado.
  *
  * O que o §12.3 do plano fechou e este arquivo é o dente: identidade do
  * negócio — telefone, endereço, nome — é CONTEÚDO VALIDADO, não variável de
@@ -80,11 +80,37 @@
  * `null` NÃO COMPILA. O `next build` reprova antes de qualquer HTML sair.
  *
  * O CASO INVERSO — campo preenchido e nunca renderizado, que é o mais fácil de
- * esquecer — é fechado do lado do molde, em `app/page.tsx`: o mapa `CONTATOS`
- * é TOTAL sobre as chaves opcionais de `identidade`, cobrado por `satisfies`.
- * Apagar o botão e deixar o número no JSON não compila; acrescentar um bloco ao
- * esquema sem renderizador na home não compila. As duas direções são o mesmo
- * dente, e quem o crava é o compilador — sem regra nova e sem heurística.
+ * esquecer — é fechado do lado do molde, em `components/rodape.tsx`: o mapa
+ * `CONTATOS` é TOTAL sobre as chaves opcionais de `identidade`, cobrado por
+ * `satisfies`. Apagar o botão e deixar o número no JSON não compila;
+ * acrescentar um bloco ao esquema sem renderizador no rodapé não compila. As
+ * duas direções são o mesmo dente, e quem o crava é o compilador — sem regra
+ * nova e sem heurística.
+ * ─────────────────────────────────────────────────────────────────────────
+ * O QUE MUDOU AGORA: DOIS CONTRATOS, PORQUE SÃO TRÊS IDIOMAS.
+ *
+ * O arquivo único misturava duas coisas que passaram a ter ciclos de vida
+ * diferentes no dia em que o site virou trilíngue:
+ *
+ *   · o que é IGUAL nos três idiomas — o nome do negócio, o telefone, o
+ *     endereço, o domínio, as cores, a imagem de compartilhamento. Copiar isso
+ *     três vezes seria fabricar a segunda e a terceira fonte da mesma verdade,
+ *     que é o defeito do Galegos multiplicado por três: o telefone corrigido em
+ *     `pt-br.json` e esquecido em `en.json` publica dois números, e nenhum dos
+ *     dois lados avisa.
+ *   · o que MUDA por idioma — todo texto que alguém lê. Aqui a duplicação não é
+ *     defeito, é o próprio trabalho.
+ *
+ * Daí `esquemaSite` (um arquivo, `conteudo/site.json`) e `esquemaTextos` (um
+ * arquivo por idioma, `conteudo/textos/<idioma>.json`). O MESMO `esquemaTextos`
+ * roda nos três, e é isso que faz idioma com campo faltando REPROVAR O BUILD em
+ * vez de publicar uma página com um buraco — que é o silêncio do §12.3 na forma
+ * de tradução esquecida.
+ *
+ * `rotulos` é o bloco que paga a dívida da regra `conteudo-fora-do-codigo` no
+ * último lugar em que ela ainda estava aberta: o literal de INTERFACE. "Pular
+ * para o conteúdo", "Nesta página", "saída" moravam em `.tsx`, e nesse lugar
+ * eles são intraduzíveis — o site sairia em três idiomas com a moldura em um só.
  * ─────────────────────────────────────────────────────────────────────────
  */
 
@@ -94,6 +120,30 @@ export class ErroDeConteudo extends Error {
     this.name = "ErroDeConteudo"
   }
 }
+
+// ── de qual arquivo veio o caminho ────────────────────────────────────────
+
+/**
+ * A RAIZ DO CAMINHO É O ARQUIVO, e ela existe porque agora há quatro arquivos
+ * de conteúdo em vez de um.
+ *
+ * Toda mensagem de erro deste módulo diz QUAL arquivo abrir. Com um arquivo só,
+ * o nome podia ser literal; com quatro, um literal seria mandar o dono corrigir
+ * `site.json` quando o campo que falta está em `textos/es.json` — e ele
+ * corrigiria o arquivo errado, veria o mesmo erro, e concluiria que a validação
+ * está quebrada.
+ */
+const ARQUIVO_DA_RAIZ: Record<string, string> = { site: "conteudo/site.json" }
+
+const raizDe = (caminho: string): string => caminho.split(".")[0]
+
+function arquivoDe(caminho: string): string {
+  const raiz = raizDe(caminho)
+  return ARQUIVO_DA_RAIZ[raiz] ?? `conteudo/textos/${raiz}.json`
+}
+
+/** O caminho SEM a raiz: é assim que o dono vê o campo dentro do arquivo. */
+const semRaiz = (caminho: string): string => caminho.replace(/^[^.[]*\.?/, "")
 
 // ── sentinelas ────────────────────────────────────────────────────────────
 
@@ -116,12 +166,16 @@ export const SENTINELA = /\bTROQUE-[A-Z-]{3,}/
  * preencher e desistiu, e é justamente esse o silêncio que o §12.3 persegue.
  */
 const OU_APAGUE = (bloco: string) =>
-  `Se o negócio não tem, APAGUE a chave "${bloco}" inteira de conteudo/site.json — o molde deixa de renderizar o bloco e ninguém cobra nada. Vazio não é "não tenho".`
+  `Se o negócio não tem, APAGUE a chave "${bloco}" inteira do arquivo — o molde deixa de renderizar o bloco e ninguém cobra nada. Vazio não é "não tenho".`
 
 /**
  * O que escrever em cada campo. Fica aqui, e não só no `.pages.yml`, porque
  * esta é a mensagem de ERRO que o dono lê às 23h com o build vermelho — o
  * `.pages.yml` é documentação, este mapa é o que aparece na hora do aperto.
+ *
+ * A chave é o caminho SEM a raiz, e por isso o mesmo mapa serve aos dois
+ * contratos: `identidade.*` e `meta.*` só existem em `site.json`, `titulo` e
+ * `home.*` só existem nos arquivos de texto. Não há colisão a desfazer.
  *
  * Campo de bloco condicional leva o `OU_APAGUE` junto: a mensagem que só sabe
  * mandar preencher é a que faz quem não tem o campo inventar um valor.
@@ -143,16 +197,19 @@ const COMO_PREENCHER: Record<string, string> = {
   "identidade.endereco.cep": `O CEP com hífen. Ex.: "04101-300". ${OU_APAGUE("identidade.endereco")}`,
   "meta.urlBase":
     'O endereço onde o site vai ficar, com https:// e SEM barra no fim. Ex.: "https://padariadoze.com.br".',
-  "meta.titulo":
-    'O título da aba e do resultado no Google. Ex.: "Padaria do Zé".',
-  "meta.gabaritoDeTitulo":
-    'O molde do título das páginas filhas, com %s onde entra o nome da página. Ex.: "%s · Padaria do Zé".',
-  "meta.descricao":
-    "De 50 a 160 caracteres dizendo o que o negócio faz. É este texto que aparece no Google e no preview do link no WhatsApp.",
-  "meta.nomeCurto":
-    'Até 12 caracteres — é o nome que fica embaixo do ícone do app instalado. Ex.: "Padaria".',
   "meta.og.alt":
     "Descrição da imagem de compartilhamento, para quem usa leitor de tela.",
+  tagDeIdioma:
+    'A tag BCP 47 deste arquivo, no molde xx-XX. Ex.: "pt-BR", "en-US", "es-ES".',
+  nomeDoIdioma:
+    'O nome do idioma ESCRITO NO PRÓPRIO IDIOMA — é o que o visitante lê no seletor. Ex.: "Português (Brasil)", "English", "Español".',
+  titulo: 'O título da aba e do resultado no Google. Ex.: "Padaria do Zé".',
+  gabaritoDeTitulo:
+    'O molde do título das páginas filhas, com %s onde entra o nome da página. Ex.: "%s · Padaria do Zé".',
+  descricao:
+    "De 50 a 160 caracteres dizendo o que o negócio faz. É este texto que aparece no Google e no preview do link no WhatsApp.",
+  nomeCurto:
+    'Até 12 caracteres — é o nome que fica embaixo do ícone do app instalado. Ex.: "Padaria".',
   "home.titulo":
     "O título grande da primeira tela. Costuma ser o nome do negócio.",
 }
@@ -201,7 +258,7 @@ const PORQUE_REPROVA =
   "de confundir com valor real, e reprova até ser trocado."
 
 /** Uma mensagem com TODOS os campos por preencher, para caber num build só. */
-function conferirSentinelas(bruto: unknown): void {
+function conferirSentinelas(bruto: unknown, arquivo: string): void {
   const pendentes = acharSentinelas(bruto)
   if (!pendentes.length) return
   const lista = pendentes
@@ -211,8 +268,8 @@ function conferirSentinelas(bruto: unknown): void {
     )
     .join("\n")
   throw new ErroDeConteudo(
-    `conteudo/site.json ainda tem ${pendentes.length} campo(s) com PLACEHOLDER. ` +
-      `Troque, em conteudo/site.json:\n\n${lista}\n\n${PORQUE_REPROVA}\n`
+    `${arquivo} ainda tem ${pendentes.length} campo(s) com PLACEHOLDER. ` +
+      `Troque, em ${arquivo}:\n\n${lista}\n\n${PORQUE_REPROVA}\n`
   )
 }
 
@@ -224,9 +281,9 @@ function conferirSentinelas(bruto: unknown): void {
  */
 function recusarSentinela(limpo: string, caminho: string): void {
   if (!SENTINELA.test(limpo)) return
-  const curto = caminho.replace(/^site\./, "")
+  const curto = semRaiz(caminho)
   throw new ErroDeConteudo(
-    `conteudo/site.json em "${curto}": ainda está com o placeholder ${JSON.stringify(limpo)}. ` +
+    `${arquivoDe(caminho)} em "${curto}": ainda está com o placeholder ${JSON.stringify(limpo)}. ` +
       `${COMO_PREENCHER[curto] ?? "Escreva o valor real deste campo."} ` +
       "O build reprova de propósito — placeholder que publica é pedido perdido em silêncio (§12.3)."
   )
@@ -255,14 +312,14 @@ function descrever(valor: unknown): string {
  */
 function falhar(caminho: string, esperado: string, recebido: unknown): never {
   throw new ErroDeConteudo(
-    `conteudo/site.json inválido em "${caminho}": esperava ${esperado}, veio ${descrever(recebido)}.`
+    `${arquivoDe(caminho)} inválido em "${semRaiz(caminho)}": esperava ${esperado}, veio ${descrever(recebido)}.`
   )
 }
 
 /** Recusa que não é de FORMATO e sim de VALOR MORTO: diz o porquê, não só o quê. */
 function falharMorto(caminho: string, recebido: string, porque: string): never {
   throw new ErroDeConteudo(
-    `conteudo/site.json em "${caminho.replace(/^site\./, "")}": ${JSON.stringify(recebido)} ${porque}`
+    `${arquivoDe(caminho)} em "${semRaiz(caminho)}": ${JSON.stringify(recebido)} ${porque}`
   )
 }
 
@@ -323,7 +380,7 @@ export const objeto =
     const sobra = Object.keys(bruto).filter((chave) => !(chave in campos))
     if (sobra.length) {
       throw new ErroDeConteudo(
-        `conteudo/site.json inválido em "${caminho || "site"}": campo(s) que o esquema não conhece — ${sobra
+        `${arquivoDe(caminho)} inválido em "${semRaiz(caminho) || "(raiz)"}": campo(s) que o esquema não conhece — ${sobra
           .map((chave) => JSON.stringify(chave))
           .join(", ")}. Conhecidos: ${Object.keys(campos).join(", ")}.`
       )
@@ -372,9 +429,9 @@ const ehObjetoSimples = (v: unknown): v is Record<string, unknown> =>
   typeof v === "object" && v !== null && !Array.isArray(v)
 
 function falharVazio(caminho: string, oque: string): never {
-  const curto = caminho.replace(/^site\./, "")
+  const curto = semRaiz(caminho)
   throw new ErroDeConteudo(
-    `conteudo/site.json em "${curto}": ${oque} vazio não é "não tenho". ` +
+    `${arquivoDe(caminho)} em "${curto}": ${oque} vazio não é "não tenho". ` +
       `${COMO_PREENCHER[curto] ?? ""} ` +
       `Este bloco é OPCIONAL: ou ele tem valor de verdade, ou a chave "${curto}" sai do arquivo. ` +
       "Deixar vazio é a terceira opção que não existe — ela publica um contato em branco, que é " +
@@ -394,7 +451,7 @@ export const opcional =
       return dentro(valor, caminho)
     } catch (erro) {
       if (!(erro instanceof ErroDeConteudo)) throw erro
-      const curto = caminho.replace(/^site\./, "")
+      const curto = semRaiz(caminho)
       throw new ErroDeConteudo(
         `${erro.message}\n\n` +
           `"${curto}" é um bloco OPCIONAL e ele está PELA METADE. Ou complete o campo acima, ` +
@@ -695,7 +752,10 @@ export const gabaritoDeTitulo: Validador<string> = (valor, caminho) => {
   return limpo
 }
 
-// ── o contrato do site ────────────────────────────────────────────────────
+/** A tag BCP 47 do arquivo de textos. Mesmo padrão que `meta.idioma` cobrava. */
+export const tagDeIdioma = padrao(/^[a-z]{2}-[A-Z]{2}$/, "pt-BR", 5)
+
+// ── o contrato COMPARTILHADO: conteudo/site.json ──────────────────────────
 
 const formaDoSite = objeto({
   // Identidade do negócio. §12.3: isto é CONTEÚDO VALIDADO, não env var.
@@ -709,9 +769,10 @@ const formaDoSite = objeto({
 
     // O BLOCO DO LINK CANÔNICO — acrescentado em 02/09 por esta landing, e ele
     // é o item (c) do cabeçalho exercitado do lado do dono: bloco novo aqui
-    // REPROVA o `next build` enquanto `app/page.tsx` não souber renderizá-lo,
-    // porque `Contato` é `Omit<identidade, 'nome'>` e o mapa `CONTATOS` é
-    // cobrado como total por `satisfies`. Medido: sem o renderizador, TS1360.
+    // REPROVA o `next build` enquanto `components/rodape.tsx` não souber
+    // renderizá-lo, porque `Contato` é `Omit<identidade, 'nome'>` e o mapa
+    // `CONTATOS` é cobrado como total por `satisfies`. Medido: sem o
+    // renderizador, TS1360.
     //
     // Por que ele precisa existir: a landing de uma ferramenta open-source SEM
     // link para o repositório é uma landing quebrada, e o esquema não tinha
@@ -742,7 +803,7 @@ const formaDoSite = objeto({
         // O rótulo do botão.
         chamadaAcao: texto(4, 40),
         // O texto que já vai escrito na conversa do WhatsApp. Está aqui, e não
-        // dentro do `page.tsx`, porque é frase que o dono reescreve — e a regra
+        // dentro do `.tsx`, porque é frase que o dono reescreve — e a regra
         // `conteudo-fora-do-codigo` acusaria a frase se ela morasse no
         // componente.
         mensagem: texto(10, 200),
@@ -764,13 +825,11 @@ const formaDoSite = objeto({
     ),
   }),
 
+  // O `meta` daqui guarda SÓ o que é igual nos três idiomas. Título, descrição,
+  // nome curto e gabarito saíram para `conteudo/textos/<idioma>.json`: eles são
+  // o que o visitante lê, e o que o visitante lê é o que se traduz.
   meta: objeto({
     urlBase,
-    idioma: padrao(/^[a-z]{2}-[A-Z]{2}$/, "pt-BR", 5),
-    titulo: texto(4, 70),
-    gabaritoDeTitulo,
-    descricao: texto(50, 160),
-    nomeCurto: texto(2, 12),
     // Data do sitemap. É CONTEÚDO e não `new Date()` porque `new Date()` no
     // build faz o mesmo commit gerar bytes diferentes a cada rodada, e build
     // que não é reprodutível não dá para comparar.
@@ -786,6 +845,36 @@ const formaDoSite = objeto({
       alt: texto(10, 140),
     }),
   }),
+})
+
+type FormaDoSite = Inferir<typeof formaDoSite>
+
+// ── o contrato POR IDIOMA: conteudo/textos/<idioma>.json ──────────────────
+
+/**
+ * O MESMO validador roda nos três arquivos, e é essa igualdade que é a defesa.
+ *
+ * Um esquema por idioma seria a permissão para o espanhol nascer sem a página
+ * de módulos e o build continuar verde — o visitante em espanhol chegaria numa
+ * rota que existe e não tem conteúdo. Com um esquema só, campo faltando em
+ * QUALQUER idioma reprova o `next build` antes de sair HTML.
+ */
+const formaDosTextos = objeto({
+  // A tag do `<html lang>` e do `og:locale`. Vive AQUI e não em `site.json`
+  // porque agora há três, uma por arquivo, e `conferirIdioma` cobra que ela
+  // combine com o nome do arquivo — copiar `en.json` para `es.json` e esquecer
+  // esta linha publicaria a página espanhola declarando-se inglesa, que é o que
+  // o leitor de tela e o Google leem primeiro.
+  tagDeIdioma,
+  // O nome do idioma ESCRITO NO PRÓPRIO IDIOMA. Quem procura "Español" no
+  // seletor não está lendo português; um rótulo traduzido para o idioma da
+  // página atual é o seletor que só serve para quem já não precisa dele.
+  nomeDoIdioma: texto(2, 40),
+
+  titulo: texto(4, 70),
+  gabaritoDeTitulo,
+  descricao: texto(50, 160),
+  nomeCurto: texto(2, 12),
 
   home: objeto({
     titulo: texto(4, 90),
@@ -842,6 +931,11 @@ const formaDoSite = objeto({
             comando: texto(3, 200),
             // A saida e opcional porque nem todo exemplo tem uma curta o
             // bastante para caber na tela sem virar captura de tela mentirosa.
+            //
+            // E ela NAO SE TRADUZ, nos tres arquivos: e o que o programa
+            // imprime de verdade, e o programa imprime em portugues. Traduzir
+            // seria publicar uma captura de uma execucao que nunca existiu --
+            // a mesma mentira do `ui-falso`, so que na documentacao.
             saida: opcional(texto(3, 900)),
             nota: opcional(texto(10, 300)),
           }),
@@ -893,9 +987,61 @@ const formaDoSite = objeto({
       }),
     })
   ),
+
+  /**
+   * TODO LITERAL DE INTERFACE, e ele é obrigatório inteiro.
+   *
+   * Estas palavras moravam em `.tsx` — "Pular para o conteúdo" no layout,
+   * "Nesta página" na documentação, "saída" na página de uso, os cinco rótulos
+   * da navegação. Enquanto o site tinha um idioma isso parecia dívida barata:
+   * a régua `conteudo-fora-do-codigo` não acusa corrida de menos de quatro
+   * palavras, então nada ficava vermelho.
+   *
+   * Com três idiomas o custo apareceu inteiro: a moldura sairia em português
+   * nas três versões, e o visitante em espanhol leria um site espanhol com a
+   * navegação em outro idioma. Não há defesa automática contra isso — é
+   * exatamente o tipo de coisa que ninguém vê no próprio idioma.
+   *
+   * Nada aqui é opcional, de propósito: rótulo faltando não vira texto vazio na
+   * tela, vira build vermelho.
+   */
+  rotulos: objeto({
+    pularParaConteudo: texto(4, 60),
+    navegacaoPrincipal: texto(3, 60),
+    secoes: texto(3, 40),
+    trilha: texto(3, 40),
+    nestaPagina: texto(3, 60),
+    saida: texto(3, 40),
+    copiar: texto(3, 40),
+    copiado: texto(3, 40),
+    buscar: texto(3, 40),
+    buscarVazio: texto(3, 80),
+    buscarDica: texto(3, 80),
+    idioma: texto(3, 40),
+    tema: texto(3, 40),
+    temaClaro: texto(3, 40),
+    temaEscuro: texto(3, 40),
+    temaSistema: texto(3, 40),
+    menu: texto(3, 40),
+    anterior: texto(3, 40),
+    proximo: texto(3, 40),
+    repositorio: texto(3, 40),
+    // Um rótulo por rota, com a MESMA chave que `lib/rotas.ts` usa. Rota nova
+    // sem rótulo reprova aqui, e rótulo sem rota reprova pelo campo
+    // desconhecido de `objeto()` — as duas direções, como sempre.
+    navegacao: objeto({
+      inicio: texto(2, 40),
+      docs: texto(2, 40),
+      instalacao: texto(2, 40),
+      uso: texto(2, 40),
+      modulos: texto(2, 40),
+    }),
+  }),
 })
 
-type FormaDoSite = Inferir<typeof formaDoSite>
+type FormaDosTextos = Inferir<typeof formaDosTextos>
+
+// ── as coerências entre campos ────────────────────────────────────────────
 
 /**
  * O número que o visitante LÊ tem de ser o número para onde o link VAI.
@@ -923,29 +1069,73 @@ function conferirCoerencia(site: FormaDoSite): void {
 }
 
 /**
- * A porta única. Sentinela primeiro (uma mensagem com tudo que falta), depois o
- * formato campo a campo, depois a coerência entre campos — nessa ordem porque é
- * a ordem em que o dono resolve: preencher, corrigir, conferir.
+ * O ARQUIVO E A TAG TÊM DE FALAR O MESMO IDIOMA.
+ *
+ * É a mesma classe de defeito do telefone em dois formatos, e nasce do mesmo
+ * gesto: `es.json` começa como cópia de `en.json`, e quem traduz o texto não
+ * repara na primeira linha. O resultado publica `<html lang="en-US">` numa
+ * página inteira em espanhol — o leitor de tela pronuncia espanhol com fonemas
+ * ingleses, e o Google indexa a página no idioma errado. As duas coisas
+ * "funcionam" e nenhuma acusa.
+ */
+function conferirIdioma(textos: FormaDosTextos, idioma: string): void {
+  const daTag = textos.tagDeIdioma.slice(0, 2).toLowerCase()
+  const doArquivo = idioma.slice(0, 2).toLowerCase()
+  if (daTag !== doArquivo) {
+    throw new ErroDeConteudo(
+      `conteudo/textos/${idioma}.json: tagDeIdioma é ${JSON.stringify(textos.tagDeIdioma)}, ` +
+        `que não é o idioma do arquivo (${idioma}). O arquivo vira <html lang="…"> e og:locale ` +
+        "da página inteira: publicado assim, o leitor de tela pronuncia o texto com os fonemas do " +
+        "idioma errado e o buscador indexa a página como se fosse de outro idioma. " +
+        `Escreva a tag deste arquivo (ex.: ${doArquivo}-XX).`
+    )
+  }
+}
+
+// ── as portas ─────────────────────────────────────────────────────────────
+
+/**
+ * A porta do compartilhado. Sentinela primeiro (uma mensagem com tudo que
+ * falta), depois o formato campo a campo, depois a coerência entre campos —
+ * nessa ordem porque é a ordem em que o dono resolve: preencher, corrigir,
+ * conferir.
  */
 export const esquemaSite: Validador<FormaDoSite> = (valor, caminho) => {
-  conferirSentinelas(valor)
+  conferirSentinelas(valor, "conteudo/site.json")
   const site = formaDoSite(valor, caminho)
   conferirCoerencia(site)
   return site
 }
 
-export type Site = FormaDoSite
+/**
+ * A porta de UM arquivo de textos. O `caminho` é o idioma — é ele que vira o
+ * nome do arquivo em toda mensagem de erro, e é ele que `conferirIdioma`
+ * compara com a tag declarada lá dentro.
+ */
+export function esquemaTextos(valor: unknown, idioma: string): FormaDosTextos {
+  conferirSentinelas(valor, `conteudo/textos/${idioma}.json`)
+  const textos = formaDosTextos(valor, idioma)
+  conferirIdioma(textos, idioma)
+  return textos
+}
+
+/** O que é igual nos três idiomas: identidade do negócio e meta técnico. */
+export type Compartilhado = FormaDoSite
+
+/** O que muda por idioma: tudo que alguém lê. */
+export type Textos = FormaDosTextos
 
 /**
  * OS BLOCOS CONDICIONAIS, num tipo só — é `identidade` menos o `nome`.
  *
- * Ele não é conveniência: é o que torna a totalidade do mapa `CONTATOS` da home
- * cobrável por `satisfies`. Acrescentar um quarto bloco condicional aqui embaixo
- * (um Instagram, um horário de funcionamento) passa a REPROVAR o `next build`
- * enquanto a home não souber renderizá-lo — que é o item (c) fechado na direção
- * mais fácil de esquecer, e fechado pelo compilador, sem regra nova.
+ * Ele não é conveniência: é o que torna a totalidade do mapa `CONTATOS` do
+ * rodapé cobrável por `satisfies`. Acrescentar um quarto bloco condicional aqui
+ * embaixo (um Instagram, um horário de funcionamento) passa a REPROVAR o
+ * `next build` enquanto o rodapé não souber renderizá-lo — que é o item (c)
+ * fechado na direção mais fácil de esquecer, e fechado pelo compilador, sem
+ * regra nova.
  */
-export type Contato = Omit<Site["identidade"], "nome">
+export type Contato = Omit<Compartilhado["identidade"], "nome">
 
 /** O bloco do botão, já estreitado. É o que `linkWhatsapp` exige receber. */
 export type Whatsapp = NonNullable<Contato["whatsapp"]>

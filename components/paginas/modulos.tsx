@@ -1,4 +1,3 @@
-import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { CircleAlert } from "lucide-react"
 
@@ -12,12 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { site } from "@/conteudo/carregar"
+import { textos, type Idioma } from "@/conteudo/carregar"
 
-export const metadata: Metadata = { title: "Os módulos" }
-
-export default function Pagina() {
-  const p = site.paginas?.modulos
+export function Modulos({ idioma }: { idioma: Idioma }) {
+  const p = textos(idioma).paginas?.modulos
   if (!p) notFound()
 
   return (

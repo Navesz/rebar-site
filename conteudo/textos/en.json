@@ -1,0 +1,242 @@
+{
+  "tagDeIdioma": "en-US",
+  "nomeDoIdioma": "English",
+  "titulo": "rebar — wrong code doesn't get through",
+  "gabaritoDeTitulo": "%s · rebar",
+  "descricao": "A checker, a commit gate and a project generator that stop wrong code from shipping. Zero runtime dependencies, Apache-2.0.",
+  "nomeCurto": "rebar",
+  "home": {
+    "titulo": "rebar",
+    "subtitulo": "A checker that runs against any repository, a gate that blocks the commit when a rule is ignored, and a generator that builds your next project already on the right side of the line.",
+    "destaques": [
+      {
+        "titulo": "The problem, measured across 161 commits",
+        "texto": "A forensic pass over six repositories, 2026-08-25: 3 had no CI, and the same 3 had a broken lint. The one with the most governance paperwork — AGENTS.md, SECURITY.md, GOVERNANCE.md — had 35 lint errors."
+      },
+      {
+        "titulo": "A rule written in markdown is followed almost never",
+        "texto": "That repository had a check script chaining format, lint, types, tests and build. Nothing ever ran it. If a rule can move down from prose to enforcement, it should — and enforcement has to be the more reliable of the two."
+      },
+      {
+        "titulo": "The checker: a scoreboard for any repository",
+        "texto": "npx github:Navesz/rebar . — nothing installed, and not one line written into the repository under audit. A rule that does not apply leaves the denominator, because a score that counts what isn't there is a score that lies."
+      },
+      {
+        "titulo": "The gate: hook, CI on both systems, and the server",
+        "texto": "What CI runs is the same sequence you run before it, in a single command. Above it, a GitHub ruleset whose bypass list is empty — not even the owner gets through. Below it, the hook, on your machine."
+      },
+      {
+        "titulo": "The generator: this page came out of it",
+        "texto": "npx github:Navesz/rebar novo my-site creates a static Next app with the gate already inside and an MCP server that serves the rules to whatever AI opens the project. Then it runs the checker on what it just made."
+      },
+      {
+        "titulo": "What is not proven yet",
+        "texto": "rebar is enforced in one repository: itself. The written target was two by D+30, and it stands at 1 of 2. One rule still only warns, because close to 12% of what it flags is noise. If that doesn't turn, the abandon criterion says stop."
+      }
+    ]
+  },
+  "paginas": {
+    "instalacao": {
+      "titulo": "Installation",
+      "resumo": "There is no installation: rebar runs through npx, without writing a line into the repository it audits. What you install is the gate, and only in a project that wants one.",
+      "passos": [
+        {
+          "titulo": "Audit a repository that already exists",
+          "comando": "npx github:Navesz/rebar .",
+          "nota": "Nothing is installed and nothing is written. You get a scoreboard, and the exit code tells you whether it passed: 0 passed, 1 failed, 2 invalid target, 127 the checker itself broke."
+        },
+        {
+          "titulo": "Audit the security of that same repository",
+          "comando": "npx -p github:Navesz/rebar rebar-security .",
+          "nota": "A different binary from the same package — hence the -p. Without it npx runs the format checker and you audit the wrong thing while believing you audited."
+        },
+        {
+          "titulo": "Start a project already on the right side of the line",
+          "comando": "npx github:Navesz/rebar novo padaria-do-ze",
+          "nota": "Creates a static Next app with the gate inside, hooks, CI on a Windows and Linux matrix, and an MCP server that serves the rules to whatever AI opens the project."
+        },
+        {
+          "titulo": "Arm the gate in the project you just created",
+          "comando": "npm run install-hooks",
+          "nota": "The hook does not come armed in a clone: without core.hooksPath the file sits on disk and git never runs it. The gate would look installed and verify nothing."
+        },
+        {
+          "titulo": "Run the whole sequence before you commit",
+          "comando": "npm run verify",
+          "nota": "It is the same command CI runs. Local and CI drifting apart is the defect that turns a gate into a green badge."
+        }
+      ]
+    },
+    "uso": {
+      "titulo": "How to use it",
+      "resumo": "Three states instead of two, and the third is what keeps the score honest: whatever does not apply leaves the denominator. An empty folder does not get a good grade.",
+      "exemplos": [
+        {
+          "titulo": "The scoreboard for one repository",
+          "comando": "npx github:Navesz/rebar .",
+          "saida": "rebar-check · prumo\n  ✓ editorconfig       tem .editorconfig\n  ✗ dependabot         sem dependabot nem renovate\n  ✓ ci                 tem CI\n  – typecheck          não tem TypeScript\n  11 de 13  ·  1 não se aplica",
+          "nota": "The dash is the third state. Before it existed, an empty folder with an empty .git/ scored 8 of 14 and tied with rebar itself. The checker prints in Brazilian Portuguese."
+        },
+        {
+          "titulo": "Several repositories at once",
+          "comando": "npx github:Navesz/rebar ../a ../b ../c",
+          "nota": "A comparable summary comes out at the end. This is how the forensic pass over 161 commits in six repositories was put together."
+        },
+        {
+          "titulo": "One rule at a time, to fix without noise",
+          "comando": "npx github:Navesz/rebar --rule=ci-gates .",
+          "nota": "The filter is for fixing, not for passing: run it without the filter before you commit."
+        },
+        {
+          "titulo": "Structured output, for CI",
+          "comando": "npx github:Navesz/rebar --json .",
+          "nota": "Every rule comes out with an id, a class, a level and a state. That is what the CI step consumes."
+        },
+        {
+          "titulo": "Heuristics failing the build too",
+          "comando": "npx github:Navesz/rebar --heuristics .",
+          "nota": "By default a heuristic only informs. A wrong automatic rule costs more than a missing one — one of them was measured at seven hits and zero true positives."
+        }
+      ]
+    },
+    "modulos": {
+      "titulo": "The modules",
+      "resumo": "Three binaries from the same package, and each one fails for a different reason. A formatting problem and a security hole are not fixed the same way, nor with the same urgency.",
+      "rotuloLimite": "What it does not do.",
+      "itens": [
+        {
+          "nome": "rebar-check",
+          "comando": "npx github:Navesz/rebar .",
+          "resumo": "The formatting ruler. It tells you whether the repository has CI that actually reaches the verification it declares, tests, a formatter, a license with its NOTICE, a hook with the execute bit, and whether shadcn is real or just a folder imitating the convention.",
+          "limite": "It does not look at security and it does not run the application. A repository with a perfect score here can still hold a plaintext password — that is what the module next door is for.",
+          "numeros": [
+            { "rotulo": "rules", "valor": "23" },
+            { "rotulo": "deterministic", "valor": "18" },
+            { "rotulo": "heuristic", "valor": "5" }
+          ]
+        },
+        {
+          "nome": "rebar-security",
+          "comando": "npx -p github:Navesz/rebar rebar-security .",
+          "resumo": "The security ruler, distilled from sixteen Brazilian technical videos: 163 candidate flaws, each judged by three independent skeptics, 82 survived. The first three were picked by coverage per hour, not by their place in the list.",
+          "limite": "It does not check Broken Access Control, which is OWASP number 1. IDOR and per-object authorization were left out because the defense lives in middleware, a policy or RLS — two identical trees on disk get opposite verdicts. Saying so is more useful than pretending to check.",
+          "numeros": [
+            { "rotulo": "rules", "valor": "3" },
+            { "rotulo": "all deterministic", "valor": "yes" }
+          ]
+        },
+        {
+          "nome": "rebar-new",
+          "comando": "npx github:Navesz/rebar novo my-site",
+          "resumo": "The generator. It emits a static Next app with the gate inside, commit hooks, CI on a Windows and Linux matrix, an MCP server, and a content schema that fails the build when the data is a plausible placeholder.",
+          "limite": "One preset only, the site. App and API are blocked by declared non-scope until the site preset is used unmodified on two sites.",
+          "numeros": [{ "rotulo": "preset", "valor": "site" }]
+        },
+        {
+          "nome": "the gate",
+          "comando": "npm run verify",
+          "resumo": "The sequence CI runs and that you run before it, in a single command. Every step of the gate is proven by mutation: the defect is planted, and the step is required to find it.",
+          "limite": "It is not a new layer. What blocks is the hook on your machine, CI, and the ruleset on the server — the only level an agent cannot edit, because it is not a file.",
+          "numeros": [
+            { "rotulo": "steps", "valor": "16" },
+            { "rotulo": "proof cases", "valor": "57" },
+            { "rotulo": "levels", "valor": "N0–N7" }
+          ]
+        }
+      ]
+    },
+    "docs": {
+      "titulo": "Documentation",
+      "resumo": "The thesis in one line: a rule in markdown is followed almost never, a rule in CI is followed every time. What follows is the evidence behind that sentence.",
+      "secoes": [
+        {
+          "titulo": "The problem, measured",
+          "corpo": "In a forensic pass over 161 commits across six repositories, the three without CI were exactly the three with a broken lint at that moment. The repository with the most governance paperwork — a strict AGENTS.md, SECURITY.md, GOVERNANCE.md, CONTRIBUTING.md — had 35 lint errors and a verification script that nothing ever ran.",
+          "itens": [
+            "Repositories without CI: 3 of 6",
+            "The same 3 with a broken lint right now",
+            "Commits with AI co-authorship: 41 of 161",
+            "Repository with the most governance: 35 lint errors"
+          ]
+        },
+        {
+          "titulo": "If a rule can move down a level, it should",
+          "corpo": "The levels run from N0 to N7. N0 is the compiler, N1 static analysis, N4 CI, N5 the hook. Above N5 it is a machine; below it is a request. Every rule that lives in a request and would fit in a machine is debt, and the bill is measurable: a hundred lines of always-present rules, across thirty sessions a week for a year, run past two million tokens.",
+          "itens": [
+            "N0 compiler — fails as \"it does not compile\"",
+            "N1 static analysis — \"it does not pass lint\"",
+            "N4 CI — \"it does not land on main\"",
+            "N5 hook — \"the action does not happen\"",
+            "N6 instruction to an AI — depends on reading and obeying"
+          ]
+        },
+        {
+          "titulo": "Every rule is born with two cases",
+          "corpo": "Each rule has a miniature repository it fails and another it passes, assembled in a temporary directory with a git of its own. Nothing is ever written into the live repository. The passing side deliberately carries the expected false positives: the example inside a comment, the sample file that is the fix rather than the flaw, the legitimate pre-hash sitting next to bcrypt.",
+          "itens": [
+            "Reading the exit code alone was not enough: passed and not-applicable both come out as zero",
+            "Loosening a rule has to paint the passing side red on the first run",
+            "A pair impossible to assemble is a rule that does not ship"
+          ]
+        },
+        {
+          "titulo": "What does not become a rule, and why",
+          "corpo": "Eight classes of flaw were left out on honesty grounds: in each of them, two identical trees on disk get opposite verdicts. Rate limiting lives in Cloudflare, authorization lives in a policy, RLS may be switched on from a dashboard. Each one became a written question, answered with a file path, instead of an invented score.",
+          "itens": [
+            "IDOR and per-object authorization",
+            "Rate limiting and brute force",
+            "IP treated as identity",
+            "RLS enabled outside the repository"
+          ]
+        },
+        {
+          "titulo": "Exit codes",
+          "corpo": "127 dominates 1, and that is not a detail: you do not accuse a repository with a ruler that broke. An exception inside a rule is a defect of the tool and never enters the target's score.",
+          "itens": [
+            "0 — everything that applies passed",
+            "1 — failed, a real violation",
+            "2 — invalid target or wrong invocation",
+            "127 — broke, a defect of the tool"
+          ]
+        },
+        {
+          "titulo": "What is not proven yet",
+          "corpo": "rebar is enforced in two repositories. One rule still only warns, because close to twelve per cent of what it flags is noise from interface vocabulary. And the most expensive lesson of the tree: the gate stayed green for six commits while the generator was dead, because no step ever generated a project. All the coverage sat on the tooling and none on what is shipped.",
+          "itens": [
+            "The generator got a step of its own after that, proven by mutation",
+            "The secret scanner had no proof at all until an outside audit found a leak in UTF-16"
+          ]
+        }
+      ]
+    }
+  },
+  "rotulos": {
+    "pularParaConteudo": "Skip to content",
+    "navegacaoPrincipal": "Main navigation",
+    "secoes": "Sections",
+    "trilha": "Breadcrumb",
+    "nestaPagina": "On this page",
+    "saida": "output",
+    "copiar": "Copy command",
+    "copiado": "Copied",
+    "buscar": "Search",
+    "buscarVazio": "No results",
+    "buscarDica": "Type to search",
+    "idioma": "Language",
+    "tema": "Theme",
+    "temaClaro": "Light",
+    "temaEscuro": "Dark",
+    "temaSistema": "System",
+    "menu": "Menu",
+    "anterior": "Previous",
+    "proximo": "Next",
+    "repositorio": "Repository",
+    "navegacao": {
+      "inicio": "Home",
+      "docs": "Docs",
+      "instalacao": "Installation",
+      "uso": "Usage",
+      "modulos": "Modules"
+    }
+  }
+}

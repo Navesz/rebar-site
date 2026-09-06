@@ -1,0 +1,242 @@
+{
+  "tagDeIdioma": "es-ES",
+  "nomeDoIdioma": "Español",
+  "titulo": "rebar — el código incorrecto no pasa",
+  "gabaritoDeTitulo": "%s · rebar",
+  "descricao": "Un verificador, un portón de commit y un generador de proyectos que impiden que el código incorrecto llegue a producción. Cero dependencias, Apache-2.0.",
+  "nomeCurto": "rebar",
+  "home": {
+    "titulo": "rebar",
+    "subtitulo": "Un verificador que se ejecuta sobre cualquier repositorio, un portón que bloquea el commit cuando se ignora una regla, y un generador que crea el próximo proyecto ya del lado correcto de la raya.",
+    "destaques": [
+      {
+        "titulo": "El problema, medido en 161 commits",
+        "texto": "Análisis forense de seis repositorios, 25/08/2026: 3 sin CI, y esos mismos 3 con el lint roto. El que tenía más documentos de gobernanza — AGENTS.md, SECURITY.md, GOVERNANCE.md — tenía 35 errores de lint."
+      },
+      {
+        "titulo": "Una regla en markdown casi nunca se cumple",
+        "texto": "Aquel repositorio tenía un script check que encadenaba formato, lint, tipos, pruebas y build. Nada lo ejecutaba nunca. Si una regla puede bajar de la prosa a la máquina, que baje — y la máquina tiene que ser la más fiable de las dos."
+      },
+      {
+        "titulo": "El verificador: un marcador de cualquier repositorio",
+        "texto": "npx github:Navesz/rebar . — sin instalar nada y sin escribir una línea en el repositorio auditado. La regla que no aplica sale del denominador, porque un marcador que cuenta lo que no existe es un marcador que miente."
+      },
+      {
+        "titulo": "El portón: hook, CI en los dos sistemas y el servidor",
+        "texto": "Lo que ejecuta el CI es la misma secuencia que ejecutas tú antes, en un solo comando. Encima, un ruleset de GitHub con la lista de excepciones vacía — ni el dueño pasa. Debajo, el hook, en tu máquina."
+      },
+      {
+        "titulo": "El generador: esta página salió de él",
+        "texto": "npx github:Navesz/rebar novo mi-sitio crea un Next estático con el portón ya dentro y un servidor MCP que sirve las reglas a la IA que abra el proyecto. Después pasa la raya por lo que acaba de crear."
+      },
+      {
+        "titulo": "Lo que todavía no está probado",
+        "texto": "rebar se impone en un repositorio: él mismo. La meta escrita eran dos hasta D+30, y va 1 de 2. Una regla sigue solo avisando porque cerca del 12% de lo que señala es ruido. Si no cambia, el criterio de abandono manda parar."
+      }
+    ]
+  },
+  "paginas": {
+    "instalacao": {
+      "titulo": "Instalación",
+      "resumo": "No hay instalación: rebar se ejecuta con npx, sin escribir una línea en el repositorio que audita. Lo que se instala es el portón, y solo en el proyecto que quiera uno.",
+      "passos": [
+        {
+          "titulo": "Auditar un repositorio que ya existe",
+          "comando": "npx github:Navesz/rebar .",
+          "nota": "No se instala nada y no se escribe nada. Sale un marcador, y el código de salida dice si pasó: 0 pasó, 1 falló, 2 objetivo inválido, 127 la raya se rompió."
+        },
+        {
+          "titulo": "Auditar la seguridad de ese mismo repositorio",
+          "comando": "npx -p github:Navesz/rebar rebar-security .",
+          "nota": "Es otro binario del mismo paquete — de ahí el -p. Sin él npx ejecuta el verificador de formato y auditas lo que no querías creyendo que auditaste."
+        },
+        {
+          "titulo": "Empezar un proyecto ya del lado correcto de la raya",
+          "comando": "npx github:Navesz/rebar novo padaria-do-ze",
+          "nota": "Crea un Next estático con el portón dentro, hooks, CI en matriz de Windows y Linux, y un servidor MCP que sirve las reglas a la IA que abra el proyecto."
+        },
+        {
+          "titulo": "Armar el portón en el proyecto recién creado",
+          "comando": "npm run install-hooks",
+          "nota": "El hook no viene armado en el clon: sin core.hooksPath el archivo está en el disco y git no lo ejecuta. El portón parecería instalado y no verificaría nada."
+        },
+        {
+          "titulo": "Ejecutar la secuencia entera antes de hacer commit",
+          "comando": "npm run verify",
+          "nota": "Es el mismo comando que ejecuta el CI. Que lo local y el CI diverjan es el defecto que convierte el portón en una insignia verde."
+        }
+      ]
+    },
+    "uso": {
+      "titulo": "Modo de uso",
+      "resumo": "Tres estados en lugar de dos, y el tercero es el que impide que el marcador mienta: lo que no aplica sale del denominador. Una carpeta vacía no saca buena nota.",
+      "exemplos": [
+        {
+          "titulo": "El marcador de un repositorio",
+          "comando": "npx github:Navesz/rebar .",
+          "saida": "rebar-check · prumo\n  ✓ editorconfig       tem .editorconfig\n  ✗ dependabot         sem dependabot nem renovate\n  ✓ ci                 tem CI\n  – typecheck          não tem TypeScript\n  11 de 13  ·  1 não se aplica",
+          "nota": "El guion es el tercer estado. Antes de existir, una carpeta vacía con un .git/ vacío sacaba 8 de 14 y empataba con el propio rebar. El verificador imprime en portugués de Brasil."
+        },
+        {
+          "titulo": "Varios repositorios de una vez",
+          "comando": "npx github:Navesz/rebar ../a ../b ../c",
+          "nota": "Al final sale un resumen comparable. Así se levantó el análisis forense de 161 commits en seis repositorios."
+        },
+        {
+          "titulo": "Una sola regla, para arreglar sin ruido",
+          "comando": "npx github:Navesz/rebar --rule=ci-gates .",
+          "nota": "El recorte sirve para arreglar, no para aprobar: ejecútalo sin el filtro antes de hacer commit."
+        },
+        {
+          "titulo": "Salida estructurada, para el CI",
+          "comando": "npx github:Navesz/rebar --json .",
+          "nota": "Cada regla sale con id, clase, nivel y estado. Es lo que consume el paso de CI."
+        },
+        {
+          "titulo": "Heurísticas que también tumban el build",
+          "comando": "npx github:Navesz/rebar --heuristics .",
+          "nota": "Por defecto una heurística solo informa. Una regla automática equivocada cuesta más que una regla ausente — una de ellas se midió con siete apariciones y cero verdaderos positivos."
+        }
+      ]
+    },
+    "modulos": {
+      "titulo": "Los módulos",
+      "resumo": "Tres binarios del mismo paquete, y cada uno falla por un motivo distinto. Un formato equivocado y un fallo de seguridad no se arreglan igual ni con la misma prisa.",
+      "rotuloLimite": "Lo que no hace.",
+      "itens": [
+        {
+          "nome": "rebar-check",
+          "comando": "npx github:Navesz/rebar .",
+          "resumo": "La raya de formato. Dice si el repositorio tiene un CI que alcanza la verificación que declara, pruebas, formateador, licencia con NOTICE, hook con bit de ejecución, y si shadcn es de verdad o solo la carpeta imitando la convención.",
+          "limite": "No mira la seguridad y no ejecuta la aplicación. Un repositorio con nota perfecta aquí puede tener una contraseña en texto plano — para eso existe el módulo de al lado.",
+          "numeros": [
+            { "rotulo": "reglas", "valor": "23" },
+            { "rotulo": "deterministas", "valor": "18" },
+            { "rotulo": "heurísticas", "valor": "5" }
+          ]
+        },
+        {
+          "nome": "rebar-security",
+          "comando": "npx -p github:Navesz/rebar rebar-security .",
+          "resumo": "La raya de seguridad, destilada de dieciséis vídeos técnicos brasileños: 163 fallos candidatos, cada uno juzgado por tres escépticos independientes, 82 sobrevivieron. Los tres primeros se eligieron por cobertura por hora, no por su orden en la lista.",
+          "limite": "No comprueba Broken Access Control, que es el número 1 de OWASP. IDOR y la autorización por objeto quedaron fuera porque la defensa vive en un middleware, una policy o RLS — dos árboles idénticos en el disco reciben veredictos opuestos. Decirlo es más útil que fingir que se comprueba.",
+          "numeros": [
+            { "rotulo": "reglas", "valor": "3" },
+            { "rotulo": "todas deterministas", "valor": "sí" }
+          ]
+        },
+        {
+          "nome": "rebar-new",
+          "comando": "npx github:Navesz/rebar novo mi-sitio",
+          "resumo": "El generador. Emite un Next estático con el portón dentro, hooks de commit, CI en matriz de Windows y Linux, servidor MCP y un esquema de contenido que tumba el build cuando el dato es un placeholder plausible.",
+          "limite": "Un solo preset, el sitio. App y API están bloqueados por no-alcance declarado hasta que el preset de sitio se use sin modificaciones en dos sitios.",
+          "numeros": [{ "rotulo": "preset", "valor": "site" }]
+        },
+        {
+          "nome": "el portón",
+          "comando": "npm run verify",
+          "resumo": "La secuencia que ejecuta el CI y que ejecutas tú antes, en un solo comando. Cada paso del portón tiene prueba por mutación: se planta el defecto y se exige que el paso lo encuentre.",
+          "limite": "No es una capa nueva. Lo que bloquea es el hook en tu máquina, el CI y el ruleset del servidor — el único nivel que el agente no edita, porque no es un archivo.",
+          "numeros": [
+            { "rotulo": "pasos", "valor": "16" },
+            { "rotulo": "casos de prueba", "valor": "57" },
+            { "rotulo": "niveles", "valor": "N0–N7" }
+          ]
+        }
+      ]
+    },
+    "docs": {
+      "titulo": "Documentación",
+      "resumo": "La tesis en una línea: una regla en markdown casi nunca se cumple, una regla en CI se cumple siempre. Lo que sigue es lo que sostiene esa frase.",
+      "secoes": [
+        {
+          "titulo": "El problema, medido",
+          "corpo": "En un análisis forense de 161 commits en seis repositorios, los tres sin CI eran exactamente los tres con el lint roto en ese momento. El repositorio con más documentos de gobernanza — un AGENTS.md estricto, SECURITY.md, GOVERNANCE.md, CONTRIBUTING.md — tenía 35 errores de lint y un script de verificación que nada ejecutaba nunca.",
+          "itens": [
+            "Repositorios sin CI: 3 de 6",
+            "Esos mismos 3 con el lint roto ahora",
+            "Commits con coautoría de IA: 41 de 161",
+            "Repositorio con más gobernanza: 35 errores de lint"
+          ]
+        },
+        {
+          "titulo": "Si una regla puede bajar de nivel, debe bajar",
+          "corpo": "Los niveles van de N0 a N7. N0 es el compilador, N1 el análisis estático, N4 el CI, N5 el hook. Por encima de N5 es una máquina; por debajo es una petición. Toda regla que vive en una petición y cabría en una máquina es deuda, y la cuenta es medible: cien líneas de reglas siempre presentes, en treinta sesiones por semana durante un año, pasan de dos millones de tokens.",
+          "itens": [
+            "N0 compilador — falla como \"no compila\"",
+            "N1 análisis estático — \"no pasa el lint\"",
+            "N4 CI — \"no entra en la principal\"",
+            "N5 hook — \"la acción no ocurre\"",
+            "N6 instrucción para la IA — depende de leerla y obedecerla"
+          ]
+        },
+        {
+          "titulo": "Toda regla nace con dos casos",
+          "corpo": "Cada regla tiene un repositorio en miniatura que reprueba y otro que aprueba, montados en un directorio temporal con su propio git. Nunca se escribe en el repositorio vivo. El lado que aprueba lleva a propósito los falsos positivos previstos: el ejemplo dentro de un comentario, el archivo de ejemplo que es el arreglo y no el fallo, el pre-hash legítimo al lado de bcrypt.",
+          "itens": [
+            "Leer solo el código de salida no bastaba: pasó y no aplica salen los dos como cero",
+            "Aflojar la regla tiene que pintar de rojo el lado que aprueba en la primera vuelta",
+            "Un par imposible de montar es una regla que no entra"
+          ]
+        },
+        {
+          "titulo": "Lo que no se convierte en regla, y por qué",
+          "corpo": "Ocho clases de fallo quedaron fuera por honestidad: en ellas, dos árboles idénticos en el disco reciben veredictos opuestos. El rate limit vive en Cloudflare, la autorización vive en una policy, RLS puede estar activada desde el panel. Cada una se convirtió en una pregunta escrita, respondida con una ruta de archivo, en lugar de un marcador inventado.",
+          "itens": [
+            "IDOR y autorización por objeto",
+            "Rate limit y fuerza bruta",
+            "La IP tratada como identidad",
+            "RLS activada fuera del repositorio"
+          ]
+        },
+        {
+          "titulo": "Códigos de salida",
+          "corpo": "El 127 domina al 1, y eso no es un detalle: no se acusa a un repositorio con una raya que se rompió. Una excepción dentro de una regla es un defecto de la herramienta y nunca entra en la nota del objetivo.",
+          "itens": [
+            "0 — todo lo que aplica pasó",
+            "1 — falló, violación real",
+            "2 — objetivo inválido o invocación equivocada",
+            "127 — se rompió, defecto de la herramienta"
+          ]
+        },
+        {
+          "titulo": "Lo que todavía no está probado",
+          "corpo": "rebar se impone en dos repositorios. Una regla sigue solo avisando porque cerca del doce por ciento de lo que señala es ruido de vocabulario de interfaz. Y la lección más cara del árbol: el portón estuvo verde durante seis commits mientras el generador estaba muerto, porque ningún paso generaba un proyecto. Toda la cobertura estaba en la herramienta y ninguna en lo que se entrega.",
+          "itens": [
+            "El generador ganó su propio paso después de eso, probado por mutación",
+            "El rastreador de secretos no tenía prueba alguna hasta que una auditoría externa encontró una fuga en UTF-16"
+          ]
+        }
+      ]
+    }
+  },
+  "rotulos": {
+    "pularParaConteudo": "Saltar al contenido",
+    "navegacaoPrincipal": "Navegación principal",
+    "secoes": "Secciones",
+    "trilha": "Ruta",
+    "nestaPagina": "En esta página",
+    "saida": "salida",
+    "copiar": "Copiar comando",
+    "copiado": "Copiado",
+    "buscar": "Buscar",
+    "buscarVazio": "Sin resultados",
+    "buscarDica": "Escribe para buscar",
+    "idioma": "Idioma",
+    "tema": "Tema",
+    "temaClaro": "Claro",
+    "temaEscuro": "Oscuro",
+    "temaSistema": "Sistema",
+    "menu": "Menú",
+    "anterior": "Anterior",
+    "proximo": "Siguiente",
+    "repositorio": "Repositorio",
+    "navegacao": {
+      "inicio": "Inicio",
+      "docs": "Docs",
+      "instalacao": "Instalación",
+      "uso": "Uso",
+      "modulos": "Módulos"
+    }
+  }
+}
