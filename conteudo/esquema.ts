@@ -803,6 +803,91 @@ const formaDoSite = objeto({
       6
     ),
   }),
+
+  // ─────────────────────────────────────────────── as paginas de documentacao
+  //
+  // POR QUE ISTO E CONTEUDO E NAO JSX. A regra `content-outside-code` do rebar
+  // acusa no de texto de JSX com quatro palavras ou mais. Uma pagina de
+  // documentacao escrita dentro do componente faria ESTE site reprovar na regua
+  // do projeto que ele documenta -- o mesmo `menu.ts` de 623 linhas que a
+  // forense catalogou no Galegos, cometido pela landing do proprio checker.
+  //
+  // Cada bloco e OPCIONAL e tudo-ou-nada. Site gerado sem documentacao nao tem
+  // a chave e nao tem a rota; com a chave, os campos vem juntos ou o build
+  // reprova. E a mesma disciplina do bloco de WhatsApp, um andar acima.
+  paginas: opcional(
+    objeto({
+      instalacao: objeto({
+        titulo: texto(4, 80),
+        resumo: texto(20, 300),
+        // `comando` e texto livre e nao um padrao: prender a forma aqui faria
+        // o esquema recusar `pnpm dlx` no dia em que alguem preferir pnpm.
+        passos: lista(
+          objeto({
+            titulo: texto(3, 80),
+            comando: texto(3, 200),
+            nota: opcional(texto(10, 300)),
+          }),
+          1,
+          8
+        ),
+      }),
+
+      uso: objeto({
+        titulo: texto(4, 80),
+        resumo: texto(20, 300),
+        exemplos: lista(
+          objeto({
+            titulo: texto(3, 80),
+            comando: texto(3, 200),
+            // A saida e opcional porque nem todo exemplo tem uma curta o
+            // bastante para caber na tela sem virar captura de tela mentirosa.
+            saida: opcional(texto(3, 900)),
+            nota: opcional(texto(10, 300)),
+          }),
+          1,
+          10
+        ),
+      }),
+
+      modulos: objeto({
+        titulo: texto(4, 80),
+        resumo: texto(20, 300),
+        itens: lista(
+          objeto({
+            nome: texto(3, 40),
+            comando: texto(3, 120),
+            resumo: texto(20, 400),
+            // O que ele NAO faz. Campo obrigatorio de proposito: modulo
+            // descrito so pelo que faz e propaganda, e a doutrina desta arvore
+            // e que o limite declarado vale mais que a capacidade declarada.
+            limite: texto(15, 400),
+            numeros: lista(
+              objeto({ rotulo: texto(2, 40), valor: texto(1, 24) }),
+              0,
+              6
+            ),
+          }),
+          1,
+          8
+        ),
+      }),
+
+      docs: objeto({
+        titulo: texto(4, 80),
+        resumo: texto(20, 300),
+        secoes: lista(
+          objeto({
+            titulo: texto(3, 90),
+            corpo: texto(30, 1200),
+            itens: lista(texto(3, 300), 0, 12),
+          }),
+          1,
+          12
+        ),
+      }),
+    })
+  ),
 })
 
 type FormaDoSite = Inferir<typeof formaDoSite>

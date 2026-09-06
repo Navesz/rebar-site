@@ -54,5 +54,208 @@
         "texto": "O rebar impõe em um repositório: ele mesmo. A meta escrita era dois até D+30, e está em 1 de 2. Uma regra continua só avisando porque perto de 12% do que ela acusa é ruído. Se não virar, o critério de abandono manda parar."
       }
     ]
+  },
+  "paginas": {
+    "instalacao": {
+      "titulo": "Instalação",
+      "resumo": "Não há instalação: o rebar roda por npx, sem escrever uma linha no repositório que audita. O que se instala é o portão, e só no projeto que quiser um.",
+      "passos": [
+        {
+          "titulo": "Auditar um repositório que já existe",
+          "comando": "npx github:Navesz/rebar .",
+          "nota": "Nada é instalado e nada é escrito. Sai um placar, e o código de saída diz se passou: 0 passou, 1 reprovou, 2 alvo inválido, 127 a régua quebrou."
+        },
+        {
+          "titulo": "Auditar a segurança do mesmo repositório",
+          "comando": "npx -p github:Navesz/rebar rebar-security .",
+          "nota": "Binário diferente do mesmo pacote — daí o -p. Sem ele o npx roda o checker de formato e você audita a coisa errada achando que auditou."
+        },
+        {
+          "titulo": "Começar um projeto já do lado certo da régua",
+          "comando": "npx github:Navesz/rebar novo padaria-do-ze",
+          "nota": "Cria um Next estático com o portão dentro, hooks, CI em matriz Windows e Linux, e um servidor MCP que serve as regras à IA que abrir o projeto."
+        },
+        {
+          "titulo": "Armar o portão no projeto criado",
+          "comando": "npm run install-hooks",
+          "nota": "O hook não vem armado no clone: sem core.hooksPath o arquivo está no disco e o git não o executa. O portão pareceria instalado e verificaria zero."
+        },
+        {
+          "titulo": "Rodar a sequência inteira antes de commitar",
+          "comando": "npm run verify",
+          "nota": "É o mesmo comando que o CI executa. Local e CI divergirem é o defeito que faz o portão virar selo verde."
+        }
+      ]
+    },
+    "uso": {
+      "titulo": "Modo de uso",
+      "resumo": "Três estados em vez de dois, e o terceiro é o que impede o placar de mentir: o que não se aplica sai do denominador. Uma pasta vazia não tira nota boa.",
+      "exemplos": [
+        {
+          "titulo": "O placar de um repositório",
+          "comando": "npx github:Navesz/rebar .",
+          "saida": "rebar-check · prumo\n  ✓ editorconfig       tem .editorconfig\n  ✗ dependabot         sem dependabot nem renovate\n  ✓ ci                 tem CI\n  – typecheck          não tem TypeScript\n  11 de 13  ·  1 não se aplica",
+          "nota": "O traço é o terceiro estado. Antes de existir, uma pasta vazia com um .git/ vazio tirava 8 de 14 e empatava com o próprio rebar."
+        },
+        {
+          "titulo": "Vários repositórios de uma vez",
+          "comando": "npx github:Navesz/rebar ../a ../b ../c",
+          "nota": "Sai um resumo comparável no fim. É como a forense de 161 commits em seis repositórios foi levantada."
+        },
+        {
+          "titulo": "Uma regra só, para consertar sem ruído",
+          "comando": "npx github:Navesz/rebar --rule=ci-gates .",
+          "nota": "O recorte serve para consertar, não para liberar: rode sem o filtro antes de commitar."
+        },
+        {
+          "titulo": "Saída estruturada, para o CI",
+          "comando": "npx github:Navesz/rebar --json .",
+          "nota": "Cada regra sai com id, classe, nível e estado. É o que o passo de CI consome."
+        },
+        {
+          "titulo": "Heurística também derrubando",
+          "comando": "npx github:Navesz/rebar --heuristics .",
+          "nota": "Por padrão heurística só informa. Regra automática errada custa mais que regra ausente — uma delas foi medida com sete ocorrências e zero verdadeiros positivos."
+        }
+      ]
+    },
+    "modulos": {
+      "titulo": "Os módulos",
+      "resumo": "Três binários do mesmo pacote, e cada um falha por um motivo diferente. Formato errado e falha de segurança não se consertam do mesmo jeito nem com a mesma pressa.",
+      "itens": [
+        {
+          "nome": "rebar-check",
+          "comando": "npx github:Navesz/rebar .",
+          "resumo": "A régua de formato. Diz se o repositório tem CI que alcança a verificação que ele declara, teste, formatador, licença com NOTICE, hook com bit de execução, e se o shadcn é de verdade ou só a pasta imitando a convenção.",
+          "limite": "Não olha segurança e não roda a aplicação. Um repositório com nota cheia aqui pode ter senha em texto puro — é para isso que existe o módulo ao lado.",
+          "numeros": [
+            {
+              "rotulo": "regras",
+              "valor": "23"
+            },
+            {
+              "rotulo": "determinísticas",
+              "valor": "18"
+            },
+            {
+              "rotulo": "heurísticas",
+              "valor": "5"
+            }
+          ]
+        },
+        {
+          "nome": "rebar-security",
+          "comando": "npx -p github:Navesz/rebar rebar-security .",
+          "resumo": "A régua de segurança, destilada de dezesseis vídeos técnicos brasileiros: 163 falhas candidatas, cada uma julgada por três céticos independentes, 82 sobreviveram. As três primeiras foram escolhidas por cobertura por hora, não por ordem de lista.",
+          "limite": "Não checa Broken Access Control, que é o número 1 do OWASP. IDOR e autorização por objeto ficaram fora porque a defesa mora em middleware, policy ou RLS — duas árvores idênticas no disco têm veredito oposto. Dizer isso é mais útil que fingir que checa.",
+          "numeros": [
+            {
+              "rotulo": "regras",
+              "valor": "3"
+            },
+            {
+              "rotulo": "todas determinísticas",
+              "valor": "sim"
+            }
+          ]
+        },
+        {
+          "nome": "rebar-new",
+          "comando": "npx github:Navesz/rebar novo meu-site",
+          "resumo": "O gerador. Emite um Next estático com o portão dentro, hooks de commit, CI em matriz Windows e Linux, servidor MCP e um esquema de conteúdo que reprova o build quando o dado é placeholder plausível.",
+          "limite": "Um preset só, o site. App e API estão barrados por não-escopo declarado até o preset site ser usado sem modificação em dois sites.",
+          "numeros": [
+            {
+              "rotulo": "preset",
+              "valor": "site"
+            }
+          ]
+        },
+        {
+          "nome": "o portão",
+          "comando": "npm run verify",
+          "resumo": "A sequência que o CI roda e que você roda antes dele, num comando só. Cada passo do portão tem prova por mutação: planta-se o defeito e exige-se que o passo o encontre.",
+          "limite": "Não é uma camada nova. O que barra é o hook na sua máquina, o CI, e o ruleset do servidor — o único nível que o agente não edita, porque não é arquivo.",
+          "numeros": [
+            {
+              "rotulo": "passos",
+              "valor": "16"
+            },
+            {
+              "rotulo": "casos de prova",
+              "valor": "57"
+            },
+            {
+              "rotulo": "níveis",
+              "valor": "N0–N7"
+            }
+          ]
+        }
+      ]
+    },
+    "docs": {
+      "titulo": "Documentação",
+      "resumo": "A tese em uma linha: regra em markdown tem cumprimento perto de zero, regra em CI tem cem por cento. O que segue é o que sustenta essa frase.",
+      "secoes": [
+        {
+          "titulo": "O problema, medido",
+          "corpo": "Numa forense de 161 commits em seis repositórios, os três sem CI eram exatamente os três com o lint quebrado naquele momento. O repositório com mais documento de governança — AGENTS.md com regras rígidas, SECURITY.md, GOVERNANCE.md, CONTRIBUTING.md — tinha 35 erros de lint e um script de verificação que nada nunca executava.",
+          "itens": [
+            "Repositórios sem CI: 3 de 6",
+            "Os mesmos 3 com lint quebrado agora",
+            "Commits com coautoria de IA: 41 de 161",
+            "Repositório com mais governança: 35 erros de lint"
+          ]
+        },
+        {
+          "titulo": "Se uma regra pode descer de nível, ela deve descer",
+          "corpo": "Os níveis vão de N0 a N7. N0 é o compilador, N1 a análise estática, N4 o CI, N5 o hook. Acima de N5 é máquina; abaixo é pedido. Toda regra que mora em pedido e caberia numa máquina é dívida, e a conta é medível: cem linhas de regra sempre presente, em trinta sessões por semana durante um ano, passam de dois milhões de tokens.",
+          "itens": [
+            "N0 compilador — falha como \"não compila\"",
+            "N1 análise estática — \"não passa no lint\"",
+            "N4 CI — \"não entra na principal\"",
+            "N5 hook — \"a ação não acontece\"",
+            "N6 instrução para IA — depende de ler e obedecer"
+          ]
+        },
+        {
+          "titulo": "Toda regra nasce com dois casos",
+          "corpo": "Cada regra tem um repositório em miniatura que ela reprova e outro que ela aprova, montados num diretório temporário com git próprio. Nunca se escreve no repositório vivo. O lado que aprova carrega de propósito os falsos positivos previstos: o exemplo dentro de comentário, o arquivo de exemplo que é o conserto e não a falha, o pré-hash legítimo ao lado do bcrypt.",
+          "itens": [
+            "Ler só o código de saída não bastava: passou e não se aplica saem os dois como zero",
+            "Afrouxar a regra tem de pintar o lado que aprova de vermelho na primeira rodada",
+            "Par impossível de montar é regra que não entra"
+          ]
+        },
+        {
+          "titulo": "O que não vira regra, e por quê",
+          "corpo": "Oito classes de falha ficaram de fora por honestidade: nelas, duas árvores idênticas no disco têm veredito oposto. Rate limit mora no Cloudflare, autorização mora numa policy, RLS pode estar ligada pelo painel. Cada uma virou pergunta escrita, respondida com caminho de arquivo, em vez de placar inventado.",
+          "itens": [
+            "IDOR e autorização por objeto",
+            "Rate limit e força bruta",
+            "IP tratado como identidade",
+            "RLS ligada fora do repositório"
+          ]
+        },
+        {
+          "titulo": "Códigos de saída",
+          "corpo": "O 127 domina o 1, e isso não é detalhe: não se acusa um repositório com uma régua que quebrou. Uma exceção dentro de uma regra é defeito da ferramenta e nunca entra na nota do alvo.",
+          "itens": [
+            "0 — tudo que se aplica passou",
+            "1 — reprovou, violação real",
+            "2 — alvo inválido ou invocação errada",
+            "127 — quebrou, defeito da ferramenta"
+          ]
+        },
+        {
+          "titulo": "O que ainda não está provado",
+          "corpo": "O rebar impõe em dois repositórios. Uma regra continua só avisando porque perto de doze por cento do que ela acusa é ruído de vocabulário de interface. E a lição mais cara da árvore: o portão ficou verde por seis commits enquanto o gerador estava morto, porque nenhum passo gerava um projeto. A cobertura estava toda no ferramental e nenhuma no que se entrega.",
+          "itens": [
+            "O gerador ganhou passo próprio depois disso, provado por mutação",
+            "O varredor de segredo não tinha prova nenhuma até uma auditoria externa achar um vazamento em UTF-16"
+          ]
+        }
+      ]
+    }
   }
 }
