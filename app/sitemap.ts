@@ -36,7 +36,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   const paginas = Object.keys(site.paginas ?? {}).map((chave) => ({
-    url: `${site.meta.urlBase}/${chave}`,
+    // Barra final porque `trailingSlash: true` no `next.config.ts` torna essa
+    // a forma CANONICA -- a sem barra passa a redirecionar. Publicar no indice
+    // a forma que redireciona custa um salto a cada visita do robo.
+    url: `${site.meta.urlBase}/${chave}/`,
     lastModified: site.meta.atualizadoEm,
     changeFrequency: "monthly" as const,
     // Menor que a raiz e igual entre si: ordenar documentação por palpite de

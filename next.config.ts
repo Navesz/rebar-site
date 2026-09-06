@@ -24,6 +24,18 @@ const nextConfig: NextConfig = {
   // eles. Medido no spike de 31/08 — todas as rotas "prerendered as static
   // content", out/index.html com 12 KB e a meta absoluta lá dentro.
   output: "export",
+  // CADA ROTA VIRA UMA PASTA COM `index.html`, e nao um arquivo `rota.html`.
+  //
+  // Medido no site publicado: sem esta linha, `/docs` respondia 200 e `/docs/`
+  // respondia 404. O GitHub Pages serve `docs.html` para o caminho sem barra e
+  // procura `docs/index.html` para o caminho com barra -- que nao existia. Uma
+  // das duas formas da URL certa quebrava, e a que quebrava e justamente a que
+  // navegador, ferramenta de link e gente digitando produzem sozinhos.
+  //
+  // Com a linha, o Pages redireciona a forma sem barra para a com barra e as
+  // duas funcionam. O `sitemap.ts` acompanha, senao o indice publica a forma
+  // que redireciona em vez da canonica.
+  trailingSlash: true,
   // Domínio próprio (`https://padaria.com.br`) devolve caminho vazio, e aí as
   // duas chaves ficam FORA do objeto: `basePath: ''` é aceito, mas
   // `assetPrefix: ''` muda o comportamento do Next em versões diferentes, e

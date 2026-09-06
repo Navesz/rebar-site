@@ -191,7 +191,8 @@
             }
           ]
         }
-      ]
+      ],
+      "rotuloLimite": "O que não faz."
     },
     "docs": {
       "titulo": "Documentação",

@@ -71,7 +71,7 @@ export default function Pagina() {
                   />
                   <p className="text-sm leading-relaxed text-muted-foreground">
                     <span className="font-medium text-foreground">
-                      O que não faz.{" "}
+                      {p.rotuloLimite}{" "}
                     </span>
                     {m.limite}
                   </p>

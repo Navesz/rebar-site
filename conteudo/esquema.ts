@@ -853,6 +853,11 @@ const formaDoSite = objeto({
       modulos: objeto({
         titulo: texto(4, 80),
         resumo: texto(20, 300),
+        // O rotulo do bloco de limite. Esta AQUI e nao no `.tsx` porque a
+        // regra `content-outside-code` do rebar o acusou -- e estava certa: a
+        // pagina declara no proprio cabecalho que nao carrega literal de
+        // conteudo, e "O que nao faz." e conteudo.
+        rotuloLimite: texto(3, 40),
         itens: lista(
           objeto({
             nome: texto(3, 40),
