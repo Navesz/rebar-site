@@ -252,7 +252,8 @@ export function PaletaDeBusca({
           </Autocomplete.InputGroup>
 
           {/*
-           * A ROLAGEM É UM `div` CRU, e não `components/ui/scroll-area.tsx`.
+           * A ROLAGEM É UM `div` CRU, e o `ScrollArea` do shadcn não está aqui —
+           * nem no projeto, porque esta foi a última coisa que o importava.
            *
            * O defeito que isso conserta: com o `ScrollArea` ali, um Tab dentro
            * da paleta levava o foco para o `ScrollArea.Viewport` — que é
@@ -262,11 +263,9 @@ export function PaletaDeBusca({
            * e desligava as três no primeiro Tab, que é o gesto natural de quem
            * abre um diálogo e quer explorá-lo.
            *
-           * `tabIndex={-1}` no Viewport seria o conserto de uma linha, e ele não
-           * cabe aqui: `components/ui/scroll-area.tsx` é do outro agente. Passar
-           * a prop pelo ponto de chamada também não resolve — CONFERIDO LENDO O
-           * ARQUIVO: o `...props` dele é espalhado no `Root`, e o `Viewport` é
-           * escrito com className fixa e sem repasse nenhum. Um `tabIndex` daqui
+           * `tabIndex={-1}` no Viewport seria o conserto de uma linha, e não
+           * bastava: o componente espalha `...props` no `Root`, e o `Viewport`
+           * era escrito com className fixa e sem repasse — um `tabIndex` daqui
            * pousaria no invólucro que não rola e deixaria o focável de pé.
            *
            * O CUSTO, escrito: some a barra de rolagem desenhada (trilho de 10px

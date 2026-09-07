@@ -234,8 +234,12 @@ export function metadadosDoNaoEncontrado(idioma: Idioma): Metadata {
  *     a regra `react-hooks/set-state-in-effect` do `eslint-config-next`
  *     reprova, e a correção chegaria um quadro DEPOIS da primeira pintura — a
  *     barra piscaria na cor errada antes de acertar. O seletor escapou disso
- *     porque CSS resolve `.dark` sem JavaScript; uma `<meta>` não tem essa
- *     saída.
+ *     porque o `next-themes` escreve `.dark` num script BLOQUEANTE, antes da
+ *     primeira pintura — não é que o CSS resolva o tema sozinho (medido: o CSS
+ *     publicado tem ZERO ocorrência de `prefers-color-scheme`; sem JavaScript
+ *     a página sai clara). A diferença é o momento, não a ausência de JS: o
+ *     script do tema roda antes de pintar, um componente de React roda depois.
+ *     Uma `<meta>` no `<head>` não tem como esperar por esse script.
  *   · script bloqueante próprio, lendo `localStorage` antes da pintura — seria
  *     uma SEGUNDA implementação da resolução de tema, ao lado da que
  *     `next-themes` já embute. Duas fontes da mesma verdade divergem na
