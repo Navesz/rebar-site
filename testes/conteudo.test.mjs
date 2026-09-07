@@ -62,11 +62,15 @@ const minimo = () => ({
     urlBase: "https://padariadoze.com.br",
     atualizadoEm: "2026-09-02",
     cores: { tema: "#0f172a", fundo: "#ffffff" },
+    // SEM `alt`, desde 06/09: ele saiu daqui para `og.alt` de cada arquivo de
+    // texto. O que sobrou são os três fatos da imagem, iguais em qualquer
+    // idioma. Devolver a chave aqui reprova como campo desconhecido — e há um
+    // teste abaixo cobrando exatamente isso, porque essa é a forma que a
+    // migração tem de deixar de acontecer pela metade.
     og: {
       caminho: "/og.png",
       largura: 1200,
       altura: 630,
-      alt: "Cartão de compartilhamento da Padaria do Zé",
     },
   },
 })
@@ -90,9 +94,21 @@ const rotulos = () => ({
   temaEscuro: "Escuro",
   temaSistema: "Sistema",
   menu: "Menu",
+  fechar: "Fechar",
   anterior: "Anterior",
   proximo: "Próximo",
   repositorio: "Repositório",
+  comecar: "Começar",
+  // Os dois textos da página 404. Ela é UM arquivo para os três idiomas — o
+  // GitHub Pages serve `out/404.html` para todo endereço desconhecido —, mas
+  // os rótulos existem nos três porque a página renderiza na `IDIOMA_PADRAO`,
+  // e o idioma padrão é decisão que pode mudar.
+  naoEncontrado: "Esta página não existe",
+  voltarParaOInicio: "Comece de novo pelo início",
+  grupos: {
+    comecar: "Comece aqui",
+    referencia: "Referência",
+  },
   navegacao: {
     inicio: "Início",
     docs: "Docs",
@@ -111,6 +127,10 @@ const textosMinimos = () => ({
   descricao:
     "Pães de fermentação natural, bolos e salgados assados todo dia de manhã na Vila Mariana.",
   nomeCurto: "Padaria",
+  // O alt do cartão de compartilhamento mora AQUI desde 06/09, e não em
+  // `site.json`: ele é o texto que o leitor de tela pronuncia quando alguém
+  // compartilha o link, e texto que alguém lê se traduz.
+  og: { alt: "Cartão de compartilhamento da Padaria do Zé" },
   home: {
     titulo: "Padaria do Zé",
     subtitulo:
@@ -204,6 +224,7 @@ test("sem o núcleo não há textos: titulo, descricao e home.titulo são obriga
     ["gabaritoDeTitulo"],
     ["tagDeIdioma"],
     ["nomeDoIdioma"],
+    ["og", "alt"],
     ["home", "titulo"],
   ]) {
     const textos = textosMinimos()
@@ -218,11 +239,14 @@ test("sem o núcleo não há textos: titulo, descricao e home.titulo são obriga
 test("placeholder no site REPROVA, e a mensagem lista tudo que falta de uma vez", () => {
   const site = minimo()
   site.identidade.nome = "TROQUE-PELO-NOME-DO-NEGOCIO"
-  site.meta.og.alt = "TROQUE-PELA-DESCRICAO-DA-IMAGEM"
+  // O segundo campo era `meta.og.alt`, que saiu deste arquivo em 06/09. Agora é
+  // `meta.urlBase` — o outro campo obrigatório do bloco compartilhado, e o que
+  // o gerador também entrega com sentinela.
+  site.meta.urlBase = "TROQUE-PELO-ENDERECO-DO-SITE"
   const mensagem = recusa(site)
   assert.match(mensagem, /2 campo\(s\) com PLACEHOLDER/)
   assert.match(mensagem, /identidade\.nome/)
-  assert.match(mensagem, /meta\.og\.alt/)
+  assert.match(mensagem, /meta\.urlBase/)
   // Uma mensagem só, e não nove builds: é a razão de a varredura vir antes da
   // validação campo a campo.
   assert.match(mensagem, /conteudo\/site\.json/)
@@ -428,10 +452,45 @@ test("a mesma tag no arquivo certo passa", () => {
   assert.equal(esquemaTextos(textos, "es").tagDeIdioma, "es-ES")
 })
 
+// ── o alt do cartão, que mudou de arquivo em 06/09 ────────────────────────
+//
+// O DEFEITO QUE ISTO FECHA estava publicado nas 15 rotas: `meta.og.alt` morava
+// no bloco COMPARTILHADO, então os HTMLs inglês e espanhol carregavam
+// `og:image:alt` em português — no mesmo `<head>` em que `og:title` e
+// `og:description` já saíam traduzidos. Toda vez que alguém compartilhava uma
+// rota no WhatsApp, no Slack ou no X, o texto alternativo ia no idioma errado.
+//
+// Caminho, largura e altura CONTINUAM no compartilhado: são fatos da imagem, e
+// o mesmo arquivo em qualquer idioma. O corte é entre o que a imagem É e o que
+// alguém LÊ sobre ela.
+
+test("alt em site.json REPROVA: o campo mudou de arquivo, não foi duplicado", () => {
+  const site = minimo()
+  site.meta.og.alt = "Cartão de compartilhamento da Padaria do Zé"
+  const mensagem = recusa(site)
+  // A recusa é a de campo desconhecido, e ela é o que impede a migração pela
+  // metade: com o alt aceito nos DOIS arquivos, `lib/metadados.ts` leria um e o
+  // dono editaria o outro — e a página continuaria publicando o texto antigo
+  // sem nada acender.
+  assert.match(mensagem, /não conhece/)
+  assert.match(mensagem, /"alt"/)
+})
+
 // ── os rótulos de interface, que são a dívida de `conteudo-fora-do-codigo` ─
 
 test("rótulo faltando REPROVA: a moldura não sai em branco nem no idioma errado", () => {
-  for (const chave of ["pularParaConteudo", "nestaPagina", "saida"]) {
+  // `naoEncontrado` e `voltarParaOInicio` entram nesta lista porque são os
+  // únicos rótulos de uma página que NENHUMA rota do site renderiza: o 404 é
+  // servido pelo GitHub Pages fora da árvore de rotas. Sem eles cobrados aqui,
+  // um idioma podia perdê-los e só a página de erro ficaria em branco — a
+  // página que, por definição, ninguém revisa.
+  for (const chave of [
+    "pularParaConteudo",
+    "nestaPagina",
+    "saida",
+    "naoEncontrado",
+    "voltarParaOInicio",
+  ]) {
     const textos = textosMinimos()
     delete textos.rotulos[chave]
     assert.match(recusaTextos(textos), new RegExp(`rotulos\\.${chave}`))
@@ -491,6 +550,29 @@ test("os três arquivos de texto passam pelo MESMO esquema", () => {
   for (const idioma of ["en", "pt-br", "es"]) {
     assert.doesNotThrow(() => esquemaTextos(lerTextos(idioma), idioma))
   }
+})
+
+// O QUE A PARIDADE NÃO VÊ: o campo presente nos três arquivos com o MESMO texto
+// em um idioma só. É o defeito que o alt do cartão tinha antes de mudar de
+// arquivo, e mover o campo não o mata sozinho — copiar `pt-br.json` para
+// `en.json` e traduzir tudo menos esta linha passa no esquema e passa na
+// paridade, e publica de novo `og:image:alt` em português nas rotas inglesas.
+//
+// A checagem vale para ESTE campo e não para os outros de propósito:
+// `nomeCurto` é "rebar" nos três e `gabaritoDeTitulo` é "%s · rebar" nos três,
+// com razão — são nome próprio e pontuação. O alt é frase, e frase igual em
+// três idiomas é tradução que não aconteceu.
+test("o alt do cartão é escrito em cada idioma, e não copiado entre eles", () => {
+  const alts = ["en", "pt-br", "es"].map((idioma) => lerTextos(idioma).og.alt)
+  assert.equal(
+    new Set(alts).size,
+    alts.length,
+    "dois arquivos de texto têm o MESMO og.alt: " +
+      JSON.stringify(alts) +
+      " — o texto alternativo do cartão de compartilhamento é o que o leitor de " +
+      "tela pronuncia quando alguém compartilha o link, e ele viaja em todas as " +
+      "cinco rotas daquele idioma."
+  )
 })
 
 // ── (c) o caso inverso: campo preenchido e nunca renderizado ──────────────

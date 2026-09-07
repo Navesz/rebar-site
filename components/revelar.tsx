@@ -36,8 +36,22 @@ export function Revelar({
   return (
     <motion.div
       className={className}
-      initial={reduzido ? { opacity: 0 } : { opacity: 0, y: 16 }}
-      whileInView={reduzido ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      // NÃO HÁ `opacity` NO ESTADO INICIAL, e a ausência é o conserto de um
+      // defeito que estava PUBLICADO. `initial` é o que o Motion escreve no
+      // HTML do servidor: com `opacity: 0` ali, as 15 rotas saíam do build
+      // carregando `style="opacity:0;transform:translateY(16px)"` — medido em
+      // `out/docs/index.html`, `out/pt-br/index.html` e `out/index.html`. Quem
+      // abrisse a página sem o JavaScript do Motion ter rodado — rede que
+      // cortou o pedaço, extensão que bloqueou, aba de fundo com o relógio de
+      // quadros estrangulado — via cabeçalho, barra lateral e RODAPÉ, e nada no
+      // meio. Uma documentação em branco que responde 200.
+      //
+      // O deslocamento pode ficar: 16px de desvio é invisível para quem lê, e
+      // some no primeiro quadro para quem tem JS. Opacidade, não — ela é a
+      // diferença entre ler e não ler. A revelação perde o esmaecer e mantém o
+      // movimento, que é o que ela comunicava de fato.
+      initial={reduzido ? false : { y: 16 }}
+      whileInView={{ y: 0 }}
       // `once` porque animação que repete a cada rolagem vira ruído no terceiro
       // encontro, e a margem negativa dispara um pouco antes da borda para o
       // elemento não chegar já animado quando a rolagem é rápida.

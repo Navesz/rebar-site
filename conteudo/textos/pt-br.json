@@ -5,6 +5,9 @@
   "gabaritoDeTitulo": "%s · rebar",
   "descricao": "Checker, portão de commit e gerador de projeto que fazem código errado não passar. Zero dependência de runtime, Apache-2.0.",
   "nomeCurto": "rebar",
+  "og": {
+    "alt": "Cartão de compartilhamento de rebar — faz código errado não passar"
+  },
   "home": {
     "titulo": "rebar",
     "subtitulo": "Um checker que roda contra qualquer repositório, um portão que barra o commit quando a regra é ignorada, e um gerador que fabrica o próximo projeto já do lado certo da régua.",
@@ -110,9 +113,18 @@
           "resumo": "A régua de formato. Diz se o repositório tem CI que alcança a verificação que ele declara, teste, formatador, licença com NOTICE, hook com bit de execução, e se o shadcn é de verdade ou só a pasta imitando a convenção.",
           "limite": "Não olha segurança e não roda a aplicação. Um repositório com nota cheia aqui pode ter senha em texto puro — é para isso que existe o módulo ao lado.",
           "numeros": [
-            { "rotulo": "regras", "valor": "23" },
-            { "rotulo": "determinísticas", "valor": "18" },
-            { "rotulo": "heurísticas", "valor": "5" }
+            {
+              "rotulo": "regras",
+              "valor": "23"
+            },
+            {
+              "rotulo": "determinísticas",
+              "valor": "18"
+            },
+            {
+              "rotulo": "heurísticas",
+              "valor": "5"
+            }
           ]
         },
         {
@@ -121,8 +133,14 @@
           "resumo": "A régua de segurança, destilada de dezesseis vídeos técnicos brasileiros: 163 falhas candidatas, cada uma julgada por três céticos independentes, 82 sobreviveram. As três primeiras foram escolhidas por cobertura por hora, não por ordem de lista.",
           "limite": "Não checa Broken Access Control, que é o número 1 do OWASP. IDOR e autorização por objeto ficaram fora porque a defesa mora em middleware, policy ou RLS — duas árvores idênticas no disco têm veredito oposto. Dizer isso é mais útil que fingir que checa.",
           "numeros": [
-            { "rotulo": "regras", "valor": "3" },
-            { "rotulo": "todas determinísticas", "valor": "sim" }
+            {
+              "rotulo": "regras",
+              "valor": "3"
+            },
+            {
+              "rotulo": "todas determinísticas",
+              "valor": "sim"
+            }
           ]
         },
         {
@@ -130,7 +148,12 @@
           "comando": "npx github:Navesz/rebar novo meu-site",
           "resumo": "O gerador. Emite um Next estático com o portão dentro, hooks de commit, CI em matriz Windows e Linux, servidor MCP e um esquema de conteúdo que reprova o build quando o dado é placeholder plausível.",
           "limite": "Um preset só, o site. App e API estão barrados por não-escopo declarado até o preset site ser usado sem modificação em dois sites.",
-          "numeros": [{ "rotulo": "preset", "valor": "site" }]
+          "numeros": [
+            {
+              "rotulo": "preset",
+              "valor": "site"
+            }
+          ]
         },
         {
           "nome": "o portão",
@@ -138,9 +161,18 @@
           "resumo": "A sequência que o CI roda e que você roda antes dele, num comando só. Cada passo do portão tem prova por mutação: planta-se o defeito e exige-se que o passo o encontre.",
           "limite": "Não é uma camada nova. O que barra é o hook na sua máquina, o CI, e o ruleset do servidor — o único nível que o agente não edita, porque não é arquivo.",
           "numeros": [
-            { "rotulo": "passos", "valor": "16" },
-            { "rotulo": "casos de prova", "valor": "57" },
-            { "rotulo": "níveis", "valor": "N0–N7" }
+            {
+              "rotulo": "passos",
+              "valor": "16"
+            },
+            {
+              "rotulo": "casos de prova",
+              "valor": "57"
+            },
+            {
+              "rotulo": "níveis",
+              "valor": "N0–N7"
+            }
           ]
         }
       ]
@@ -228,9 +260,17 @@
     "temaEscuro": "Escuro",
     "temaSistema": "Sistema",
     "menu": "Menu",
+    "fechar": "Fechar",
     "anterior": "Anterior",
     "proximo": "Próximo",
     "repositorio": "Repositório",
+    "comecar": "Começar",
+    "naoEncontrado": "Esta página não existe",
+    "voltarParaOInicio": "Comece de novo pelo início",
+    "grupos": {
+      "comecar": "Comece aqui",
+      "referencia": "Referência"
+    },
     "navegacao": {
       "inicio": "Início",
       "docs": "Docs",

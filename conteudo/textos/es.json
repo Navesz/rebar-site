@@ -5,6 +5,9 @@
   "gabaritoDeTitulo": "%s · rebar",
   "descricao": "Un verificador, un portón de commit y un generador de proyectos que impiden que el código incorrecto llegue a producción. Cero dependencias, Apache-2.0.",
   "nomeCurto": "rebar",
+  "og": {
+    "alt": "Tarjeta para compartir de rebar — el código incorrecto no pasa"
+  },
   "home": {
     "titulo": "rebar",
     "subtitulo": "Un verificador que se ejecuta sobre cualquier repositorio, un portón que bloquea el commit cuando se ignora una regla, y un generador que crea el próximo proyecto ya del lado correcto de la raya.",
@@ -110,9 +113,18 @@
           "resumo": "La raya de formato. Dice si el repositorio tiene un CI que alcanza la verificación que declara, pruebas, formateador, licencia con NOTICE, hook con bit de ejecución, y si shadcn es de verdad o solo la carpeta imitando la convención.",
           "limite": "No mira la seguridad y no ejecuta la aplicación. Un repositorio con nota perfecta aquí puede tener una contraseña en texto plano — para eso existe el módulo de al lado.",
           "numeros": [
-            { "rotulo": "reglas", "valor": "23" },
-            { "rotulo": "deterministas", "valor": "18" },
-            { "rotulo": "heurísticas", "valor": "5" }
+            {
+              "rotulo": "reglas",
+              "valor": "23"
+            },
+            {
+              "rotulo": "deterministas",
+              "valor": "18"
+            },
+            {
+              "rotulo": "heurísticas",
+              "valor": "5"
+            }
           ]
         },
         {
@@ -121,8 +133,14 @@
           "resumo": "La raya de seguridad, destilada de dieciséis vídeos técnicos brasileños: 163 fallos candidatos, cada uno juzgado por tres escépticos independientes, 82 sobrevivieron. Los tres primeros se eligieron por cobertura por hora, no por su orden en la lista.",
           "limite": "No comprueba Broken Access Control, que es el número 1 de OWASP. IDOR y la autorización por objeto quedaron fuera porque la defensa vive en un middleware, una policy o RLS — dos árboles idénticos en el disco reciben veredictos opuestos. Decirlo es más útil que fingir que se comprueba.",
           "numeros": [
-            { "rotulo": "reglas", "valor": "3" },
-            { "rotulo": "todas deterministas", "valor": "sí" }
+            {
+              "rotulo": "reglas",
+              "valor": "3"
+            },
+            {
+              "rotulo": "todas deterministas",
+              "valor": "sí"
+            }
           ]
         },
         {
@@ -130,7 +148,12 @@
           "comando": "npx github:Navesz/rebar novo mi-sitio",
           "resumo": "El generador. Emite un Next estático con el portón dentro, hooks de commit, CI en matriz de Windows y Linux, servidor MCP y un esquema de contenido que tumba el build cuando el dato es un placeholder plausible.",
           "limite": "Un solo preset, el sitio. App y API están bloqueados por no-alcance declarado hasta que el preset de sitio se use sin modificaciones en dos sitios.",
-          "numeros": [{ "rotulo": "preset", "valor": "site" }]
+          "numeros": [
+            {
+              "rotulo": "preset",
+              "valor": "site"
+            }
+          ]
         },
         {
           "nome": "el portón",
@@ -138,9 +161,18 @@
           "resumo": "La secuencia que ejecuta el CI y que ejecutas tú antes, en un solo comando. Cada paso del portón tiene prueba por mutación: se planta el defecto y se exige que el paso lo encuentre.",
           "limite": "No es una capa nueva. Lo que bloquea es el hook en tu máquina, el CI y el ruleset del servidor — el único nivel que el agente no edita, porque no es un archivo.",
           "numeros": [
-            { "rotulo": "pasos", "valor": "16" },
-            { "rotulo": "casos de prueba", "valor": "57" },
-            { "rotulo": "niveles", "valor": "N0–N7" }
+            {
+              "rotulo": "pasos",
+              "valor": "16"
+            },
+            {
+              "rotulo": "casos de prueba",
+              "valor": "57"
+            },
+            {
+              "rotulo": "niveles",
+              "valor": "N0–N7"
+            }
           ]
         }
       ]
@@ -228,9 +260,17 @@
     "temaEscuro": "Oscuro",
     "temaSistema": "Sistema",
     "menu": "Menú",
+    "fechar": "Cerrar",
     "anterior": "Anterior",
     "proximo": "Siguiente",
     "repositorio": "Repositorio",
+    "comecar": "Empezar",
+    "naoEncontrado": "Esta página no existe",
+    "voltarParaOInicio": "Vuelve a empezar desde el inicio",
+    "grupos": {
+      "comecar": "Primeros pasos",
+      "referencia": "Referencia"
+    },
     "navegacao": {
       "inicio": "Inicio",
       "docs": "Docs",

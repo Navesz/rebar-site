@@ -108,9 +108,44 @@ export function PainelDeCodigo({
   const comCromo = comAbas || Boolean(arquivo)
 
   const painel = cn(
-    "relative overflow-hidden rounded-xl border border-code-border bg-code text-code-foreground shadow-raised",
+    "group/painel relative cursor-pointer overflow-hidden rounded-xl border border-code-border bg-code text-code-foreground shadow-raised transition-colors hover:border-code-chrome-foreground/40",
     className
   )
+
+  /**
+   * O PAINEL INTEIRO COPIA, e não só o ícone de 28px.
+   *
+   * O ícone continua ali — ele é o que ENSINA que dá para copiar, e é o
+   * controle que o teclado e o leitor de tela alcançam. O que muda é o alvo do
+   * mouse: mirar 28px para uma ação sem consequência é pedir precisão que a
+   * ação não merece, e errar o alvo aqui custa uma segunda mirada.
+   *
+   * Este `onClick` mora num `<div>` DE PROPÓSITO, e isso não é papel de botão
+   * escondido: transformar o painel em `<button>` engoliria o `<pre>` com sua
+   * própria rolagem e foco, e um botão dentro de outro botão é marcação
+   * inválida. O padrão aqui é o do alvo redundante — o mouse ganha a área
+   * inteira, e quem não usa mouse continua tendo o botão de verdade, que já
+   * está no fluxo de tabulação.
+   *
+   * TRÊS COISAS NÃO PODEM DISPARAR A CÓPIA, e cada uma tem seu motivo:
+   *   · seleção de texto — quem arrastou para selecionar quer o pedaço que
+   *     escolheu, e copiar o bloco inteiro por cima apagaria a escolha da área
+   *     de transferência sem avisar;
+   *   · o próprio botão — o clique dele já sobe até aqui, e copiar duas vezes
+   *     reinicia o temporizador do "copiado" no meio;
+   *   · as abas — trocar de gerenciador de pacote é outra intenção.
+   */
+  function copiarPeloPainel(evento: React.MouseEvent<HTMLElement>) {
+    const alvo = evento.target as HTMLElement
+    if (alvo.closest("button")) return
+
+    const selecao = window.getSelection()
+    if (selecao && !selecao.isCollapsed && selecao.toString().trim() !== "") {
+      return
+    }
+
+    copiar()
+  }
 
   // Sem cromo o botão flutua sobre o código, como no `comando.tsx` — e aí a
   // linha tem de parar antes dele, senão o primeiro comando passa por baixo.
@@ -141,7 +176,12 @@ export function PainelDeCodigo({
                 // hover aqui é a própria borda do painel: um degrau acima do
                 // fundo nos DOIS temas, que é o que este painel precisa por ser
                 // escuro nos dois.
-                className="ml-auto shrink-0 text-code-chrome-foreground hover:bg-code-border hover:text-code-tab-foreground dark:hover:bg-code-border"
+                // `group-hover/painel` acende o ícone quando o mouse está em
+                // QUALQUER lugar do painel: é ele que conta que o painel
+                // inteiro copia. Sem esse aceso, a área clicável seria um
+                // segredo — e alvo grande que ninguém sabe que existe não vale
+                // mais que o alvo pequeno.
+                className="ml-auto shrink-0 text-code-chrome-foreground group-hover/painel:text-code-tab-foreground hover:bg-code-border hover:text-code-tab-foreground dark:hover:bg-code-border"
               />
             }
           >
@@ -162,7 +202,7 @@ export function PainelDeCodigo({
 
   if (!comAbas) {
     return (
-      <div className={painel}>
+      <div className={painel} onClick={copiarPeloPainel}>
         {arquivo ? (
           <div className={cn(cromo, "py-1.5")}>
             {prompt ? (
@@ -174,7 +214,13 @@ export function PainelDeCodigo({
             {controle}
           </div>
         ) : (
-          <div className="absolute top-2 right-2 z-10">{controle}</div>
+          // `top-3.5` e não `top-2`: o botão tem de ficar centrado NA PRIMEIRA
+          // LINHA, não encostado no canto. A conta, medida no painel de uma
+          // linha da home: 1px de borda + 16px de `py-4` + metade da linha de
+          // 23px = 28,5px até o centro da linha; o botão tem 28px, então o topo
+          // dele cai em 14,5px. `top-3.5` são 14px — sobra meio pixel, contra
+          // os 5,5px que `top-2` deixava o botão acima do centro.
+          <div className="absolute top-3.5 right-2 z-10">{controle}</div>
         )}
         <Corpo
           codigo={abas[0].codigo}
@@ -199,6 +245,7 @@ export function PainelDeCodigo({
       // O `Tabs` nasce com `gap-2`, e aqui a barra encosta no código: o painel é
       // uma janela só, não duas peças empilhadas.
       className={cn(painel, "gap-0")}
+      onClick={copiarPeloPainel}
     >
       {/* `pb-0` para o sublinhado da aba ativa cair EM CIMA do divisor. */}
       <div className={cn(cromo, "pt-1.5 pb-0")}>
@@ -275,9 +322,9 @@ function Corpo({
       // código ela é a única pista de que há texto além da borda direita.
       className="overflow-x-auto py-4 text-sm leading-relaxed focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
     >
-      {/* `w-fit min-w-full` para o realce de linha ir até a borda mesmo quando o
-          código é mais estreito que o painel, e acompanhar a linha mais longa
-          quando é mais largo. */}
+      {/* `w-fit min-w-full` para a área clicável de cópia cobrir a largura do
+          painel mesmo quando o código é mais estreito, e acompanhar a linha
+          mais longa quando ele é mais largo. */}
       <code
         ref={refDoCodigo}
         className={cn(
@@ -293,18 +340,14 @@ function Corpo({
                 // entre dois comandos sumiria; `1lh` é uma linha deste mesmo
                 // elemento, então acompanha o `leading-relaxed`.
                 //
-                // O realce para em 10% de alfa por medida, não por gosto: é o
-                // teto anotado no `globals.css`, com o `$` em 5.57:1 no claro e
-                // 6.02:1 no escuro SOBRE a linha realçada. Mais alfa e ele
-                // atravessa o piso de 4.5:1.
-                <span
-                  key={i}
-                  className={cn(
-                    "block min-h-[1lh] pl-4",
-                    recuo,
-                    temTexto && "bg-code-line"
-                  )}
-                >
+                // NÃO HÁ FUNDO NA LINHA. Havia: `bg-code-line`, que é o óxido a
+                // 10% de alfa. Ele foi desenhado para REALÇAR UMA linha entre
+                // várias, e estava sendo pintado em toda linha com texto — um
+                // comando de uma linha só virava uma faixa laranja de 574px de
+                // largura, medida na home. Realce que cobre tudo não realça
+                // nada, e ainda esquenta uma superfície que o resto do site
+                // trata como grafite frio.
+                <span key={i} className={cn("block min-h-[1lh] pl-4", recuo)}>
                   {temTexto ? (
                     <span
                       aria-hidden

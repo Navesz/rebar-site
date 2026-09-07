@@ -80,6 +80,37 @@ export function useCoreografia<T extends HTMLElement = HTMLDivElement>(
   return escopo
 }
 
+// Folga sobre a duração da própria linha, para o prazo nunca cortar uma
+// animação que está correndo bem.
+const FOLGA_DE_QUADROS = 600
+
+/**
+ * Rede de segurança para animação de ENTRADA — a que esconde antes de mostrar.
+ *
+ * O `.from()` do GSAP escreve o estado escondido NA HORA em que a linha é
+ * criada, e conta com o relógio de quadros para desfazê-lo. Se esse relógio não
+ * andar, o conteúdo fica invisível para sempre: não é hipótese, foi medido
+ * nesta máquina em 2026-09-06, num painel de navegador que reportava
+ * `visibilityState: "visible"` e mesmo assim entregou **0 quadros de
+ * `requestAnimationFrame` em 9,9 segundos** — o hero congelou a 30% da própria
+ * entrada. Navegador real faz o mesmo, em menor escala, em aba de fundo.
+ *
+ * `setTimeout` é a saída porque ele continua disparando quando o `rAF` está
+ * suspenso (a aba de fundo o estrangula para ~1 s, não o desliga). Passado o
+ * prazo, a linha é levada ao fim de uma vez: quem viu a animação já a viu, e
+ * quem não viu recebe a página inteira em vez de uma em branco.
+ *
+ * Devolve a função de limpeza — retorne-a de dentro do `mm.add()`.
+ */
+export function concluirMesmoSemQuadros(linha: gsap.core.Timeline) {
+  const prazo = linha.totalDuration() * 1000 + FOLGA_DE_QUADROS
+  const relogio = window.setTimeout(() => {
+    if (linha.progress() < 1) linha.progress(1)
+  }, prazo)
+
+  return () => window.clearTimeout(relogio)
+}
+
 /**
  * Recalcula as posições de todos os gatilhos. Necessário depois de qualquer
  * mudança de altura que o GSAP não vê acontecer — abrir um accordion, carregar

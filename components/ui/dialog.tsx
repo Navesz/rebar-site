@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
@@ -31,7 +31,15 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        // `bg-veu` e não `bg-black/10`. O preto a 10% era o único preto
+        // literal do CSS publicado, e ele resolvia só metade do problema:
+        // escurecia no tema claro e mudava a superfície escura em menos de 3%
+        // — a paleta ⌘K abria sem separar figura de fundo. O token de
+        // `globals.css` usa a tinta do texto com alfa por tema (0.28 no claro,
+        // 0.55 no escuro), porque no escuro o véu não está clareando um fundo
+        // claro: está apagando o TEXTO de uma página escura, e isso custa mais
+        // alfa.
+        "fixed inset-0 isolate z-50 bg-veu duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
       {...props}
@@ -39,14 +47,26 @@ function DialogOverlay({
   )
 }
 
+/**
+ * O rótulo do botão de fechar é COBRADO PELO TIPO, e só quando o botão existe.
+ *
+ * O `shadcn add` emite `<span className="sr-only">Close</span>` cravado aqui, e
+ * este site sai em três idiomas: a palavra passaria em build, em lint e em
+ * teste, e apareceria só para quem usa leitor de tela — em inglês, no meio de
+ * uma página em espanhol. A união abaixo faz o compilador exigir o rótulo
+ * exatamente nos casos em que ele vai para a tela, e proibi-lo quando não vai.
+ */
+type FecharDoDialogo =
+  | { showCloseButton: false; rotuloDeFechar?: undefined }
+  | { showCloseButton?: true; rotuloDeFechar: string }
+
 function DialogContent({
   className,
   children,
   showCloseButton = true,
+  rotuloDeFechar,
   ...props
-}: DialogPrimitive.Popup.Props & {
-  showCloseButton?: boolean
-}) {
+}: DialogPrimitive.Popup.Props & FecharDoDialogo) {
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -70,9 +90,8 @@ function DialogContent({
               />
             }
           >
-            <XIcon
-            />
-            <span className="sr-only">Close</span>
+            <XIcon />
+            <span className="sr-only">{rotuloDeFechar}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>

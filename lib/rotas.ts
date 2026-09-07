@@ -54,13 +54,3 @@ const POR_CHAVE = ROTAS.reduce(
 export function rotaDe(chave: ChaveDeRota): string {
   return POR_CHAVE[chave]
 }
-
-/**
- * As rotas que vivem DENTRO de `/docs`, na ordem da barra lateral.
- *
- * Derivada por prefixo, e não digitada: mover uma página para dentro ou para
- * fora de `/docs` é mudar o caminho acima, e esta lista acompanha sozinha.
- */
-export const ROTAS_DE_DOCS = ROTAS.filter((rota) =>
-  rota.caminho.startsWith("/docs/")
-)

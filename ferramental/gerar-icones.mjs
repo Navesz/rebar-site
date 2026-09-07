@@ -237,7 +237,7 @@ function pedaco(tipo, dados) {
   return Buffer.concat([tamanho, corpo, crc])
 }
 
-function escreverPng(caminho, largura, altura, rgba) {
+function montarPng(largura, altura, rgba) {
   const ihdr = Buffer.alloc(13)
   ihdr.writeUInt32BE(largura, 0)
   ihdr.writeUInt32BE(altura, 4)
@@ -249,15 +249,45 @@ function escreverPng(caminho, largura, altura, rgba) {
     linhas[destino] = 0 // filtro "nenhum": o desenho é liso, filtrar não paga
     rgba.copy(linhas, destino + 1, y * largura * 4, (y + 1) * largura * 4)
   }
-  writeFileSync(
-    caminho,
-    Buffer.concat([
-      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-      pedaco("IHDR", ihdr),
-      pedaco("IDAT", deflateSync(linhas, { level: 9 })),
-      pedaco("IEND", Buffer.alloc(0)),
-    ])
-  )
+  return Buffer.concat([
+    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    pedaco("IHDR", ihdr),
+    pedaco("IDAT", deflateSync(linhas, { level: 9 })),
+    pedaco("IEND", Buffer.alloc(0)),
+  ])
+}
+
+function escreverPng(caminho, largura, altura, rgba) {
+  writeFileSync(caminho, montarPng(largura, altura, rgba))
+}
+
+// O `.ico` existe por um motivo só: Safari antigo e leitores de feed ainda
+// pedem `/favicon.ico` e ignoram o `icon.svg`. O contêiner aqui carrega PNG
+// dentro (suportado desde o Windows Vista), e não bitmap DIB — DIB exigiria
+// máscara AND invertida e paleta, 300 linhas para servir navegador que já não
+// existe.
+function escreverIco(caminho, tamanhos) {
+  const imagens = tamanhos.map((t) => montarPng(t, t, rasterizarIcone(t)))
+
+  const cabecalho = Buffer.alloc(6 + imagens.length * 16)
+  cabecalho.writeUInt16LE(0, 0) // reservado
+  cabecalho.writeUInt16LE(1, 2) // 1 = ícone
+  cabecalho.writeUInt16LE(imagens.length, 4)
+
+  let deslocamento = cabecalho.length
+  imagens.forEach((png, i) => {
+    const e = 6 + i * 16
+    // 0 quer dizer 256 neste campo de um byte só; os tamanhos aqui são menores.
+    cabecalho[e] = tamanhos[i] % 256
+    cabecalho[e + 1] = tamanhos[i] % 256
+    cabecalho.writeUInt16LE(1, e + 4) // planos
+    cabecalho.writeUInt16LE(32, e + 6) // bits por pixel
+    cabecalho.writeUInt32LE(png.length, e + 8)
+    cabecalho.writeUInt32LE(deslocamento, e + 12)
+    deslocamento += png.length
+  })
+
+  writeFileSync(caminho, Buffer.concat([cabecalho, ...imagens]))
 }
 
 function misturar(alvo, i, cor, alfa) {
@@ -270,7 +300,7 @@ function misturar(alvo, i, cor, alfa) {
 
 // ───────────────────────────────────────────────────────────── ícone
 
-function gerarIcone(caminho, tamanho) {
+function rasterizarIcone(tamanho) {
   const rgba = Buffer.alloc(tamanho * tamanho * 4)
   const unidades = LADO / tamanho // unidades de desenho por pixel
   // A marca ocupa 76% do ladrilho, centrada — margem menor que essa faz o R
@@ -295,7 +325,11 @@ function gerarIcone(caminho, tamanho) {
     }
   }
 
-  escreverPng(caminho, tamanho, tamanho, rgba)
+  return rgba
+}
+
+function gerarIcone(caminho, tamanho) {
+  escreverPng(caminho, tamanho, tamanho, rasterizarIcone(tamanho))
   return `${caminho} (${tamanho}×${tamanho})`
 }
 
@@ -417,6 +451,12 @@ const feitos = [
   gerarIcone(join(RAIZ, "app", "apple-icon.png"), 180),
   gerarOg(join(RAIZ, "public", "og.png"), site),
 ]
+
+// Três tamanhos e não um: 16 é a aba, 32 é a aba em tela retina e o atalho da
+// barra de tarefas, 48 é o atalho na área de trabalho. Deixar o sistema
+// reduzir o de 48 para 16 borra as nervuras num cinza sujo.
+escreverIco(join(RAIZ, "app", "favicon.ico"), [16, 32, 48])
+feitos.push("app/favicon.ico")
 
 writeFileSync(join(RAIZ, "app", "icon.svg"), svgDaMarca({ comLadrilho: true }))
 feitos.push("app/icon.svg")

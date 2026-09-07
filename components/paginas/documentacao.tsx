@@ -1,107 +1,92 @@
 import { notFound } from "next/navigation"
-import { Check } from "lucide-react"
 
+import { ArtigoDeDoc } from "@/components/artigo-de-doc"
 import { Revelar } from "@/components/revelar"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+import { TituloDeSecao } from "@/components/titulo-de-secao"
 import { textos, type Idioma } from "@/conteudo/carregar"
+import { ancorasDe } from "@/lib/ancoras"
 
 /**
- * O ÍNDICE E O CORPO SAEM DA MESMA LISTA, e por isso não podem divergir.
- * Um sumário escrito à mão ao lado das seções é a segunda fonte que envelhece
- * separada — exatamente o defeito que este projeto persegue no código.
+ * A PÁGINA DE DOCUMENTAÇÃO: seções ancoradas, e não mais um acordeão.
+ *
+ * O QUE ELA ERA, E POR QUE MUDOU. Era um `Accordion` com TODOS os itens abertos
+ * por padrão — um acordeão que não acordeona. Ele custava três coisas e não
+ * pagava nenhuma:
+ *
+ *   · o conteúdo já estava todo na tela, então o controle de abrir e fechar
+ *     servia só para ESCONDER o que a pessoa veio ler;
+ *   · o `id` morava no item do acordeão, e o link do índice levava para um
+ *     `<button>` — se alguém fechasse a seção, a âncora passava a apontar para
+ *     um painel colapsado e o salto parava no lugar errado;
+ *   · a ALTURA da página mudava a cada clique, que é exatamente o que um
+ *     scrollspy de rolagem não pode ter debaixo dele sem remedir.
+ *
+ * Agora são `<section>` com `<h2 id>` — a forma que faz o índice da direita e o
+ * scrollspy terem sentido, e a mesma que `tailwindcss.com/docs` e
+ * `nextjs.org/docs` usam.
+ *
+ * O TÍTULO ANCORADO SAIU DAQUI e virou `components/titulo-de-secao.tsx`. Ele
+ * era marcação escrita à mão nesta página e SÓ nesta: as outras três tinham o
+ * `id` e não tinham o `#`, então apanhar o link de uma seção era possível em
+ * uma das quatro páginas de documentação. As decisões que ele carrega — o nome
+ * acessível vindo de `aria-labelledby` em vez de um rótulo inventado, e o
+ * `hidden lg:inline-flex` que mantém o alvo fora das telas de toque — estão
+ * escritas lá, onde agora valem para todas as páginas.
  */
-const ancora = (titulo: string) =>
-  titulo
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")
-
 export function Documentacao({ idioma }: { idioma: Idioma }) {
-  const t = textos(idioma)
-  const p = t.paginas?.docs
+  const p = textos(idioma).paginas?.docs
   if (!p) notFound()
 
+  const ancoras = ancorasDe(p.secoes.map((secao) => secao.titulo))
+  const indice = p.secoes.map((secao, i) => ({
+    id: ancoras[i],
+    titulo: secao.titulo,
+  }))
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-16">
-      <Revelar>
-        <h1 className="text-4xl font-semibold tracking-tight">{p.titulo}</h1>
-        <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-          {p.resumo}
-        </p>
-      </Revelar>
+    <ArtigoDeDoc
+      idioma={idioma}
+      chave="docs"
+      titulo={p.titulo}
+      resumo={p.resumo}
+      indice={indice}
+    >
+      <div className="flex flex-col gap-14">
+        {p.secoes.map((secao, i) => (
+          <section key={secao.titulo}>
+            <Revelar atraso={Math.min(i, 3) * 0.04}>
+              <TituloDeSecao id={ancoras[i]} className="text-h2">
+                {secao.titulo}
+              </TituloDeSecao>
 
-      <Revelar atraso={0.08}>
-        <nav aria-label={t.rotulos.nestaPagina} className="mt-10">
-          <h2 className="text-xs tracking-wide text-muted-foreground uppercase">
-            {t.rotulos.nestaPagina}
-          </h2>
-          <ul className="mt-3 space-y-1.5">
-            {p.secoes.map((s) => (
-              <li key={s.titulo}>
-                <a
-                  href={`#${ancora(s.titulo)}`}
-                  className="rounded text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                >
-                  {s.titulo}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </Revelar>
+              <p className="mt-4 text-body text-muted-foreground">
+                {secao.corpo}
+              </p>
 
-      {/* Sem `type="multiple"`: isto é Base UI, não Radix — o Root já abre
-          vários por padrão (`openMultiple`). Passar a prop do Radix aqui é
-          erro de tipo, e foi o que o typecheck acusou. Numa página de
-          referência a pessoa compara duas seções, e o acordeão que fecha a
-          anterior a obriga a rolar duas vezes pelo mesmo par. */}
-      <Accordion
-        defaultValue={p.secoes.map((s) => ancora(s.titulo))}
-        className="mt-10"
-      >
-        {p.secoes.map((s, i) => (
-          <AccordionItem
-            key={s.titulo}
-            value={ancora(s.titulo)}
-            id={ancora(s.titulo)}
-            // `scroll-mt` para o cabeçalho fixo não cobrir o título ao pular
-            // pela âncora — sem isto o link do índice leva a pessoa para o
-            // meio do parágrafo.
-            className="scroll-mt-20"
-          >
-            <AccordionTrigger className="text-left text-lg font-medium">
-              {s.titulo}
-            </AccordionTrigger>
-            <AccordionContent>
-              <Revelar atraso={Math.min(i, 3) * 0.04}>
-                <p className="leading-relaxed text-muted-foreground">
-                  {s.corpo}
-                </p>
-                {s.itens.length ? (
-                  <ul className="mt-4 space-y-2">
-                    {s.itens.map((item) => (
-                      <li key={item} className="flex gap-2.5 text-sm">
-                        <Check
-                          aria-hidden
-                          className="mt-0.5 size-4 shrink-0 text-primary"
-                        />
-                        <span className="leading-relaxed">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </Revelar>
-            </AccordionContent>
-          </AccordionItem>
+              {secao.itens.length ? (
+                // Marcador de lista de verdade, e não um ícone de "check" por
+                // item: estes itens são EVIDÊNCIA ("3 de 6 repositórios sem
+                // CI"), e um visto ao lado de um número ruim afirma o
+                // contrário do que a linha diz.
+                //
+                // `marker:text-brand` e NÃO `marker:text-brand-border`: o
+                // marcador é TINTA, e `--brand-border` é o token de borda —
+                // ele está anotado em `globals.css` com 3,07:1 no claro e
+                // 3,42:1 no escuro, que é contraste de linha de 1px e não de
+                // símbolo que a pessoa precisa ver. Com `--brand` os mesmos
+                // pontos vão a 5,07:1 e 7,13:1 sobre o fundo da página.
+                <ul className="mt-5 flex list-disc flex-col gap-2 pl-5 marker:text-brand">
+                  {secao.itens.map((item) => (
+                    <li key={item} className="pl-1 text-sm leading-relaxed">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </Revelar>
+          </section>
         ))}
-      </Accordion>
-    </div>
+      </div>
+    </ArtigoDeDoc>
   )
 }

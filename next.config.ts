@@ -47,6 +47,26 @@ const nextConfig: NextConfig = {
     // Sem esta linha o build reprova assim que encontra um <Image>.
     unoptimized: true,
   },
+  experimental: {
+    // A BANDEIRA EXISTE PARA ESTA ARQUITETURA, e o doc empacotado a nomeia:
+    // `not-found.md` lista "your app has multiple root layouts … so there's no
+    // single layout to compose a global 404 from" como o caso de uso de
+    // `global-not-found`. É exatamente o nosso — os dois layouts raiz são
+    // `app/(ingles)/layout.tsx` e `app/[idioma]/layout.tsx`.
+    //
+    // Sem ela, o `app/not-found.tsx` de topo era embrulhado num layout embutido
+    // do Next (`<html><body>` sem atributo nenhum), e o `<html>` da nossa casca
+    // saía ANINHADO dentro daquele `<body>`. O navegador conserta — a
+    // especificação manda copiar os atributos do `<html>` de dentro para a raiz
+    // que já existe, e foi medido: um `<html>` só no DOM, `lang` certo, zero
+    // erro no console. Mas HTML que depende do conserto do analisador é
+    // exatamente o que este site existe para não publicar.
+    //
+    // O preço declarado: a bandeira é experimental, e a página passa a NÃO
+    // herdar layout nenhum — ela importa o próprio `globals.css`, que é o que
+    // `app/global-not-found.tsx` já faz.
+    globalNotFound: true,
+  },
 }
 
 export default nextConfig

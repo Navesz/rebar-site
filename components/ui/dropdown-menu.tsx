@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 import { ChevronRightIcon, CheckIcon } from "lucide-react"
 
 function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
@@ -40,7 +40,17 @@ function DropdownMenuContent({
       >
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
-          className={cn("z-50 max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95", className )}
+          // `shadow-overlay` e não `shadow-md`: a sombra do Tailwind é preta
+          // fixa e desaparece no tema escuro, que é justamente onde o menu
+          // precisa se descolar da página. O token de `globals.css` pinta com
+          // `--elevacao`, que troca por tema. A escala do projeto tem duas
+          // alturas só — `raised` para o que está apoiado na página (painel de
+          // código, cartão) e `overlay` para o que flutua por cima dela. Menu
+          // é overlay, como a paleta ⌘K.
+          className={cn(
+            "z-50 max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-overlay ring-1 ring-foreground/10 duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
+            className
+          )}
           {...props}
         />
       </MenuPrimitive.Positioner>
@@ -72,6 +82,28 @@ function DropdownMenuLabel({
   )
 }
 
+/**
+ * ALTURA DO ITEM: 28px (`py-1` sobre `text-sm`), e o mínimo de alvo de toque é
+ * 44px. O REMÉDIO NÃO ESTÁ AQUI, e isso é decisão, não esquecimento.
+ *
+ * Os dois menus que este site abre (`seletor-de-tema.tsx` e
+ * `seletor-de-idioma.tsx`) já passam `min-h-11 lg:min-h-0` no ponto de
+ * chamada. Levar esse par para a classe-base foi avaliado e recusado por três
+ * motivos:
+ *
+ *   · `lg:` é um limite de LARGURA, não de dedo. Um componente da biblioteca
+ *     não sabe em que ponto da página ele abre, e cravar um breakpoint aqui o
+ *     faria mentir sobre si mesmo no primeiro menu que nascesse só no desktop.
+ *   · a mesma altura teria de entrar também em `DropdownMenuCheckboxItem`,
+ *     `DropdownMenuRadioItem` e `DropdownMenuSubTrigger` para o menu não sair
+ *     com itens de duas alturas — e três dos quatro não têm ponto de chamada
+ *     neste site, ou seja, seriam três edições que ninguém consegue conferir.
+ *   · com os dois pontos de chamada já corrigidos, a mudança vale 0px de
+ *     melhora medida hoje.
+ *
+ * Ao criar um menu novo: passe `min-h-11` (mais `lg:min-h-0` se ele só precisar
+ * do alvo grande no celular) no item, como os dois existentes fazem.
+ */
 function DropdownMenuItem({
   className,
   inset,
@@ -134,7 +166,14 @@ function DropdownMenuSubContent({
   return (
     <DropdownMenuContent
       data-slot="dropdown-menu-sub-content"
-      className={cn("w-auto min-w-[96px] rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className )}
+      // `shadow-overlay` pelo mesmo motivo do menu-pai — e o MESMO token que
+      // ele, e não um degrau acima como o `shadow-lg` que estava aqui contra o
+      // `shadow-md` de lá. A escala tem duas alturas de propósito: quem separa
+      // o submenu do menu é o `ring-1`, não uma terceira sombra.
+      className={cn(
+        "w-auto min-w-[96px] rounded-lg bg-popover p-1 text-popover-foreground shadow-overlay ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+        className
+      )}
       align={align}
       alignOffset={alignOffset}
       side={side}
@@ -169,8 +208,7 @@ function DropdownMenuCheckboxItem({
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon
-          />
+          <CheckIcon />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -210,8 +248,7 @@ function DropdownMenuRadioItem({
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon
-          />
+          <CheckIcon />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}

@@ -63,9 +63,21 @@ export function BarraDeProgresso() {
       aria-hidden
       className="pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 bg-transparent"
     >
+      {/* A TINTA É `brand`, E NÃO `primary`. `--primary` neste projeto é aço
+          quase-preto no claro (oklch 0.245) e quase-branco no escuro (oklch
+          0.928) — ou seja, a mesma tinta do texto e das arestas. Uma faixa
+          dessa cor colada no topo, com 2px de altura, não lê como indicador:
+          lê como a borda de baixo do cabeçalho, que já existe ali e é
+          exatamente o que ela fica parecendo estar engrossando.
+
+          `--brand` é o óxido, e é o que TODO indicador de posição deste site
+          já usa: o item ativo da navegação, o do índice da página, o da barra
+          lateral e a própria fita da esteira. Indicador de posição é uma
+          família só — se o de leitura fosse de outra cor, ele estaria
+          afirmando ser outra coisa. */}
       <div
         ref={barra}
-        className="h-full w-full origin-left scale-x-0 bg-primary"
+        className="h-full w-full origin-left scale-x-0 bg-brand"
       />
     </div>
   )

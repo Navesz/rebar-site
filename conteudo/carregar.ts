@@ -69,18 +69,6 @@ export function textos(idioma: Idioma): Textos {
 }
 
 /**
- * Estreita o `string` que vem de `params` para `Idioma`.
- *
- * `app/[idioma]` recebe `{ idioma: string }` do Next, e com
- * `dynamicParams = false` o valor SEMPRE está em `IDIOMAS_TRADUZIDOS` em tempo
- * de build. O tipo, porém, continua `string` — e sem esta guarda a página faria
- * um `as Idioma` que mente. Aqui a mentira vira `notFound()`.
- */
-export function ehIdioma(valor: string): valor is Idioma {
-  return (IDIOMAS as readonly string[]).includes(valor)
-}
-
-/**
  * O CAMINHO DE UMA ROTA NUM IDIOMA, e é a única peça que sabe que o padrão não
  * leva prefixo.
  *

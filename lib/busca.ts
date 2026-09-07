@@ -29,6 +29,20 @@ export type ItemDeBusca = {
   secao?: string
   /** Texto para casar e para mostrar como resumo. */
   trecho?: string
+  /**
+   * Texto que CASA E NÃO APARECE — hoje, o comando de cada passo, exemplo e
+   * módulo.
+   *
+   * Os outros três campos são contrato duplo: eles são o que a busca compara E
+   * o que a linha da paleta desenha. Este quebra o par de propósito, e é a
+   * única forma de o índice conhecer os 14 comandos que o site manda digitar
+   * sem que a linha vire uma tira de terminal — `npx github:Navesz/rebar
+   * --json .` tem 32 caracteres e trunca o título e a seção juntos.
+   *
+   * Quem consome a lista não precisa saber que ele existe: `filtrar` pontua,
+   * `paleta-de-busca.tsx` continua desenhando título + seção + trecho.
+   */
+  texto?: string
 }
 
 /**
@@ -53,6 +67,47 @@ const LIMITE = 12
 const PESO_DO_TITULO = 1
 const PESO_DA_SECAO = 0.55
 const PESO_DO_TRECHO = 0.35
+
+/**
+ * O PESO DO CAMPO QUE NÃO APARECE, e ele é o menor da escala DE PROPÓSITO.
+ *
+ * `texto` carrega o comando do passo/exemplo/módulo, e comando é o campo mais
+ * perigoso do índice: os 14 do site começam por "npx github:Navesz/rebar", ou
+ * seja, catorze alvos praticamente idênticos com 25 caracteres de vocabulário
+ * comum. Com peso de trecho (0.35) eles empatariam entre si e empurrariam
+ * páginas inteiras para baixo em qualquer consulta que roçasse "rebar", "git"
+ * ou "nov" — a busca passaria a responder o argumento em vez da página.
+ *
+ * 0.2 saiu de MEDIÇÃO, não de gosto: `filtrar()` rodado contra o índice real
+ * dos três idiomas (25 itens cada) em 15 consultas, com o campo a 0.35, 0.2 e
+ * 0.1.
+ *
+ * O GANHO é igual nos três valores, e por isso não é ele que escolhe o número.
+ * Nos TRÊS idiomas: `--json` e `--rule=ci-gates` saem de ZERO resultado para o
+ * exemplo certo em 1º — as duas bandeiras não existem em texto visível nenhum;
+ * `rebar-security` sai de 1 para 2, ganhando o passo de instalação que roda o
+ * módulo; `install-hooks` e `npm run verify` passam a achar o passo que os
+ * executa (en 1→2 e 0→2; pt-br e es 0→1 e 1→3). E as consultas de navegação —
+ * `usage`, `modules`, `docs`, `rebar`, `heuristics`, `installation`, `uso`,
+ * `inicio` — saem IDÊNTICAS às de antes nos três idiomas: nenhuma perdeu
+ * posição para um comando.
+ *
+ * O que separa os três valores é o extremo de cada lado, e é ele que fixa o
+ * número:
+ *
+ *   · a 0.35 (peso de trecho) a consulta `npx` — três letras contra catorze
+ *     comandos que começam por elas — expulsa a PÁGINA de instalação dos seis
+ *     primeiros nos três idiomas, e o topo vira seis seções soltas. A busca
+ *     passa a responder o argumento em vez da página;
+ *   · a 0.1 o campo deixa de desempatar: em `novo` (medido em en), `rebar-new`
+ *     — cujo comando é `... rebar novo my-site` — cai do 2º lugar para fora dos
+ *     três primeiros, e volta a perder para prosa com n-o-v-o espalhado.
+ *
+ * A 0.2 os dois se resolvem: `npx` mantém a página em 2º e ainda promove os
+ * passos com comando, e `novo` põe `rebar-new` em 2º. É o menor peso que ainda
+ * desempata, abaixo do menor peso que já sequestra.
+ */
+const PESO_DO_TEXTO = 0.2
 
 /**
  * A TABELA DE PONTOS. Todo o comportamento da ordenação sai daqui, e cada
@@ -240,7 +295,14 @@ export function filtrar(itens: ItemDeBusca[], consulta: string): ItemDeBusca[] {
     const pontos = Math.max(
       PESO_DO_TITULO * pontuar(normalizar(item.titulo), alvo),
       item.secao ? PESO_DA_SECAO * pontuar(normalizar(item.secao), alvo) : 0,
-      item.trecho ? PESO_DO_TRECHO * pontuar(normalizar(item.trecho), alvo) : 0
+      item.trecho ? PESO_DO_TRECHO * pontuar(normalizar(item.trecho), alvo) : 0,
+      // O campo invisível entra pela MESMA porta que os outros três, e não por
+      // um passe especial: é `Math.max` outra vez, então um comando bem casado
+      // faz o item aparecer, e nunca soma migalhas por cima de um título que já
+      // casou melhor. Se um dia o conteúdo perder a `nota` de um passo, o
+      // comando vira também o `trecho` visível e pontua a 0.35 pela linha de
+      // cima — o que está certo: ali ele deixou de ser invisível.
+      item.texto ? PESO_DO_TEXTO * pontuar(normalizar(item.texto), alvo) : 0
     )
     if (pontos > 0) pontuados.push({ item, pontos })
   }

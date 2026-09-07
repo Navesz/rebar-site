@@ -98,7 +98,15 @@ function aberturaDeGrafo(
         url: site.meta.og.caminho,
         width: site.meta.og.largura,
         height: site.meta.og.altura,
-        alt: site.meta.og.alt,
+        // O ALT SAI DO IDIOMA, e não de `site.meta.og`. Medido no build
+        // anterior: os 15 HTMLs — os cinco ingleses e os cinco espanhóis
+        // incluídos — carregavam
+        // `og:image:alt="Cartão de compartilhamento de rebar — …"`, em
+        // português, dentro do mesmo `<head>` em que `og:title` e
+        // `og:description` já vinham traduzidos. Caminho, largura e altura
+        // continuam vindo do compartilhado porque são fatos da imagem; o alt é
+        // a frase que o leitor de tela pronuncia, e ela se traduz.
+        alt: t.og.alt,
       },
     ],
   }
@@ -169,6 +177,33 @@ export function metadadosDeDoc(idioma: Idioma, chave: ChaveDeDoc): Metadata {
 }
 
 /**
+ * O `<head>` DA PÁGINA 404, e ele é o único deste arquivo que não herda nada.
+ *
+ * `app/not-found.tsx` não está dentro de layout raiz nenhum (o site tem dois, e
+ * o Next não escolhe entre eles para o 404), então não existe o
+ * `title.template` que as 15 rotas herdam de `metadadosDaRaiz`. O gabarito é
+ * aplicado AQUI, com o mesmo `gabaritoDeTitulo` do idioma — escrever "· rebar"
+ * à mão seria a segunda fonte do sufixo, que diverge no dia em que o nome
+ * mudar.
+ *
+ * O QUE ELE DE PROPÓSITO NÃO TEM:
+ *   · `alternates` — o GitHub Pages serve `out/404.html` para QUALQUER endereço
+ *     desconhecido, então não há rota canônica a declarar. Anunciar uma seria
+ *     dizer ao buscador que `/pt-br/qualquer-coisa` é a mesma página que
+ *     `/es/outra-coisa`.
+ *   · `openGraph` — 404 não é página para compartilhar, e um cartão bonito num
+ *     link quebrado só faz o link parecer bom.
+ *   · `robots` — o Next já emite `<meta name="robots" content="noindex"/>` na
+ *     rota `_not-found` sozinho. Medido no `out/404.html` do build anterior,
+ *     que era o 404 de fábrica e já saía com a tag. Repeti-la aqui publicaria
+ *     a mesma diretiva duas vezes.
+ */
+export function metadadosDoNaoEncontrado(idioma: Idioma): Metadata {
+  const t = textos(idioma)
+  return { title: t.gabaritoDeTitulo.replace("%s", t.rotulos.naoEncontrado) }
+}
+
+/**
  * A COR DA BARRA DO NAVEGADOR, que até aqui não existia.
  *
  * Sem `themeColor`, o Android e o iOS em modo standalone pintam a barra de
@@ -176,6 +211,43 @@ export function metadadosDeDoc(idioma: Idioma, chave: ChaveDeDoc): Metadata {
  * clara acima do conteúdo. As duas cores saem de `meta.cores`, as MESMAS que o
  * manifesto já usa: uma fonte só, e não um `#0f172a` repetido em três arquivos
  * que alguém troca em dois.
+ *
+ * ─────────────────────────────────────────────────────────────────────────
+ * O LIMITE, DECLARADO: A META SEGUE O SISTEMA, O SITE SEGUE A CLASSE.
+ *
+ * As duas linhas abaixo são resolvidas pelo NAVEGADOR, por
+ * `prefers-color-scheme`. O tema desta página não é: `next-themes` está montado
+ * com `attribute="class"` e `defaultTheme="system"`
+ * (`components/theme-provider.tsx`), e escreve `.dark` no `<html>`. Enquanto o
+ * visitante fica em "Sistema" — o padrão — os dois concordam. No instante em
+ * que ele escolhe "Escuro" no seletor (ou aperta `d`) com o celular no claro, a
+ * barra de endereço fica do tema OPOSTO ao da página.
+ *
+ * POR QUE NÃO É CONSERTADO AQUI, e isto é decisão, não esquecimento. A meta
+ * teria de ser reescrita a partir do tema RESOLVIDO, que só existe no
+ * navegador, e as duas formas de fazer isso custam mais que o defeito:
+ *
+ *   · componente de cliente com `useTheme()` — o valor chega `undefined` no
+ *     render do servidor e no de hidratação, então escrever a tag exige estado
+ *     derivado do ambiente dentro de um effect. É exatamente o padrão que
+ *     `components/seletor-de-tema.tsx` documenta como barrado neste projeto:
+ *     a regra `react-hooks/set-state-in-effect` do `eslint-config-next`
+ *     reprova, e a correção chegaria um quadro DEPOIS da primeira pintura — a
+ *     barra piscaria na cor errada antes de acertar. O seletor escapou disso
+ *     porque CSS resolve `.dark` sem JavaScript; uma `<meta>` não tem essa
+ *     saída.
+ *   · script bloqueante próprio, lendo `localStorage` antes da pintura — seria
+ *     uma SEGUNDA implementação da resolução de tema, ao lado da que
+ *     `next-themes` já embute. Duas fontes da mesma verdade divergem na
+ *     primeira mudança de chave de armazenamento, e divergem em silêncio: a
+ *     barra fica de uma cor, a página de outra, e nada acende. É o defeito do
+ *     §12.3 trocado de lugar.
+ *
+ * O que fica: quem usa "Sistema" (o padrão) vê a cor certa sempre; quem força o
+ * tema contra o sistema vê a barra do navegador na outra cor. É uma faixa de
+ * 24px numa preferência minoritária, contra uma dependência de effect em todas
+ * as 15 rotas.
+ * ─────────────────────────────────────────────────────────────────────────
  */
 export const viewportPadrao: Viewport = {
   themeColor: [

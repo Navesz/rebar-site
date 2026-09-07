@@ -3,21 +3,20 @@
     "nome": "rebar",
     "repositorio": {
       "url": "https://github.com/Navesz/rebar",
-      "rotulo": "Navesz/rebar no GitHub"
+      "rotulo": "Navesz/rebar"
     }
   },
   "meta": {
     "urlBase": "https://navesz.github.io/rebar-site",
     "atualizadoEm": "2026-09-02",
     "cores": {
-      "tema": "#0f172a",
-      "fundo": "#ffffff"
+      "tema": "#0e1117",
+      "fundo": "#f8fafd"
     },
     "og": {
       "caminho": "/og.png",
       "largura": 1200,
-      "altura": 630,
-      "alt": "Cartão de compartilhamento de rebar — faz código errado não passar"
+      "altura": 630
     }
   }
 }

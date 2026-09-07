@@ -80,7 +80,7 @@
   --color-code-chrome-foreground: var(--code-chrome-foreground);
   --color-code-tab-foreground: var(--code-tab-foreground);
   --color-code-prompt: var(--code-prompt);
-  --color-code-line: var(--code-line);
+  --color-veu: var(--veu);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -142,6 +142,15 @@
 :root {
   --radius: 0.625rem;
   --desvio-do-cabecalho: 5rem;
+
+  /* A SEGUNDA barra grudada, a de /docs, que so existe abaixo de `lg`. Ela
+     entra como `scroll-margin-top` no alvo — que SOMA ao `scroll-padding-top`
+     do scrollport — e nao como um segundo desvio global, senao toda ancora do
+     site desceria por causa de uma barra que a maioria das paginas nao tem. */
+  /* 57px medidos na faixa real: 1px de `border-b` + 6px de `py-1.5` + 44px do
+     `h-11` do botão + 6px de `py-1.5`. O primeiro palpite foi 3.25rem, e ele
+     deixava o título ancorado 5px atrás da borda de baixo da barra. */
+  --altura-da-barra-de-docs: 3.5625rem;
 
   /* Aço claro. `background` não é branco puro: 0.985 com um fio de azul
      (0.004) tira o brilho de folha de papel sob leitura longa. */
@@ -210,10 +219,13 @@
   --code-chrome-foreground: oklch(0.715 0.015 258); /* 5.93:1 no chrome */
   --code-tab-foreground: oklch(0.96 0.008 258); /* 13.33:1 no chrome */
   --code-prompt: oklch(0.79 0.125 62); /* 8.61:1 sobre code */
-  /* Realce de linha a 10% de alfa: acima disso o `$` do prompt cai de 8.61:1
-     para menos de 4.5:1 sobre a linha composta. Em 10% ele fica em 5.57:1. */
-  --code-line: oklch(0.715 0.155 54 / 0.1);
 
+  /* O VEU de dialogo e gaveta. Era `bg-black/10` — o unico preto literal do
+     projeto —, e preto a 10% resolve o tema claro e nao faz NADA no escuro:
+     medido, ele escurecia a superficie escura em menos de 3%, entao a paleta
+     ⌘K abria sem separar figura de fundo. Aqui a tinta e a mesma do texto e o
+     alfa e escolhido por tema. */
+  --veu: oklch(0.21 0.016 258 / 0.28);
   /* Do óxido ao aço, e não cinco cinzas iguais como vinha do template. */
   --chart-1: oklch(0.575 0.15 46); /* 4.45:1 sobre background */
   --chart-2: oklch(0.665 0.125 68); /* 3.00:1 */
@@ -286,7 +298,10 @@
   --code-chrome-foreground: oklch(0.7 0.015 258); /* 6.71:1 no chrome */
   --code-tab-foreground: oklch(0.96 0.008 258); /* 15.95:1 no chrome */
   --code-prompt: oklch(0.79 0.125 62); /* 9.88:1 sobre code */
-  --code-line: oklch(0.715 0.155 54 / 0.1); /* prompt em 6.02:1 na linha */
+
+  /* No escuro o veu precisa de MUITO mais alfa: ele nao esta clareando um
+     fundo claro, esta apagando o TEXTO de uma pagina escura. */
+  --veu: oklch(0.06 0.02 258 / 0.55);
 
   /* Escala própria do escuro: o `chart-4` do claro (0.395) sumiria contra o
      carvão, e o `chart-5` claro só existe como fundo de área. */
@@ -350,6 +365,17 @@
     /* O cabeçalho é sticky: sem isto, âncora de sumário para o título
        EMBAIXO dele. Era `scroll-mt-20` solto numa página só. */
     scroll-padding-top: var(--desvio-do-cabecalho);
+  }
+
+  /* Abaixo de `lg` a documentacao empilha uma segunda barra grudada sob o
+     cabecalho, e a ancora que so descontava a primeira parava o titulo
+     escolhido DEBAIXO dela — a pessoa pedia uma secao e via a de cima. O
+     desconto extra vale so onde essa barra existe, por isso ele mora no ALVO
+     e nao no scrollport. */
+  @media (width < 64rem) {
+    :is(body:has([data-barra-de-docs])) :where([id]) {
+      scroll-margin-top: var(--altura-da-barra-de-docs);
+    }
   }
 
   /* Rolagem suave é conforto, não requisito: para quem pediu menos

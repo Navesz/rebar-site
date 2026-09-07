@@ -197,8 +197,12 @@ const COMO_PREENCHER: Record<string, string> = {
   "identidade.endereco.cep": `O CEP com hífen. Ex.: "04101-300". ${OU_APAGUE("identidade.endereco")}`,
   "meta.urlBase":
     'O endereço onde o site vai ficar, com https:// e SEM barra no fim. Ex.: "https://padariadoze.com.br".',
-  "meta.og.alt":
-    "Descrição da imagem de compartilhamento, para quem usa leitor de tela.",
+  // A chave é "og.alt" e não "meta.og.alt" desde 06/09: o alt mudou de arquivo,
+  // e a chave deste mapa é o caminho DENTRO do arquivo. Deixá-la como estava
+  // mandaria o dono procurar `meta.og.alt` num `textos/es.json` que não tem
+  // `meta` nenhum.
+  "og.alt":
+    "Descrição da imagem de compartilhamento, NO IDIOMA DESTE ARQUIVO — é o que o leitor de tela lê quando o link é compartilhado.",
   tagDeIdioma:
     'A tag BCP 47 deste arquivo, no molde xx-XX. Ex.: "pt-BR", "en-US", "es-ES".',
   nomeDoIdioma:
@@ -835,6 +839,16 @@ const formaDoSite = objeto({
     // que não é reprodutível não dá para comparar.
     atualizadoEm: dataIso,
     cores: objeto({ tema: corHex, fundo: corHex }),
+    // SÓ OS FATOS DA IMAGEM MORAM AQUI, e o `alt` saiu em 06/09.
+    //
+    // Caminho, largura e altura são o mesmo arquivo em qualquer idioma; o
+    // `alt` é TEXTO QUE ALGUÉM LÊ, e texto que alguém lê se traduz. Medido no
+    // build anterior: as 15 rotas — as cinco inglesas e as cinco espanholas
+    // incluídas — publicavam
+    // `og:image:alt="Cartão de compartilhamento de rebar — faz código errado
+    // não passar"`, em português, no MESMO `<head>` em que `og:title` e
+    // `og:description` já saíam traduzidos. O alt agora é `og.alt` de
+    // `conteudo/textos/<idioma>.json`.
     og: objeto({
       caminho: caminhoPublico,
       // 1200×630 não é decoração: é a proporção que WhatsApp, LinkedIn e
@@ -842,7 +856,6 @@ const formaDoSite = objeto({
       // um número qualquer que ninguém confere.
       largura: inteiro(1200, 1200),
       altura: inteiro(630, 630),
-      alt: texto(10, 140),
     }),
   }),
 })
@@ -875,6 +888,22 @@ const formaDosTextos = objeto({
   gabaritoDeTitulo,
   descricao: texto(50, 160),
   nomeCurto: texto(2, 12),
+
+  /**
+   * O TEXTO ALTERNATIVO DO CARTÃO DE COMPARTILHAMENTO, que morava em
+   * `site.json` e era o último texto do `<head>` a sair em português nas 15
+   * rotas.
+   *
+   * O bloco `meta.og` do compartilhado continua com caminho, largura e altura
+   * — os três são FATOS DA IMAGEM, iguais em qualquer idioma. O `alt` não é
+   * fato da imagem: é a frase que o leitor de tela pronuncia quando alguém
+   * compartilha o link, e ela pertence a quem lê.
+   *
+   * A forma é um bloco de um campo só, e é de propósito: o nome `og` é o mesmo
+   * dos dois lados, então quem abre os dois arquivos vê o corte — o que é fato
+   * ficou lá, o que é texto veio para cá.
+   */
+  og: objeto({ alt: texto(10, 140) }),
 
   home: objeto({
     titulo: texto(4, 90),
@@ -1023,9 +1052,44 @@ const formaDosTextos = objeto({
     temaEscuro: texto(3, 40),
     temaSistema: texto(3, 40),
     menu: texto(3, 40),
+    // O nome acessível do botão que fecha a gaveta. Só quem usa leitor de tela
+    // o ouve — e é justamente por isso que ele precisa estar aqui: literal
+    // cravado no componente passa em todo teste e publica "Close" nas três
+    // versões sem ninguém enxergar.
+    fechar: texto(3, 40),
     anterior: texto(3, 40),
     proximo: texto(3, 40),
     repositorio: texto(3, 40),
+    // A chamada para ação da home e o primeiro link da documentação. É um
+    // rótulo, e não conteúdo da home, porque aparece nos dois lugares: repetir
+    // o texto em `home` e em `paginas` criaria duas versões da mesma palavra,
+    // e elas divergem na primeira revisão de copy.
+    comecar: texto(3, 40),
+    /**
+     * OS DOIS RÓTULOS DA PÁGINA 404, e eles existem porque o GitHub Pages
+     * serve UM arquivo — `out/404.html` — para todo endereço desconhecido, nos
+     * TRÊS idiomas.
+     *
+     * Medido no build anterior: aquele arquivo era o 404 de fábrica do Next —
+     * `<html>` sem `lang`, sem o CSS do site, com "404 | This page could not
+     * be found." e ZERO links. Quem seguisse um link antigo (o slug das rotas
+     * passou a ser inglês, então `/docs/instalacao` não existe mais) chegava
+     * numa página sem saída, em inglês, mesmo vindo de `/pt-br` ou `/es`.
+     *
+     * Os dois rótulos existem nos três arquivos mesmo que a página renderize
+     * na `IDIOMA_PADRAO`: é `app/not-found.tsx` que oferece as TRÊS home como
+     * saída, e o dia em que o site trocar de idioma padrão não pode ser o dia
+     * em que dois textos somem.
+     */
+    naoEncontrado: texto(3, 60),
+    voltarParaOInicio: texto(3, 60),
+    // Os grupos da barra lateral da documentação. Não saem de `paginas` porque
+    // não são página nenhuma: são a divisão editorial entre o que se lê para
+    // começar e o que se consulta depois.
+    grupos: objeto({
+      comecar: texto(3, 40),
+      referencia: texto(3, 40),
+    }),
     // Um rótulo por rota, com a MESMA chave que `lib/rotas.ts` usa. Rota nova
     // sem rótulo reprova aqui, e rótulo sem rota reprova pelo campo
     // desconhecido de `objeto()` — as duas direções, como sempre.
