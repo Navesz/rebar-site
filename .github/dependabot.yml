@@ -46,6 +46,24 @@ updates:
       - dependency-name: 'typescript'
         versions: ['>=6.1.0']
 
+      # E UM SEGUNDO TETO, do mesmo formato e noutro pacote. Com o typescript
+      # liberado, o PR do grupo passou a trazer `eslint ^10` e o CI morreu em
+      #
+      #   TypeError: Error while loading rule 'react/display-name':
+      #   contextOrFilename.getFilename is not a function
+      #
+      # Medido em 08/09/2026:
+      #
+      #   npm view eslint-plugin-react peerDependencies
+      #   { eslint: '^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7' }
+      #
+      # O ESLint 10 nao esta la, e `eslint-config-next` depende de
+      # `eslint-plugin-react@^7.37.0` -- entao a incompatibilidade chega por
+      # dentro e nao ha versao a escolher aqui. `>=10` e o complemento exato do
+      # teto; o 9.x continua passando. Solte quando o peer abrir.
+      - dependency-name: 'eslint'
+        versions: ['>=10']
+
     # Agrupado para não abrir sete PRs por semana. PR de dependência que ninguém
     # lê é ruído que ensina a fechar PR de dependência sem ler.
     groups:
