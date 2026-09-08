@@ -17,6 +17,35 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    # SEGURADO POR UM TETO A MONTANTE, e não por gosto: a restrição não é deste
+    # repositório. Medido em 07/09/2026:
+    #
+    #   npm view typescript-eslint peerDependencies.typescript
+    #   >=4.8.4 <6.1.0
+    #
+    # O `eslint-config-next` depende de `typescript-eslint@^8.46.0`, então a cópia
+    # que se recusa a resolver é a aninhada em
+    # node_modules/eslint-config-next/node_modules/typescript-eslint. Um bump para
+    # o TypeScript 7 está dois majors fora desse teto: o `npm ci` não monta árvore
+    # e o PR do grupo já nasce vermelho, antes de um único check rodar. Nada aqui
+    # conserta isso — só o peer a montante se mexer.
+    #
+    # A REGRA É ESCRITA CONTRA O TETO MEDIDO, E NÃO CONTRA A FORMA DO BUMP.
+    # `update-types: version-update:semver-major` era a linha fácil e é a errada:
+    # 6.0.0 é um major que o peer ACEITA, então essa forma seguraria uma versão a
+    # que ninguém se opõe. `>=6.1.0` é o complemento exato do limite superior.
+    #
+    # O `ignore` vem antes do `groups` porque é essa a ordem em que acontece: o
+    # Dependabot filtra a dependência ignorada primeiro e agrupa o que sobrou,
+    # então o PR semanal continua chegando com o resto.
+    #
+    # A CONDIÇÃO DE SOLTAR É AQUELE COMANDO, não uma data: quando
+    # `peerDependencies.typescript` parar de terminar em `<6.1.0`, este bloco
+    # acabou. Remova inteiro — não há número aqui para editar à mão.
+    ignore:
+      - dependency-name: 'typescript'
+        versions: ['>=6.1.0']
+
     # Agrupado para não abrir sete PRs por semana. PR de dependência que ninguém
     # lê é ruído que ensina a fechar PR de dependência sem ler.
     groups:
