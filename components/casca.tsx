@@ -1,15 +1,15 @@
-import type { ReactNode } from "react"
-import { Geist, Geist_Mono } from "next/font/google"
+import type { ReactNode } from 'react'
+import { Geist, Geist_Mono } from 'next/font/google'
 
-import { BarraDeProgresso } from "@/components/barra-de-progresso"
-import { Cabecalho } from "@/components/cabecalho"
-import { Rodape } from "@/components/rodape"
-import { ThemeProvider } from "@/components/theme-provider"
-import { textos, type Idioma } from "@/conteudo/carregar"
-import { cn } from "@/lib/utils"
+import { BarraDeProgresso } from '@/components/barra-de-progresso'
+import { Cabecalho } from '@/components/cabecalho'
+import { Rodape } from '@/components/rodape'
+import { ThemeProvider } from '@/components/theme-provider'
+import { textos, type Idioma } from '@/conteudo/carregar'
+import { cn } from '@/lib/utils'
 
-const fontSans = Geist({ subsets: ["latin"], variable: "--font-sans" })
-const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
+const fontSans = Geist({ subsets: ['latin'], variable: '--font-sans' })
+const fontMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 /**
  * O `<html>` INTEIRO, escrito uma vez e usado pelos DOIS layouts raiz.
@@ -30,25 +30,14 @@ const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
  * dívida barata, com três ele publicaria a moldura em português nas três
  * versões.
  */
-export function Casca({
-  idioma,
-  children,
-}: {
-  idioma: Idioma
-  children: ReactNode
-}) {
+export function Casca({ idioma, children }: { idioma: Idioma; children: ReactNode }) {
   const t = textos(idioma)
 
   return (
     <html
       lang={t.tagDeIdioma}
       suppressHydrationWarning
-      className={cn(
-        "antialiased",
-        fontMono.variable,
-        "font-sans",
-        fontSans.variable
-      )}
+      className={cn('antialiased', fontMono.variable, 'font-sans', fontSans.variable)}
     >
       <body>
         <ThemeProvider>

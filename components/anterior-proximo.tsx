@@ -14,13 +14,13 @@
  * fazer no rodapé de uma página que já renderizou.
  */
 
-import Link from "next/link"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import Link from 'next/link'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 
-import { ORDEM_DOS_DOCS } from "@/components/navegacao-de-docs"
-import { caminhoDe, textos, type Idioma } from "@/conteudo/carregar"
-import { rotaDe, type ChaveDeDoc } from "@/lib/rotas"
-import { cn } from "@/lib/utils"
+import { ORDEM_DOS_DOCS } from '@/components/navegacao-de-docs'
+import { caminhoDe, textos, type Idioma } from '@/conteudo/carregar'
+import { rotaDe, type ChaveDeDoc } from '@/lib/rotas'
+import { cn } from '@/lib/utils'
 
 export function AnteriorProximo({
   idioma,
@@ -35,14 +35,12 @@ export function AnteriorProximo({
   const posicao = ORDEM_DOS_DOCS.indexOf(chave)
   const anterior = posicao > 0 ? ORDEM_DOS_DOCS[posicao - 1] : undefined
   const proximo =
-    posicao >= 0 && posicao < ORDEM_DOS_DOCS.length - 1
-      ? ORDEM_DOS_DOCS[posicao + 1]
-      : undefined
+    posicao >= 0 && posicao < ORDEM_DOS_DOCS.length - 1 ? ORDEM_DOS_DOCS[posicao + 1] : undefined
 
   if (!anterior && !proximo) return null
 
   return (
-    <div className={cn("grid gap-3 sm:grid-cols-2", className)}>
+    <div className={cn('grid gap-3 sm:grid-cols-2', className)}>
       {anterior ? (
         <Salto
           idioma={idioma}
@@ -62,7 +60,7 @@ export function AnteriorProximo({
           // Primeira página da sequência: sem o "anterior" para ocupar a
           // esquerda, o "próximo" iria parar lá e o sentido da seta brigaria
           // com a posição na tela.
-          className={cn(!anterior && "sm:col-start-2")}
+          className={cn(!anterior && 'sm:col-start-2')}
         />
       ) : null}
     </div>
@@ -83,10 +81,10 @@ function Salto({
   rotulo: string
   /** O nome da página de destino. */
   destino: string
-  sentido: "anterior" | "proximo"
+  sentido: 'anterior' | 'proximo'
   className?: string
 }) {
-  const paraTras = sentido === "anterior"
+  const paraTras = sentido === 'anterior'
   const Seta = paraTras ? ArrowLeft : ArrowRight
 
   return (
@@ -96,11 +94,11 @@ function Salto({
       // do nome da página —, então não há `aria-label` inventado aqui e o
       // rótulo continua saindo do JSON nos três idiomas.
       className={cn(
-        "group flex flex-col gap-1 rounded-xl border border-border/70 px-4 py-3 transition-colors",
-        "hover:border-brand-border hover:bg-brand-subtle/40",
-        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-        !paraTras && "sm:items-end sm:text-right",
-        className
+        'group flex flex-col gap-1 rounded-xl border border-border/70 px-4 py-3 transition-colors',
+        'hover:border-brand-border hover:bg-brand-subtle/40',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+        !paraTras && 'sm:items-end sm:text-right',
+        className,
       )}
     >
       <span className="text-caption text-muted-foreground">{rotulo}</span>

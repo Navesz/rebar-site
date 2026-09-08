@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * A linha de progresso da leitura, presa à rolagem da página. É o papel do GSAP.
@@ -15,9 +15,9 @@
  * rebar catalogou, e a defesa é justamente esta fronteira.
  */
 
-import { useEffect, useRef } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 export function BarraDeProgresso() {
   const barra = useRef<HTMLDivElement>(null)
@@ -28,7 +28,7 @@ export function BarraDeProgresso() {
 
     // Quem pediu menos movimento não recebe uma barra que se move: ela
     // simplesmente não aparece. É a mesma decisão do `Revelar`.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     gsap.registerPlugin(ScrollTrigger)
 
@@ -38,17 +38,17 @@ export function BarraDeProgresso() {
         { scaleX: 0 },
         {
           scaleX: 1,
-          ease: "none",
+          ease: 'none',
           scrollTrigger: {
             trigger: document.documentElement,
-            start: "top top",
-            end: "bottom bottom",
+            start: 'top top',
+            end: 'bottom bottom',
             // `scrub: true` amarra o progresso da animação à posição da
             // rolagem em vez de disparar uma duração fixa. Sem isto a barra
             // completa sozinha e passa a mentir sobre onde a pessoa está.
             scrub: true,
           },
-        }
+        },
       )
     })
 
@@ -75,10 +75,7 @@ export function BarraDeProgresso() {
           lateral e a própria fita da esteira. Indicador de posição é uma
           família só — se o de leitura fosse de outra cor, ele estaria
           afirmando ser outra coisa. */}
-      <div
-        ref={barra}
-        className="h-full w-full origin-left scale-x-0 bg-brand"
-      />
+      <div ref={barra} className="h-full w-full origin-left scale-x-0 bg-brand" />
     </div>
   )
 }

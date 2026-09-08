@@ -1,9 +1,9 @@
-import Link from "next/link"
-import { ArrowRight, BookOpen, Boxes, Download, Terminal } from "lucide-react"
+import Link from 'next/link'
+import { ArrowRight, BookOpen, Boxes, Download, Terminal } from 'lucide-react'
 
-import { Revelar } from "@/components/revelar"
-import { caminhoDe, textos, type Idioma } from "@/conteudo/carregar"
-import { rotaDe } from "@/lib/rotas"
+import { Revelar } from '@/components/revelar'
+import { caminhoDe, textos, type Idioma } from '@/conteudo/carregar'
+import { rotaDe } from '@/lib/rotas'
 
 /**
  * OS QUATRO ATALHOS PARA A DOCUMENTAÇÃO.
@@ -25,10 +25,10 @@ import { rotaDe } from "@/lib/rotas"
  * bloco sem rota — é erro de compilação, e não um cartão para o vazio.
  */
 const ATALHOS = [
-  { chave: "instalacao", Icone: Download },
-  { chave: "uso", Icone: Terminal },
-  { chave: "modulos", Icone: Boxes },
-  { chave: "docs", Icone: BookOpen },
+  { chave: 'instalacao', Icone: Download },
+  { chave: 'uso', Icone: Terminal },
+  { chave: 'modulos', Icone: Boxes },
+  { chave: 'docs', Icone: BookOpen },
 ] as const
 
 export function AtalhosDaDocumentacao({ idioma }: { idioma: Idioma }) {
@@ -50,11 +50,7 @@ export function AtalhosDaDocumentacao({ idioma }: { idioma: Idioma }) {
       {ATALHOS.map(({ chave, Icone }, i) => {
         const pagina = paginas[chave]
         return (
-          <Revelar
-            key={chave}
-            atraso={Math.min(i, 3) * 0.05}
-            className="h-full"
-          >
+          <Revelar key={chave} atraso={Math.min(i, 3) * 0.05} className="h-full">
             <Link
               href={caminhoDe(idioma, rotaDe(chave))}
               className="group flex h-full flex-col gap-3 rounded-xl border border-border/60 bg-card p-5 transition-colors hover:border-brand-border hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none sm:p-6"
@@ -71,9 +67,7 @@ export function AtalhosDaDocumentacao({ idioma }: { idioma: Idioma }) {
                   />
                 </span>
               </span>
-              <span className="text-caption text-muted-foreground">
-                {pagina.resumo}
-              </span>
+              <span className="text-caption text-muted-foreground">{pagina.resumo}</span>
             </Link>
           </Revelar>
         )

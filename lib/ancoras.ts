@@ -30,11 +30,11 @@ const HIFEN_DA_BORDA = /^-+|-+$/g
  */
 export function ancoraDe(titulo: string): string {
   return titulo
-    .normalize("NFD")
-    .replace(DIACRITICOS, "")
+    .normalize('NFD')
+    .replace(DIACRITICOS, '')
     .toLowerCase()
-    .replace(NAO_ALFANUMERICO, "-")
-    .replace(HIFEN_DA_BORDA, "")
+    .replace(NAO_ALFANUMERICO, '-')
+    .replace(HIFEN_DA_BORDA, '')
 }
 
 /**

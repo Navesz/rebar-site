@@ -29,7 +29,7 @@ export type Barra = {
 export type Forma = {
   barra: Barra
   // "tinta" soma a barra ao desenho; "corte" a remove.
-  operacao: "tinta" | "corte"
+  operacao: 'tinta' | 'corte'
 }
 
 export const LADO = 100
@@ -48,7 +48,7 @@ function barraEntre(
   x2: number,
   y2: number,
   espessura: number,
-  raio: number
+  raio: number,
 ): Barra {
   const comprimento = Math.hypot(x2 - x1, y2 - y1) + espessura
   const giro = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI
@@ -81,7 +81,7 @@ function nervura(y: number): Forma {
       raio: FOLGA / 2,
       giro: -35,
     },
-    operacao: "corte",
+    operacao: 'corte',
   }
 }
 
@@ -91,24 +91,24 @@ export const FORMAS: readonly Forma[] = [
   // Haste — a perna esquerda do R, de cima a baixo.
   {
     barra: { x: 16, y: 8, largura: BITOLA, altura: 84, raio: RAIO },
-    operacao: "tinta",
+    operacao: 'tinta',
   },
   // Braço de cima e braço do meio fecham o arco; a lateral direita liga os
   // dois. O vazio que sobra entre eles (x 32..68, y 24..44) é o olho do R.
   {
     barra: { x: 16, y: 8, largura: 68, altura: BITOLA, raio: RAIO },
-    operacao: "tinta",
+    operacao: 'tinta',
   },
   {
     barra: { x: 68, y: 8, largura: BITOLA, altura: 52, raio: RAIO },
-    operacao: "tinta",
+    operacao: 'tinta',
   },
   {
     barra: { x: 16, y: 44, largura: 68, altura: BITOLA, raio: RAIO },
-    operacao: "tinta",
+    operacao: 'tinta',
   },
   // Perna diagonal, saindo de baixo do arco.
-  { barra: barraEntre(50, 60, 77, 85, BITOLA, RAIO), operacao: "tinta" },
+  { barra: barraEntre(50, 60, 77, 85, BITOLA, RAIO), operacao: 'tinta' },
 
   // Nervuras só no trecho da haste que sobra abaixo do arco: é o único lugar
   // onde o vergalhão aparece como vergalhão, e não como letra.

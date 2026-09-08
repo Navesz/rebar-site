@@ -1,6 +1,6 @@
-import type { NextConfig } from "next"
+import type { NextConfig } from 'next'
 
-import site from "./conteudo/site.json"
+import site from './conteudo/site.json'
 
 /**
  * O CAMINHO EM QUE O SITE MORA, derivado de `meta.urlBase` e de mais lugar
@@ -16,14 +16,14 @@ import site from "./conteudo/site.json"
  * segundo campo com o mesmo caminho é a segunda fonte que diverge — o defeito
  * do `Navesz/Galegos#1` com outra roupa.
  */
-const caminhoBase = new URL(site.meta.urlBase).pathname.replace(/\/+$/, "")
+const caminhoBase = new URL(site.meta.urlBase).pathname.replace(/\/+$/, '')
 
 const nextConfig: NextConfig = {
   // SSG puro. É o que faz og:image existir: WhatsApp, LinkedIn, Slack e Discord
   // não executam JavaScript, então meta tag pintada no cliente não existe para
   // eles. Medido no spike de 31/08 — todas as rotas "prerendered as static
   // content", out/index.html com 12 KB e a meta absoluta lá dentro.
-  output: "export",
+  output: 'export',
   // CADA ROTA VIRA UMA PASTA COM `index.html`, e nao um arquivo `rota.html`.
   //
   // Medido no site publicado: sem esta linha, `/docs` respondia 200 e `/docs/`

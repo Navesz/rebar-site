@@ -29,11 +29,11 @@
 
 /** Os cinco tempos da chegada do hero, na ordem em que entram. */
 export const PASSO_DO_HERO = {
-  marca: "marca",
-  titulo: "titulo",
-  subtitulo: "subtitulo",
-  acao: "acao",
-  painel: "painel",
+  marca: 'marca',
+  titulo: 'titulo',
+  subtitulo: 'subtitulo',
+  acao: 'acao',
+  painel: 'painel',
 } as const
 
 export type PassoDoHero = (typeof PASSO_DO_HERO)[keyof typeof PASSO_DO_HERO]
@@ -41,15 +41,14 @@ export type PassoDoHero = (typeof PASSO_DO_HERO)[keyof typeof PASSO_DO_HERO]
 /** Os alvos da esteira presa à rolagem. */
 export const PASSO_DA_ESTEIRA = {
   /** Cada linha do placar impresso pelo checker. */
-  linha: "linha",
+  linha: 'linha',
   /** O trilho de progresso que acompanha a lista. */
-  fita: "fita",
+  fita: 'fita',
   /** Cada exemplo de invocação. */
-  item: "item",
+  item: 'item',
 } as const
 
-export type PassoDaEsteira =
-  (typeof PASSO_DA_ESTEIRA)[keyof typeof PASSO_DA_ESTEIRA]
+export type PassoDaEsteira = (typeof PASSO_DA_ESTEIRA)[keyof typeof PASSO_DA_ESTEIRA]
 
 /** O atributo que o molde escreve e a partitura procura. Um lugar só. */
 export const noHero = (passo: PassoDoHero) => `[data-entrada="${passo}"]`

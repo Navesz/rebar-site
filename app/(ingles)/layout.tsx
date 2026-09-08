@@ -1,9 +1,9 @@
-import type { Metadata, Viewport } from "next"
+import type { Metadata, Viewport } from 'next'
 
-import "../globals.css"
-import { Casca } from "@/components/casca"
-import { IDIOMA_PADRAO } from "@/conteudo/carregar"
-import { metadadosDaRaiz, viewportPadrao } from "@/lib/metadados"
+import '../globals.css'
+import { Casca } from '@/components/casca'
+import { IDIOMA_PADRAO } from '@/conteudo/carregar'
+import { metadadosDaRaiz, viewportPadrao } from '@/lib/metadados'
 
 /**
  * O LAYOUT RAIZ DO INGLÊS, que é o idioma da RAIZ do site.
@@ -24,8 +24,6 @@ export const metadata: Metadata = metadadosDaRaiz(IDIOMA_PADRAO)
 
 export const viewport: Viewport = viewportPadrao
 
-export default function LayoutRaiz({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function LayoutRaiz({ children }: Readonly<{ children: React.ReactNode }>) {
   return <Casca idioma={IDIOMA_PADRAO}>{children}</Casca>
 }

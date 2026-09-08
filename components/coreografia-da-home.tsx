@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * AS DUAS COREOGRAFIAS DA HOME, e nenhuma das duas é estado de componente.
@@ -53,22 +53,12 @@
  * devolve o valor, devolve uma referência opaca.
  */
 
-import type { ReactNode } from "react"
-import gsap from "gsap"
+import type { ReactNode } from 'react'
+import gsap from 'gsap'
 
-import {
-  COM_MOVIMENTO,
-  concluirMesmoSemQuadros,
-  ENTRADA,
-  useCoreografia,
-} from "@/lib/animacao"
-import { cn } from "@/lib/utils"
-import {
-  naEsteira,
-  noHero,
-  PASSO_DA_ESTEIRA,
-  type PassoDoHero,
-} from "@/components/passos-da-home"
+import { COM_MOVIMENTO, concluirMesmoSemQuadros, ENTRADA, useCoreografia } from '@/lib/animacao'
+import { cn } from '@/lib/utils'
+import { naEsteira, noHero, PASSO_DA_ESTEIRA, type PassoDoHero } from '@/components/passos-da-home'
 
 /**
  * Quanto tempo depois da navegação a chegada do hero ainda é chegada.
@@ -151,13 +141,13 @@ export function CoreografiaDoHero({
       // `aria-hidden`. `ease: "none"` porque quem dita a curva aqui é o dedo
       // da pessoa na rolagem; qualquer easing sobre um `scrub` faz o fundo
       // acelerar sozinho e denuncia o truque.
-      gsap.to("[data-nervura]", {
+      gsap.to('[data-nervura]', {
         yPercent: PARALAXE_DA_NERVURA,
-        ease: "none",
+        ease: 'none',
         scrollTrigger: {
           trigger: hero,
-          start: "top top",
-          end: "bottom top",
+          start: 'top top',
+          end: 'bottom top',
           scrub: true,
         },
       })
@@ -176,7 +166,7 @@ export function CoreografiaDoHero({
             duration: movimento.duracao,
             stagger: movimento.escalonar,
           },
-          movimento.quando
+          movimento.quando,
         )
       }
 
@@ -187,10 +177,7 @@ export function CoreografiaDoHero({
   })
 
   return (
-    <div
-      ref={escopo}
-      className={cn("relative isolate overflow-hidden", className)}
-    >
+    <div ref={escopo} className={cn('relative isolate overflow-hidden', className)}>
       {/*
        * A NERVURA VIVE AQUI, e não no molde: ela é decoração pura, não tem
        * texto e é o único elemento que a paralaxe move. Nascendo dentro do
@@ -237,7 +224,7 @@ export function CoreografiaDaEsteira({
   const escopo = useCoreografia<HTMLDivElement>((mm, secao) => {
     mm.add(COM_MOVIMENTO, () => {
       const linha = gsap.timeline({
-        defaults: { ease: "none" },
+        defaults: { ease: 'none' },
         scrollTrigger: {
           trigger: secao,
           // A faixa começa com a seção já entrando na tela e termina quando o
@@ -245,8 +232,8 @@ export function CoreografiaDaEsteira({
           // depois é o que faz cada item ser revelado UM POUCO ANTES de chegar
           // ao olho: revelação que acontece atrás da dobra é revelação que
           // ninguém viu, e aí a coreografia inteira não mostrou nada.
-          start: "top 75%",
-          end: "bottom bottom",
+          start: 'top 75%',
+          end: 'bottom bottom',
           // `scrub` com número e não `true`: meio segundo de inércia tira o
           // serrilhado do trackpad sem soltar a animação da rolagem.
           scrub: 0.5,
@@ -259,17 +246,13 @@ export function CoreografiaDaEsteira({
         // aparecer seria animar dentro de uma caixa invisível, e a impressão
         // aconteceria para ninguém. Por isso o item vem primeiro, em `0`, e as
         // linhas começam em `1`, quando ele já assentou.
-        .from(
-          naEsteira(PASSO_DA_ESTEIRA.item),
-          { opacity: 0, y: 18, duration: 1, stagger: 2 },
-          0
-        )
+        .from(naEsteira(PASSO_DA_ESTEIRA.item), { opacity: 0, y: 18, duration: 1, stagger: 2 }, 0)
         // O placar imprime linha a linha, que é como ele sai no terminal.
         // `xPercent` pequeno para o texto parecer digitado, não arremessado.
         .from(
           naEsteira(PASSO_DA_ESTEIRA.linha),
           { opacity: 0, xPercent: -2, duration: 0.5, stagger: 0.35 },
-          1
+          1,
         )
         // A fita percorre a faixa INTEIRA — os mesmos 10 da linha do tempo:
         // ela é o progresso da esteira, e progresso que completa antes do fim

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * A COREOGRAFIA DE SCROLL, num lugar só.
@@ -19,18 +19,18 @@
  *      sessão vê a animação ser desfeita na hora, sem recarregar a página.
  */
 
-import { useEffect, useRef, type DependencyList } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useEffect, useRef, type DependencyList } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // Consulta de mídia em vez de leitura única: `gsap.matchMedia` reavalia
 // sozinho quando a preferência do sistema muda, e desfaz o que criou dentro
 // do ramo que deixou de casar.
-export const COM_MOVIMENTO = "(prefers-reduced-motion: no-preference)"
+export const COM_MOVIMENTO = '(prefers-reduced-motion: no-preference)'
 
 // A mesma curva do `Revelar`, para as duas bibliotecas não animarem com
 // personalidades diferentes na mesma tela.
-export const ENTRADA = "power3.out"
+export const ENTRADA = 'power3.out'
 
 let plugadoUmaVez = false
 
@@ -53,7 +53,7 @@ function registrar() {
  */
 export function useCoreografia<T extends HTMLElement = HTMLDivElement>(
   coreografar: (mm: gsap.MatchMedia, escopo: T) => void,
-  dependencias: DependencyList = []
+  dependencias: DependencyList = [],
 ) {
   const escopo = useRef<T>(null)
 

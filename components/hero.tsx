@@ -1,12 +1,12 @@
-import Link from "next/link"
-import { ArrowRight, ArrowUpRight } from "lucide-react"
+import Link from 'next/link'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
-import { CoreografiaDoHero } from "@/components/coreografia-da-home"
-import { Marca } from "@/components/marca"
-import { PASSO_DO_HERO } from "@/components/passos-da-home"
-import { PainelDeCodigo } from "@/components/painel-de-codigo"
-import { caminhoDe, site, textos, type Idioma } from "@/conteudo/carregar"
-import { rotaDe } from "@/lib/rotas"
+import { CoreografiaDoHero } from '@/components/coreografia-da-home'
+import { Marca } from '@/components/marca'
+import { PASSO_DO_HERO } from '@/components/passos-da-home'
+import { PainelDeCodigo } from '@/components/painel-de-codigo'
+import { caminhoDe, site, textos, type Idioma } from '@/conteudo/carregar'
+import { rotaDe } from '@/lib/rotas'
 
 /**
  * A PRIMEIRA DOBRA: marca, título, o que a ferramenta é, para onde ir, e o
@@ -114,7 +114,7 @@ export function Hero({ idioma }: { idioma: Idioma }) {
           {instalacao ? (
             <Link
               data-entrada={PASSO_DO_HERO.acao}
-              href={caminhoDe(idioma, rotaDe("instalacao"))}
+              href={caminhoDe(idioma, rotaDe('instalacao'))}
               className="group inline-flex min-h-11 items-center gap-2 rounded-md bg-brand px-5 text-sm font-medium text-brand-foreground shadow-raised transition-shadow hover:shadow-overlay focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
             >
               {t.rotulos.comecar}

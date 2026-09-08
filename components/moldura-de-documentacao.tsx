@@ -19,12 +19,12 @@
  * que é código AO LADO do texto — voltaria a empilhar em toda tela existente.
  */
 
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
 
-import { BarraLateralDocs } from "@/components/barra-lateral-docs"
-import { GRUPOS_DE_DOCS } from "@/components/navegacao-de-docs"
-import { caminhoDe, textos, type Idioma } from "@/conteudo/carregar"
-import { rotaDe } from "@/lib/rotas"
+import { BarraLateralDocs } from '@/components/barra-lateral-docs'
+import { GRUPOS_DE_DOCS } from '@/components/navegacao-de-docs'
+import { caminhoDe, textos, type Idioma } from '@/conteudo/carregar'
+import { rotaDe } from '@/lib/rotas'
 
 export function MolduraDeDocumentacao({
   idioma,

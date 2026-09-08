@@ -117,7 +117,7 @@
 export class ErroDeConteudo extends Error {
   constructor(mensagem: string) {
     super(mensagem)
-    this.name = "ErroDeConteudo"
+    this.name = 'ErroDeConteudo'
   }
 }
 
@@ -133,9 +133,9 @@ export class ErroDeConteudo extends Error {
  * corrigiria o arquivo errado, veria o mesmo erro, e concluiria que a validação
  * está quebrada.
  */
-const ARQUIVO_DA_RAIZ: Record<string, string> = { site: "conteudo/site.json" }
+const ARQUIVO_DA_RAIZ: Record<string, string> = { site: 'conteudo/site.json' }
 
-const raizDe = (caminho: string): string => caminho.split(".")[0]
+const raizDe = (caminho: string): string => caminho.split('.')[0]
 
 function arquivoDe(caminho: string): string {
   const raiz = raizDe(caminho)
@@ -143,7 +143,7 @@ function arquivoDe(caminho: string): string {
 }
 
 /** O caminho SEM a raiz: é assim que o dono vê o campo dentro do arquivo. */
-const semRaiz = (caminho: string): string => caminho.replace(/^[^.[]*\.?/, "")
+const semRaiz = (caminho: string): string => caminho.replace(/^[^.[]*\.?/, '')
 
 // ── sentinelas ────────────────────────────────────────────────────────────
 
@@ -181,50 +181,43 @@ const OU_APAGUE = (bloco: string) =>
  * mandar preencher é a que faz quem não tem o campo inventar um valor.
  */
 const COMO_PREENCHER: Record<string, string> = {
-  "identidade.nome":
-    'O nome do negócio como o cliente o chama. Ex.: "Padaria do Zé".',
-  "identidade.whatsapp.e164": `Só dígitos, com DDI e DDD, do jeito que o wa.me aceita — sem +, sem espaço, sem parêntese. O molde é 55DD9NNNNNNNN — DDI, DDD e o número, colados. ${OU_APAGUE("identidade.whatsapp")}`,
-  "identidade.whatsapp.exibicao": `O MESMO número de cima, formatado para o visitante ler, no molde (DD) 9NNNN-NNNN. ${OU_APAGUE("identidade.whatsapp")}`,
-  "identidade.whatsapp.chamadaAcao":
+  'identidade.nome': 'O nome do negócio como o cliente o chama. Ex.: "Padaria do Zé".',
+  'identidade.whatsapp.e164': `Só dígitos, com DDI e DDD, do jeito que o wa.me aceita — sem +, sem espaço, sem parêntese. O molde é 55DD9NNNNNNNN — DDI, DDD e o número, colados. ${OU_APAGUE('identidade.whatsapp')}`,
+  'identidade.whatsapp.exibicao': `O MESMO número de cima, formatado para o visitante ler, no molde (DD) 9NNNN-NNNN. ${OU_APAGUE('identidade.whatsapp')}`,
+  'identidade.whatsapp.chamadaAcao':
     'O texto do botão que abre a conversa. Ex.: "Falar no WhatsApp".',
-  "identidade.whatsapp.mensagem":
-    "A frase que já vai escrita na conversa quando o visitante toca o botão.",
-  "identidade.email": `O e-mail que alguém abre e responde. Ex.: "contato@padariadoze.com.br". ${OU_APAGUE("identidade.email")}`,
-  "identidade.endereco.logradouro": `Rua e número. Ex.: "Rua das Palmeiras, 512". ${OU_APAGUE("identidade.endereco")}`,
-  "identidade.endereco.bairro": `O bairro. Ex.: "Vila Mariana". ${OU_APAGUE("identidade.endereco")}`,
-  "identidade.endereco.cidade": `A cidade. Ex.: "São Paulo". ${OU_APAGUE("identidade.endereco")}`,
-  "identidade.endereco.uf": `A sigla do estado, duas maiúsculas. Ex.: "SP". ${OU_APAGUE("identidade.endereco")}`,
-  "identidade.endereco.cep": `O CEP com hífen. Ex.: "04101-300". ${OU_APAGUE("identidade.endereco")}`,
-  "meta.urlBase":
+  'identidade.whatsapp.mensagem':
+    'A frase que já vai escrita na conversa quando o visitante toca o botão.',
+  'identidade.email': `O e-mail que alguém abre e responde. Ex.: "contato@padariadoze.com.br". ${OU_APAGUE('identidade.email')}`,
+  'identidade.endereco.logradouro': `Rua e número. Ex.: "Rua das Palmeiras, 512". ${OU_APAGUE('identidade.endereco')}`,
+  'identidade.endereco.bairro': `O bairro. Ex.: "Vila Mariana". ${OU_APAGUE('identidade.endereco')}`,
+  'identidade.endereco.cidade': `A cidade. Ex.: "São Paulo". ${OU_APAGUE('identidade.endereco')}`,
+  'identidade.endereco.uf': `A sigla do estado, duas maiúsculas. Ex.: "SP". ${OU_APAGUE('identidade.endereco')}`,
+  'identidade.endereco.cep': `O CEP com hífen. Ex.: "04101-300". ${OU_APAGUE('identidade.endereco')}`,
+  'meta.urlBase':
     'O endereço onde o site vai ficar, com https:// e SEM barra no fim. Ex.: "https://padariadoze.com.br".',
   // A chave é "og.alt" e não "meta.og.alt" desde 06/09: o alt mudou de arquivo,
   // e a chave deste mapa é o caminho DENTRO do arquivo. Deixá-la como estava
   // mandaria o dono procurar `meta.og.alt` num `textos/es.json` que não tem
   // `meta` nenhum.
-  "og.alt":
-    "Descrição da imagem de compartilhamento, NO IDIOMA DESTE ARQUIVO — é o que o leitor de tela lê quando o link é compartilhado.",
-  tagDeIdioma:
-    'A tag BCP 47 deste arquivo, no molde xx-XX. Ex.: "pt-BR", "en-US", "es-ES".',
+  'og.alt':
+    'Descrição da imagem de compartilhamento, NO IDIOMA DESTE ARQUIVO — é o que o leitor de tela lê quando o link é compartilhado.',
+  tagDeIdioma: 'A tag BCP 47 deste arquivo, no molde xx-XX. Ex.: "pt-BR", "en-US", "es-ES".',
   nomeDoIdioma:
     'O nome do idioma ESCRITO NO PRÓPRIO IDIOMA — é o que o visitante lê no seletor. Ex.: "Português (Brasil)", "English", "Español".',
   titulo: 'O título da aba e do resultado no Google. Ex.: "Padaria do Zé".',
   gabaritoDeTitulo:
     'O molde do título das páginas filhas, com %s onde entra o nome da página. Ex.: "%s · Padaria do Zé".',
   descricao:
-    "De 50 a 160 caracteres dizendo o que o negócio faz. É este texto que aparece no Google e no preview do link no WhatsApp.",
+    'De 50 a 160 caracteres dizendo o que o negócio faz. É este texto que aparece no Google e no preview do link no WhatsApp.',
   nomeCurto:
     'Até 12 caracteres — é o nome que fica embaixo do ícone do app instalado. Ex.: "Padaria".',
-  "home.titulo":
-    "O título grande da primeira tela. Costuma ser o nome do negócio.",
+  'home.titulo': 'O título grande da primeira tela. Costuma ser o nome do negócio.',
 }
 
 /** Todo texto do JSON, com o caminho até ele, para a varredura de sentinela. */
-function caminharTextos(
-  valor: unknown,
-  caminho: string,
-  saida: Array<[string, string]>
-): void {
-  if (typeof valor === "string") {
+function caminharTextos(valor: unknown, caminho: string, saida: Array<[string, string]>): void {
+  if (typeof valor === 'string') {
     saida.push([caminho, valor])
     return
   }
@@ -232,7 +225,7 @@ function caminharTextos(
     valor.forEach((item, i) => caminharTextos(item, `${caminho}[${i}]`, saida))
     return
   }
-  if (typeof valor === "object" && valor !== null) {
+  if (typeof valor === 'object' && valor !== null) {
     for (const [chave, item] of Object.entries(valor)) {
       caminharTextos(item, caminho ? `${caminho}.${chave}` : chave, saida)
     }
@@ -244,36 +237,33 @@ export type Pendencia = { caminho: string; valor: string; instrucao: string }
 /** Os campos que ainda estão com placeholder, na ordem em que aparecem no JSON. */
 export function acharSentinelas(bruto: unknown): Pendencia[] {
   const textos: Array<[string, string]> = []
-  caminharTextos(bruto, "", textos)
+  caminharTextos(bruto, '', textos)
   return textos
     .filter(([, valor]) => SENTINELA.test(valor))
     .map(([caminho, valor]) => ({
       caminho,
       valor,
-      instrucao: COMO_PREENCHER[caminho] ?? "Escreva o valor real deste campo.",
+      instrucao: COMO_PREENCHER[caminho] ?? 'Escreva o valor real deste campo.',
     }))
 }
 
 const PORQUE_REPROVA =
   'POR QUE O BUILD PARA AQUI EM VEZ DE PUBLICAR: um placeholder plausível — "5500000000000",\n' +
   '"contato@exemplo.com.br" — sobe, parece certo e não entrega pedido nenhum. É o mesmo defeito\n' +
-  "do PR Navesz/Galegos#1 (§12.3), estacionado justamente porque o link subia sem destinatário e\n" +
-  "o cardápio parava de entregar EM SILÊNCIO. Placeholder aqui é inerte e barulhento: impossível\n" +
-  "de confundir com valor real, e reprova até ser trocado."
+  'do PR Navesz/Galegos#1 (§12.3), estacionado justamente porque o link subia sem destinatário e\n' +
+  'o cardápio parava de entregar EM SILÊNCIO. Placeholder aqui é inerte e barulhento: impossível\n' +
+  'de confundir com valor real, e reprova até ser trocado.'
 
 /** Uma mensagem com TODOS os campos por preencher, para caber num build só. */
 function conferirSentinelas(bruto: unknown, arquivo: string): void {
   const pendentes = acharSentinelas(bruto)
   if (!pendentes.length) return
   const lista = pendentes
-    .map(
-      (p) =>
-        `  ${p.caminho} = ${JSON.stringify(p.valor)}\n      → ${p.instrucao}`
-    )
-    .join("\n")
+    .map((p) => `  ${p.caminho} = ${JSON.stringify(p.valor)}\n      → ${p.instrucao}`)
+    .join('\n')
   throw new ErroDeConteudo(
     `${arquivo} ainda tem ${pendentes.length} campo(s) com PLACEHOLDER. ` +
-      `Troque, em ${arquivo}:\n\n${lista}\n\n${PORQUE_REPROVA}\n`
+      `Troque, em ${arquivo}:\n\n${lista}\n\n${PORQUE_REPROVA}\n`,
   )
 }
 
@@ -288,8 +278,8 @@ function recusarSentinela(limpo: string, caminho: string): void {
   const curto = semRaiz(caminho)
   throw new ErroDeConteudo(
     `${arquivoDe(caminho)} em "${curto}": ainda está com o placeholder ${JSON.stringify(limpo)}. ` +
-      `${COMO_PREENCHER[curto] ?? "Escreva o valor real deste campo."} ` +
-      "O build reprova de propósito — placeholder que publica é pedido perdido em silêncio (§12.3)."
+      `${COMO_PREENCHER[curto] ?? 'Escreva o valor real deste campo.'} ` +
+      'O build reprova de propósito — placeholder que publica é pedido perdido em silêncio (§12.3).',
   )
 }
 
@@ -297,16 +287,13 @@ function recusarSentinela(limpo: string, caminho: string): void {
 
 /** Descrição curta do que VEIO, para a mensagem dizer o que consertar. */
 function descrever(valor: unknown): string {
-  if (valor === undefined) return "nada (campo ausente)"
-  if (valor === null) return "null"
-  if (typeof valor === "string") {
-    return valor.length <= 60
-      ? JSON.stringify(valor)
-      : `texto de ${valor.length} caracteres`
+  if (valor === undefined) return 'nada (campo ausente)'
+  if (valor === null) return 'null'
+  if (typeof valor === 'string') {
+    return valor.length <= 60 ? JSON.stringify(valor) : `texto de ${valor.length} caracteres`
   }
   if (Array.isArray(valor)) return `lista de ${valor.length} item(ns)`
-  if (typeof valor === "object")
-    return `objeto com ${Object.keys(valor).length} campo(s)`
+  if (typeof valor === 'object') return `objeto com ${Object.keys(valor).length} campo(s)`
   return JSON.stringify(valor)
 }
 
@@ -316,14 +303,14 @@ function descrever(valor: unknown): string {
  */
 function falhar(caminho: string, esperado: string, recebido: unknown): never {
   throw new ErroDeConteudo(
-    `${arquivoDe(caminho)} inválido em "${semRaiz(caminho)}": esperava ${esperado}, veio ${descrever(recebido)}.`
+    `${arquivoDe(caminho)} inválido em "${semRaiz(caminho)}": esperava ${esperado}, veio ${descrever(recebido)}.`,
   )
 }
 
 /** Recusa que não é de FORMATO e sim de VALOR MORTO: diz o porquê, não só o quê. */
 function falharMorto(caminho: string, recebido: string, porque: string): never {
   throw new ErroDeConteudo(
-    `${arquivoDe(caminho)} em "${semRaiz(caminho)}": ${JSON.stringify(recebido)} ${porque}`
+    `${arquivoDe(caminho)} em "${semRaiz(caminho)}": ${JSON.stringify(recebido)} ${porque}`,
   )
 }
 
@@ -333,23 +320,20 @@ type Inferir<V> = V extends Validador<infer T> ? T : never
 export const texto =
   (min = 1, max = 300): Validador<string> =>
   (valor, caminho) => {
-    if (typeof valor !== "string") falhar(caminho, "texto", valor)
+    if (typeof valor !== 'string') falhar(caminho, 'texto', valor)
     const limpo = valor.trim()
     recusarSentinela(limpo, caminho)
-    if (limpo.length < min)
-      falhar(caminho, `texto com ao menos ${min} caractere(s)`, valor)
-    if (limpo.length > max)
-      falhar(caminho, `texto com no máximo ${max} caracteres`, valor)
+    if (limpo.length < min) falhar(caminho, `texto com ao menos ${min} caractere(s)`, valor)
+    if (limpo.length > max) falhar(caminho, `texto com no máximo ${max} caracteres`, valor)
     return limpo
   }
 
 export const inteiro =
   (min: number, max: number): Validador<number> =>
   (valor, caminho) => {
-    if (typeof valor !== "number" || !Number.isInteger(valor))
-      falhar(caminho, "número inteiro", valor)
-    if (valor < min || valor > max)
-      falhar(caminho, `inteiro entre ${min} e ${max}`, valor)
+    if (typeof valor !== 'number' || !Number.isInteger(valor))
+      falhar(caminho, 'número inteiro', valor)
+    if (valor < min || valor > max) falhar(caminho, `inteiro entre ${min} e ${max}`, valor)
     return valor
   }
 
@@ -363,19 +347,16 @@ export const padrao =
 
 export const objeto =
   <F extends Record<string, Validador<unknown>>>(
-    campos: F
+    campos: F,
   ): Validador<{ [K in keyof F]: Inferir<F[K]> }> =>
   (valor, caminho) => {
-    if (typeof valor !== "object" || valor === null || Array.isArray(valor)) {
-      falhar(caminho, "objeto", valor)
+    if (typeof valor !== 'object' || valor === null || Array.isArray(valor)) {
+      falhar(caminho, 'objeto', valor)
     }
     const bruto = valor as Record<string, unknown>
     const saida: Record<string, unknown> = {}
     for (const chave of Object.keys(campos)) {
-      saida[chave] = campos[chave](
-        bruto[chave],
-        caminho ? `${caminho}.${chave}` : chave
-      )
+      saida[chave] = campos[chave](bruto[chave], caminho ? `${caminho}.${chave}` : chave)
     }
     // Campo desconhecido REPROVA, e essa é a escolha cara de propósito. Campo a
     // mais é quase sempre campo renomeado no esquema e esquecido no JSON — ou o
@@ -384,9 +365,9 @@ export const objeto =
     const sobra = Object.keys(bruto).filter((chave) => !(chave in campos))
     if (sobra.length) {
       throw new ErroDeConteudo(
-        `${arquivoDe(caminho)} inválido em "${semRaiz(caminho) || "(raiz)"}": campo(s) que o esquema não conhece — ${sobra
+        `${arquivoDe(caminho)} inválido em "${semRaiz(caminho) || '(raiz)'}": campo(s) que o esquema não conhece — ${sobra
           .map((chave) => JSON.stringify(chave))
-          .join(", ")}. Conhecidos: ${Object.keys(campos).join(", ")}.`
+          .join(', ')}. Conhecidos: ${Object.keys(campos).join(', ')}.`,
       )
     }
     return saida as { [K in keyof F]: Inferir<F[K]> }
@@ -395,7 +376,7 @@ export const objeto =
 export const lista =
   <T>(item: Validador<T>, min = 1, max = 24): Validador<T[]> =>
   (valor, caminho) => {
-    if (!Array.isArray(valor)) falhar(caminho, "lista", valor)
+    if (!Array.isArray(valor)) falhar(caminho, 'lista', valor)
     if (valor.length < min || valor.length > max) {
       falhar(caminho, `lista com ${min} a ${max} item(ns)`, valor)
     }
@@ -430,16 +411,16 @@ export const lista =
  * diz qual campo falta.
  */
 const ehObjetoSimples = (v: unknown): v is Record<string, unknown> =>
-  typeof v === "object" && v !== null && !Array.isArray(v)
+  typeof v === 'object' && v !== null && !Array.isArray(v)
 
 function falharVazio(caminho: string, oque: string): never {
   const curto = semRaiz(caminho)
   throw new ErroDeConteudo(
     `${arquivoDe(caminho)} em "${curto}": ${oque} vazio não é "não tenho". ` +
-      `${COMO_PREENCHER[curto] ?? ""} ` +
+      `${COMO_PREENCHER[curto] ?? ''} ` +
       `Este bloco é OPCIONAL: ou ele tem valor de verdade, ou a chave "${curto}" sai do arquivo. ` +
-      "Deixar vazio é a terceira opção que não existe — ela publica um contato em branco, que é " +
-      "o mesmo silêncio do §12.3 com outra cara."
+      'Deixar vazio é a terceira opção que não existe — ela publica um contato em branco, que é ' +
+      'o mesmo silêncio do §12.3 com outra cara.',
   )
 }
 
@@ -447,10 +428,8 @@ export const opcional =
   <T>(dentro: Validador<T>): Validador<T | null> =>
   (valor, caminho) => {
     if (valor === undefined || valor === null) return null
-    if (typeof valor === "string" && valor.trim() === "")
-      falharVazio(caminho, "campo")
-    if (ehObjetoSimples(valor) && Object.keys(valor).length === 0)
-      falharVazio(caminho, "bloco")
+    if (typeof valor === 'string' && valor.trim() === '') falharVazio(caminho, 'campo')
+    if (ehObjetoSimples(valor) && Object.keys(valor).length === 0) falharVazio(caminho, 'bloco')
     try {
       return dentro(valor, caminho)
     } catch (erro) {
@@ -460,8 +439,8 @@ export const opcional =
         `${erro.message}\n\n` +
           `"${curto}" é um bloco OPCIONAL e ele está PELA METADE. Ou complete o campo acima, ` +
           `ou apague a chave "${curto}" inteira — o molde deixa de renderizar o bloco e ninguém ` +
-          "cobra nada. Meio bloco é pior que nenhum: a página mostra um contato que não leva a " +
-          "lugar nenhum, e do lado do dono não chega erro nenhum."
+          'cobra nada. Meio bloco é pior que nenhum: a página mostra um contato que não leva a ' +
+          'lugar nenhum, e do lado do dono não chega erro nenhum.',
       )
     }
   }
@@ -490,7 +469,7 @@ const UM_DIGITO_SO = /^(\d)\1+$/
  * em dente — o aviso do gerador pedia para trocar, agora o build cobra.
  */
 function hostDeMentira(host: string): boolean {
-  const h = host.toLowerCase().replace(/\.$/, "")
+  const h = host.toLowerCase().replace(/\.$/, '')
 
   // POR RÓTULO, NÃO POR PREFIXO. A versão anterior ancorava no INÍCIO do host,
   // e a auditoria de 31/08 derrubou a defesa inteira com um subdomínio:
@@ -503,33 +482,33 @@ function hostDeMentira(host: string): boolean {
   // defesa caía no caso mais comum. Agora o rótulo proibido conta em QUALQUER
   // posição: `www.exemplo.com.br` tem "exemplo" entre os rótulos e é recusado.
   const PROIBIDOS = new Set([
-    "exemplo",
-    "example",
-    "exemple",
-    "ejemplo",
-    "dominio",
-    "domain",
-    "seudominio",
-    "meudominio",
-    "seu-dominio",
-    "meu-dominio",
-    "seusite",
-    "meusite",
-    "seu-site",
-    "meu-site",
-    "email",
-    "e-mail",
-    "seuemail",
-    "seu-email",
-    "empresa",
-    "suaempresa",
-    "sua-empresa",
-    "teste",
-    "test",
-    "exemplo1",
-    "localhost",
+    'exemplo',
+    'example',
+    'exemple',
+    'ejemplo',
+    'dominio',
+    'domain',
+    'seudominio',
+    'meudominio',
+    'seu-dominio',
+    'meu-dominio',
+    'seusite',
+    'meusite',
+    'seu-site',
+    'meu-site',
+    'email',
+    'e-mail',
+    'seuemail',
+    'seu-email',
+    'empresa',
+    'suaempresa',
+    'sua-empresa',
+    'teste',
+    'test',
+    'exemplo1',
+    'localhost',
   ])
-  if (h.split(".").some((rotulo) => PROIBIDOS.has(rotulo))) return true
+  if (h.split('.').some((rotulo) => PROIBIDOS.has(rotulo))) return true
 
   // Reservados pela RFC 2606: não resolvem nunca, em nenhum registrador.
   if (/\.(invalid|test|example|localhost)$/.test(h)) return true
@@ -562,24 +541,24 @@ function hostDeMentira(host: string): boolean {
 export const urlBase: Validador<string> = (valor, caminho) => {
   const limpo = padrao(
     /^https:\/\/[^\s/?#]+(?:\/[^\s?#]*[^\s/?#])?$/,
-    "https://dominio.com.br, ou https://dono.github.io/projeto (sem barra no fim)",
-    200
+    'https://dominio.com.br, ou https://dono.github.io/projeto (sem barra no fim)',
+    200,
   )(valor, caminho)
-  if (hostDeMentira(limpo.slice("https://".length).split("/")[0])) {
+  if (hostDeMentira(limpo.slice('https://'.length).split('/')[0])) {
     falharMorto(
       caminho,
       limpo,
-      "é domínio de exemplo, não o endereço do site. Ele vira o og:url, o sitemap e o robots.txt: " +
-        "publicado assim, o cartão de compartilhamento aponta para um lugar que não existe e ninguém " +
-        "percebe. Escreva o domínio de verdade (ex.: https://padariadoze.com.br), ou gere o projeto de " +
-        "novo passando o domínio como segundo argumento."
+      'é domínio de exemplo, não o endereço do site. Ele vira o og:url, o sitemap e o robots.txt: ' +
+        'publicado assim, o cartão de compartilhamento aponta para um lugar que não existe e ninguém ' +
+        'percebe. Escreva o domínio de verdade (ex.: https://padariadoze.com.br), ou gere o projeto de ' +
+        'novo passando o domínio como segundo argumento.',
     )
   }
   return limpo
 }
 
 /** Caminho servido de `public/`. Absoluto, porque vira URL absoluta no og. */
-export const caminhoPublico = padrao(/^\/[^\s?#]*$/, "/arquivo.ext", 200)
+export const caminhoPublico = padrao(/^\/[^\s?#]*$/, '/arquivo.ext', 200)
 
 /**
  * URL de uma PÁGINA, e a diferença para `urlBase` é o caminho.
@@ -596,22 +575,22 @@ export const caminhoPublico = padrao(/^\/[^\s?#]*$/, "/arquivo.ext", 200)
 export const urlDePagina: Validador<string> = (valor, caminho) => {
   const limpo = padrao(
     /^https:\/\/[^\s/?#]+(?:\/[^\s?#]*[^\s/?#])?$/,
-    "https://host/caminho (sem barra no fim)",
-    300
+    'https://host/caminho (sem barra no fim)',
+    300,
   )(valor, caminho)
-  const host = limpo.slice("https://".length).split("/")[0]
+  const host = limpo.slice('https://'.length).split('/')[0]
   if (hostDeMentira(host)) {
     falharMorto(
       caminho,
       limpo,
-      "é host de exemplo, não o endereço do repositório. Escreva o link que abre de verdade " +
-        "(ex.: https://github.com/dono/projeto)."
+      'é host de exemplo, não o endereço do repositório. Escreva o link que abre de verdade ' +
+        '(ex.: https://github.com/dono/projeto).',
     )
   }
   return limpo
 }
 
-export const corHex = padrao(/^#[0-9a-fA-F]{6}$/, "#rrggbb", 7)
+export const corHex = padrao(/^#[0-9a-fA-F]{6}$/, '#rrggbb', 7)
 
 /**
  * Só dígitos, com DDI. É o que o `wa.me` aceita — ele rejeita pontuação.
@@ -624,16 +603,16 @@ export const corHex = padrao(/^#[0-9a-fA-F]{6}$/, "#rrggbb", 7)
 export const telefoneE164: Validador<string> = (valor, caminho) => {
   const limpo = padrao(
     /^[1-9]\d{9,14}$/,
-    "só dígitos, com DDI (ex.: 55 + DDD + número)",
-    15
+    'só dígitos, com DDI (ex.: 55 + DDD + número)',
+    15,
   )(valor, caminho)
   if (ZEROS_DEMAIS.test(limpo) || UM_DIGITO_SO.test(limpo)) {
     falharMorto(
       caminho,
       limpo,
-      "casa o formato e não é telefone de ninguém. O wa.me com número inexistente abre e morre do " +
-        "lado do cliente, sem erro nenhum do lado do dono — o site fica no ar entregando zero pedido. " +
-        "Escreva o número real, só dígitos, no molde 55DD9NNNNNNNN."
+      'casa o formato e não é telefone de ninguém. O wa.me com número inexistente abre e morre do ' +
+        'lado do cliente, sem erro nenhum do lado do dono — o site fica no ar entregando zero pedido. ' +
+        'Escreva o número real, só dígitos, no molde 55DD9NNNNNNNN.',
     )
   }
   return limpo
@@ -647,38 +626,30 @@ export const telefoneE164: Validador<string> = (valor, caminho) => {
  */
 export const telefoneExibicao: Validador<string> = (valor, caminho) => {
   const limpo = texto(8, 30)(valor, caminho)
-  const digitos = limpo.replace(/\D/g, "")
+  const digitos = limpo.replace(/\D/g, '')
   if (digitos.length < 10 || digitos.length > 11) {
-    falhar(
-      caminho,
-      "telefone com DDD, como o visitante lê, no molde (DD) 9NNNN-NNNN",
-      valor
-    )
+    falhar(caminho, 'telefone com DDD, como o visitante lê, no molde (DD) 9NNNN-NNNN', valor)
   }
   if (ZEROS_DEMAIS.test(digitos) || UM_DIGITO_SO.test(digitos)) {
     falharMorto(
       caminho,
       limpo,
-      "é máscara de formulário, não telefone. É o número que o visitante vê no rodapé e digita no " +
-        "celular dele. Escreva o real, no molde (DD) 9NNNN-NNNN."
+      'é máscara de formulário, não telefone. É o número que o visitante vê no rodapé e digita no ' +
+        'celular dele. Escreva o real, no molde (DD) 9NNNN-NNNN.',
     )
   }
   return limpo
 }
 
 export const email: Validador<string> = (valor, caminho) => {
-  const limpo = padrao(
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    "nome@dominio",
-    120
-  )(valor, caminho)
-  if (hostDeMentira(limpo.slice(limpo.indexOf("@") + 1))) {
+  const limpo = padrao(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'nome@dominio', 120)(valor, caminho)
+  if (hostDeMentira(limpo.slice(limpo.indexOf('@') + 1))) {
     falharMorto(
       caminho,
       limpo,
-      "é e-mail de exemplo. `exemplo.com.br` está registrado de verdade: a mensagem do cliente sai, " +
-        "não volta bounce nenhum, e some — o mesmo silêncio do telefone, na caixa de entrada. " +
-        "Escreva o e-mail que alguém abre e responde."
+      'é e-mail de exemplo. `exemplo.com.br` está registrado de verdade: a mensagem do cliente sai, ' +
+        'não volta bounce nenhum, e some — o mesmo silêncio do telefone, na caixa de entrada. ' +
+        'Escreva o e-mail que alguém abre e responde.',
     )
   }
   return limpo
@@ -689,75 +660,67 @@ export const email: Validador<string> = (valor, caminho) => {
  * `AA` e `ZZ` — e endereço com UF que não existe some do mapa sem avisar.
  */
 const UFS = [
-  "AC",
-  "AL",
-  "AM",
-  "AP",
-  "BA",
-  "CE",
-  "DF",
-  "ES",
-  "GO",
-  "MA",
-  "MG",
-  "MS",
-  "MT",
-  "PA",
-  "PB",
-  "PE",
-  "PI",
-  "PR",
-  "RJ",
-  "RN",
-  "RO",
-  "RR",
-  "RS",
-  "SC",
-  "SE",
-  "SP",
-  "TO",
+  'AC',
+  'AL',
+  'AM',
+  'AP',
+  'BA',
+  'CE',
+  'DF',
+  'ES',
+  'GO',
+  'MA',
+  'MG',
+  'MS',
+  'MT',
+  'PA',
+  'PB',
+  'PE',
+  'PI',
+  'PR',
+  'RJ',
+  'RN',
+  'RO',
+  'RR',
+  'RS',
+  'SC',
+  'SE',
+  'SP',
+  'TO',
 ]
 
 export const uf: Validador<string> = (valor, caminho) => {
-  const limpo = padrao(/^[A-Z]{2}$/, "UF em duas maiúsculas", 2)(valor, caminho)
+  const limpo = padrao(/^[A-Z]{2}$/, 'UF em duas maiúsculas', 2)(valor, caminho)
   if (!UFS.includes(limpo)) {
-    falharMorto(
-      caminho,
-      limpo,
-      `não é uma UF brasileira. As que existem: ${UFS.join(", ")}.`
-    )
+    falharMorto(caminho, limpo, `não é uma UF brasileira. As que existem: ${UFS.join(', ')}.`)
   }
   return limpo
 }
 
 export const cep: Validador<string> = (valor, caminho) => {
-  const limpo = padrao(/^\d{5}-\d{3}$/, "00000-000", 9)(valor, caminho)
-  if (UM_DIGITO_SO.test(limpo.replace("-", ""))) {
+  const limpo = padrao(/^\d{5}-\d{3}$/, '00000-000', 9)(valor, caminho)
+  if (UM_DIGITO_SO.test(limpo.replace('-', ''))) {
     falharMorto(
       caminho,
       limpo,
-      'casa o formato e não é CEP de lugar nenhum. Escreva o do endereço (ex.: "04101-300").'
+      'casa o formato e não é CEP de lugar nenhum. Escreva o do endereço (ex.: "04101-300").',
     )
   }
   return limpo
 }
 
-export const dataIso = padrao(/^\d{4}-\d{2}-\d{2}$/, "AAAA-MM-DD", 10)
+export const dataIso = padrao(/^\d{4}-\d{2}-\d{2}$/, 'AAAA-MM-DD', 10)
 
 /** O `%s` é o buraco onde o Next encaixa o título da página filha. */
 export const gabaritoDeTitulo: Validador<string> = (valor, caminho) => {
   const limpo = texto(4, 120)(valor, caminho)
-  if (!limpo.includes("%s"))
-    falhar(
-      caminho,
-      "gabarito contendo %s (onde entra o título da página)",
-      valor
-    )
+  if (!limpo.includes('%s'))
+    falhar(caminho, 'gabarito contendo %s (onde entra o título da página)', valor)
   return limpo
 }
 
 /** A tag BCP 47 do arquivo de textos. Mesmo padrão que `meta.idioma` cobrava. */
-export const tagDeIdioma = padrao(/^[a-z]{2}-[A-Z]{2}$/, "pt-BR", 5)
+export const tagDeIdioma = padrao(/^[a-z]{2}-[A-Z]{2}$/, 'pt-BR', 5)
 
 // ── o contrato COMPARTILHADO: conteudo/site.json ──────────────────────────
 
@@ -790,7 +753,7 @@ const formaDoSite = objeto({
         // `exibicao` é separado de `e164`: o que se lê e para onde se vai são
         // dois usos, e um campo só para os dois vira o Galegos de novo.
         rotulo: texto(4, 60),
-      })
+      }),
     ),
 
     // O BLOCO DO BOTÃO DE WHATSAPP, e ele carrega a própria cópia de propósito.
@@ -811,7 +774,7 @@ const formaDoSite = objeto({
         // `conteudo-fora-do-codigo` acusaria a frase se ela morasse no
         // componente.
         mensagem: texto(10, 200),
-      })
+      }),
     ),
 
     // Um site pode ter só e-mail — é o caso da landing de ferramenta.
@@ -825,7 +788,7 @@ const formaDoSite = objeto({
         cidade: texto(2, 60),
         uf,
         cep,
-      })
+      }),
     ),
   }),
 
@@ -915,11 +878,7 @@ const formaDosTextos = objeto({
     // texto já se anuncia como exemplo. Reprovar o build por causa de copy é o
     // caminho rápido para o dono apagar a validação inteira.
     subtitulo: texto(20, 220),
-    destaques: lista(
-      objeto({ titulo: texto(3, 60), texto: texto(20, 240) }),
-      1,
-      6
-    ),
+    destaques: lista(objeto({ titulo: texto(3, 60), texto: texto(20, 240) }), 1, 6),
   }),
 
   // ─────────────────────────────────────────────── as paginas de documentacao
@@ -947,7 +906,7 @@ const formaDosTextos = objeto({
             nota: opcional(texto(10, 300)),
           }),
           1,
-          8
+          8,
         ),
       }),
 
@@ -969,7 +928,7 @@ const formaDosTextos = objeto({
             nota: opcional(texto(10, 300)),
           }),
           1,
-          10
+          10,
         ),
       }),
 
@@ -990,14 +949,10 @@ const formaDosTextos = objeto({
             // descrito so pelo que faz e propaganda, e a doutrina desta arvore
             // e que o limite declarado vale mais que a capacidade declarada.
             limite: texto(15, 400),
-            numeros: lista(
-              objeto({ rotulo: texto(2, 40), valor: texto(1, 24) }),
-              0,
-              6
-            ),
+            numeros: lista(objeto({ rotulo: texto(2, 40), valor: texto(1, 24) }), 0, 6),
           }),
           1,
-          8
+          8,
         ),
       }),
 
@@ -1011,10 +966,10 @@ const formaDosTextos = objeto({
             itens: lista(texto(3, 300), 0, 12),
           }),
           1,
-          12
+          12,
         ),
       }),
-    })
+    }),
   ),
 
   /**
@@ -1120,14 +1075,14 @@ function conferirCoerencia(site: FormaDoSite): void {
   // do mesmo número para divergir — é a exigência seguindo o uso, aqui também.
   const zap = site.identidade.whatsapp
   if (zap === null) return
-  const visivel = zap.exibicao.replace(/\D/g, "")
+  const visivel = zap.exibicao.replace(/\D/g, '')
   if (!zap.e164.endsWith(visivel)) {
     throw new ErroDeConteudo(
-      "conteudo/site.json: identidade.whatsapp.exibicao e identidade.whatsapp.e164 são telefones " +
+      'conteudo/site.json: identidade.whatsapp.exibicao e identidade.whatsapp.e164 são telefones ' +
         `DIFERENTES — o rodapé mostra ${JSON.stringify(zap.exibicao)} ` +
         `(dígitos ${visivel}) e o link abre ${zap.e164}. ` +
-        "Os dois campos são o MESMO número em formatos diferentes: o e164 tem de terminar nos " +
-        "dígitos do exibicao — e164 no molde 55DD9NNNNNNNN, exibicao no molde (DD) 9NNNN-NNNN."
+        'Os dois campos são o MESMO número em formatos diferentes: o e164 tem de terminar nos ' +
+        'dígitos do exibicao — e164 no molde 55DD9NNNNNNNN, exibicao no molde (DD) 9NNNN-NNNN.',
     )
   }
 }
@@ -1149,9 +1104,9 @@ function conferirIdioma(textos: FormaDosTextos, idioma: string): void {
     throw new ErroDeConteudo(
       `conteudo/textos/${idioma}.json: tagDeIdioma é ${JSON.stringify(textos.tagDeIdioma)}, ` +
         `que não é o idioma do arquivo (${idioma}). O arquivo vira <html lang="…"> e og:locale ` +
-        "da página inteira: publicado assim, o leitor de tela pronuncia o texto com os fonemas do " +
-        "idioma errado e o buscador indexa a página como se fosse de outro idioma. " +
-        `Escreva a tag deste arquivo (ex.: ${doArquivo}-XX).`
+        'da página inteira: publicado assim, o leitor de tela pronuncia o texto com os fonemas do ' +
+        'idioma errado e o buscador indexa a página como se fosse de outro idioma. ' +
+        `Escreva a tag deste arquivo (ex.: ${doArquivo}-XX).`,
     )
   }
 }
@@ -1165,7 +1120,7 @@ function conferirIdioma(textos: FormaDosTextos, idioma: string): void {
  * conferir.
  */
 export const esquemaSite: Validador<FormaDoSite> = (valor, caminho) => {
-  conferirSentinelas(valor, "conteudo/site.json")
+  conferirSentinelas(valor, 'conteudo/site.json')
   const site = formaDoSite(valor, caminho)
   conferirCoerencia(site)
   return site
@@ -1199,10 +1154,10 @@ export type Textos = FormaDosTextos
  * fechado na direção mais fácil de esquecer, e fechado pelo compilador, sem
  * regra nova.
  */
-export type Contato = Omit<Compartilhado["identidade"], "nome">
+export type Contato = Omit<Compartilhado['identidade'], 'nome'>
 
 /** O bloco do botão, já estreitado. É o que `linkWhatsapp` exige receber. */
-export type Whatsapp = NonNullable<Contato["whatsapp"]>
+export type Whatsapp = NonNullable<Contato['whatsapp']>
 
 /**
  * O link do WhatsApp é MONTADO em código a partir do número que é conteúdo.

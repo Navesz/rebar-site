@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * A NAVEGAÇÃO DO CABEÇALHO nas duas larguras — a fila no desktop e a gaveta no
@@ -18,23 +18,17 @@
  * conteúdo é `components/cabecalho.tsx`, que é servidor.
  */
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion, useReducedMotion } from "motion/react"
-import { BookOpen, Boxes, Download, House, Menu, Terminal } from "lucide-react"
+import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { motion, useReducedMotion } from 'motion/react'
+import { BookOpen, Boxes, Download, House, Menu, Terminal } from 'lucide-react'
 
-import { cn } from "@/lib/utils"
-import { MarcaGitHub } from "@/components/marca-github"
-import type { ChaveDeRota } from "@/lib/rotas"
-import { Button } from "@/components/ui/button"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+import { cn } from '@/lib/utils'
+import { MarcaGitHub } from '@/components/marca-github'
+import type { ChaveDeRota } from '@/lib/rotas'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 
 /** O ícone não atravessa a fronteira servidor→cliente; a chave, sim. */
 const ICONES: Record<ChaveDeRota, typeof House> = {
@@ -67,7 +61,7 @@ export type ItemDeNavegacao = {
  */
 function rotaAtiva(
   caminho: string,
-  itens: readonly ItemDeNavegacao[]
+  itens: readonly ItemDeNavegacao[],
 ): ItemDeNavegacao | undefined {
   return itens.reduce<ItemDeNavegacao | undefined>((melhor, item) => {
     const casa = caminho === item.href || caminho.startsWith(`${item.href}/`)
@@ -102,12 +96,12 @@ export function NavegacaoDoCabecalho({
                 // Cor E `aria-current`, sempre os dois: só a cor deixa a barra
                 // muda para leitor de tela e ilegível para quem não distingue
                 // os dois tons de aço.
-                aria-current={estaAtivo ? "page" : undefined}
+                aria-current={estaAtivo ? 'page' : undefined}
                 className={cn(
-                  "flex h-10 items-center rounded-md px-3 text-sm transition-colors",
+                  'flex h-10 items-center rounded-md px-3 text-sm transition-colors',
                   estaAtivo
-                    ? "font-medium text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? 'font-medium text-foreground'
+                    : 'text-muted-foreground hover:text-foreground',
                 )}
               >
                 {item.rotulo}
@@ -126,9 +120,7 @@ export function NavegacaoDoCabecalho({
                   layoutId="cabecalho-rota-ativa"
                   className="absolute inset-x-3 -bottom-5 h-0.5 rounded-full bg-brand"
                   transition={
-                    reduzido
-                      ? { duration: 0 }
-                      : { type: "spring", stiffness: 380, damping: 30 }
+                    reduzido ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 30 }
                   }
                 />
               ) : null}
@@ -181,26 +173,19 @@ export function MenuMobile({
             // 44px no toque, contra os 36px do resto da barra: este é o único
             // controle que a pessoa precisa acertar antes de ver qualquer
             // outro, e é o alvo mínimo recomendado para o dedo.
-            className={cn("size-11", className)}
+            className={cn('size-11', className)}
           />
         }
       >
         <Menu aria-hidden className="size-5" />
       </SheetTrigger>
 
-      <SheetContent
-        side="right"
-        className="gap-0"
-        rotuloDeFechar={rotulos.fechar}
-      >
+      <SheetContent side="right" className="gap-0" rotuloDeFechar={rotulos.fechar}>
         <SheetHeader className="border-b border-border px-4 py-3.5">
           <SheetTitle>{rotulos.menu}</SheetTitle>
         </SheetHeader>
 
-        <nav
-          aria-label={rotulos.navegacaoPrincipal}
-          className="min-h-0 flex-1 overflow-y-auto p-2"
-        >
+        <nav aria-label={rotulos.navegacaoPrincipal} className="min-h-0 flex-1 overflow-y-auto p-2">
           <ul className="flex flex-col gap-0.5">
             {itens.map((item) => {
               const Icone = ICONES[item.chave]
@@ -209,13 +194,13 @@ export function MenuMobile({
                 <li key={item.chave}>
                   <Link
                     href={item.href}
-                    aria-current={estaAtivo ? "page" : undefined}
+                    aria-current={estaAtivo ? 'page' : undefined}
                     onClick={() => setAberto(false)}
                     className={cn(
-                      "flex min-h-11 items-center gap-3 rounded-md px-3 text-sm transition-colors",
+                      'flex min-h-11 items-center gap-3 rounded-md px-3 text-sm transition-colors',
                       estaAtivo
-                        ? "bg-brand-subtle font-medium text-brand-subtle-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        ? 'bg-brand-subtle font-medium text-brand-subtle-foreground'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                     )}
                   >
                     <Icone aria-hidden className="size-4" />

@@ -1,25 +1,16 @@
-import Link from "next/link"
+import Link from 'next/link'
 
-import { Marca } from "@/components/marca"
-import {
-  MenuMobile,
-  NavegacaoDoCabecalho,
-} from "@/components/navegacao-do-cabecalho"
-import { PaletaDeBusca } from "@/components/paleta-de-busca"
-import { SeletorDeIdioma } from "@/components/seletor-de-idioma"
-import { SeletorDeTema } from "@/components/seletor-de-tema"
-import { buttonVariants } from "@/components/ui/button"
-import {
-  IDIOMAS,
-  caminhoDe,
-  site,
-  textos,
-  type Idioma,
-} from "@/conteudo/carregar"
-import { indiceDeBusca } from "@/lib/indice-de-busca"
-import { ROTAS } from "@/lib/rotas"
-import { cn } from "@/lib/utils"
-import { MarcaGitHub } from "@/components/marca-github"
+import { Marca } from '@/components/marca'
+import { MenuMobile, NavegacaoDoCabecalho } from '@/components/navegacao-do-cabecalho'
+import { PaletaDeBusca } from '@/components/paleta-de-busca'
+import { SeletorDeIdioma } from '@/components/seletor-de-idioma'
+import { SeletorDeTema } from '@/components/seletor-de-tema'
+import { buttonVariants } from '@/components/ui/button'
+import { IDIOMAS, caminhoDe, site, textos, type Idioma } from '@/conteudo/carregar'
+import { indiceDeBusca } from '@/lib/indice-de-busca'
+import { ROTAS } from '@/lib/rotas'
+import { cn } from '@/lib/utils'
+import { MarcaGitHub } from '@/components/marca-github'
 
 /**
  * O CABEÇALHO DO SITE — e ele é um componente de SERVIDOR de propósito.
@@ -68,7 +59,7 @@ export function Cabecalho({ idioma }: { idioma: Idioma }) {
    * lista as cinco, porque lá a marca divide espaço com quatro controles e
    * "clique na palavra rebar" deixa de ser óbvio.
    */
-  const itensDoTopo = itens.filter((item) => item.chave !== "inicio")
+  const itensDoTopo = itens.filter((item) => item.chave !== 'inicio')
 
   // O bloco do repositório é OPCIONAL no esquema (é `Contato`, o mesmo que o
   // rodapé cobra por `satisfies`): site gerado sem repositório não pode
@@ -79,7 +70,7 @@ export function Cabecalho({ idioma }: { idioma: Idioma }) {
     // O prefixo da raiz é vazio; o dos traduzidos é `/pt-br`, `/es`. Ele sai de
     // `caminhoDe` para não existir uma segunda regra de prefixo do lado do
     // cliente — a raiz sem prefixo é decisão de UM arquivo só.
-    prefixo: caminhoDe(outro, "/").replace(/^\/$/, ""),
+    prefixo: caminhoDe(outro, '/').replace(/^\/$/, ''),
     tag: textos(outro).tagDeIdioma,
     nome: textos(outro).nomeDoIdioma,
     atual: outro === idioma,
@@ -89,7 +80,7 @@ export function Cabecalho({ idioma }: { idioma: Idioma }) {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-header max-w-6xl items-center gap-2 px-4 sm:gap-3 sm:px-6">
         <Link
-          href={caminhoDe(idioma, "/")}
+          href={caminhoDe(idioma, '/')}
           className="flex shrink-0 items-center gap-2 rounded-md text-foreground transition-colors hover:text-brand"
         >
           <Marca className="size-6 text-brand" />
@@ -161,8 +152,8 @@ export function Cabecalho({ idioma }: { idioma: Idioma }) {
               rel="noreferrer"
               title={t.rotulos.repositorio}
               className={cn(
-                buttonVariants({ variant: "ghost", size: "icon-lg" }),
-                "hidden lg:inline-flex"
+                buttonVariants({ variant: 'ghost', size: 'icon-lg' }),
+                'hidden lg:inline-flex',
               )}
             >
               {/* `lucide-react` 1.41.0 não exporta `Github` — a biblioteca

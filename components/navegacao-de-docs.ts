@@ -19,8 +19,8 @@
  * quatro strings, e não o carregador de conteúdo inteiro.
  */
 
-import type { Textos } from "@/conteudo/carregar"
-import type { ChaveDeDoc } from "@/lib/rotas"
+import type { Textos } from '@/conteudo/carregar'
+import type { ChaveDeDoc } from '@/lib/rotas'
 
 /**
  * Os grupos possíveis saem do ESQUEMA DO CONTEÚDO, e não de uma lista literal
@@ -28,7 +28,7 @@ import type { ChaveDeDoc } from "@/lib/rotas"
  * dele faz um grupo inventado no `.tsx` virar erro de tipo em vez de um rótulo
  * `undefined` na tela.
  */
-export type GrupoDeDocs = keyof Textos["rotulos"]["grupos"]
+export type GrupoDeDocs = keyof Textos['rotulos']['grupos']
 
 /**
  * A divisão editorial: o que se lê para começar, e o que se consulta depois.
@@ -48,8 +48,8 @@ export type GrupoDeDocs = keyof Textos["rotulos"]["grupos"]
  * COMEÇAR; "referência" fica com o que se consulta depois.
  */
 export const GRUPOS_DE_DOCS = [
-  { grupo: "comecar", paginas: ["docs", "instalacao", "uso"] },
-  { grupo: "referencia", paginas: ["modulos"] },
+  { grupo: 'comecar', paginas: ['docs', 'instalacao', 'uso'] },
+  { grupo: 'referencia', paginas: ['modulos'] },
 ] as const satisfies readonly {
   grupo: GrupoDeDocs
   paginas: readonly ChaveDeDoc[]
@@ -72,6 +72,4 @@ export const ORDEM_DOS_DOCS = GRUPOS_DE_DOCS.flatMap((g) => g.paginas)
  * único link para ela no site. É o tipo de buraco que só o visitante encontra.
  */
 type ExigirVazio<T extends never> = T
-export type DocSemLugarNaBarra = ExigirVazio<
-  Exclude<ChaveDeDoc, (typeof ORDEM_DOS_DOCS)[number]>
->
+export type DocSemLugarNaBarra = ExigirVazio<Exclude<ChaveDeDoc, (typeof ORDEM_DOS_DOCS)[number]>>

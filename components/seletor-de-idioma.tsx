@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * O SELETOR DE IDIOMA, e o que ele resolve é UMA coisa: continuar na mesma
@@ -22,17 +22,17 @@
  * `/pt-br` de `/pt-br/`.
  */
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Check, Languages } from "lucide-react"
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Check, Languages } from 'lucide-react'
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu'
 
 export type OpcaoDeIdioma = {
   /** O prefixo desta versão: `""` para a raiz, `/pt-br` e `/es` nas outras. */
@@ -55,12 +55,12 @@ export type OpcaoDeIdioma = {
  * `/es//`.
  */
 function rotaSemIdioma(caminho: string, prefixos: readonly string[]): string {
-  const nua = caminho.length > 1 ? caminho.replace(/\/+$/, "") : caminho
+  const nua = caminho.length > 1 ? caminho.replace(/\/+$/, '') : caminho
 
   for (const prefixo of prefixos) {
     // A raiz não tem prefixo para tirar: `""` casaria com tudo.
     if (!prefixo) continue
-    if (nua === prefixo) return "/"
+    if (nua === prefixo) return '/'
     // A barra no teste é o que impede `/es` de morder uma rota que só COMEÇA
     // com essas letras.
     if (nua.startsWith(`${prefixo}/`)) return nua.slice(prefixo.length)
@@ -81,7 +81,7 @@ export function SeletorDeIdioma({
   const caminho = usePathname()
   const rota = rotaSemIdioma(
     caminho,
-    idiomas.map((idioma) => idioma.prefixo)
+    idiomas.map((idioma) => idioma.prefixo),
   )
 
   return (
@@ -110,7 +110,7 @@ export function SeletorDeIdioma({
                 // especial, a home traduzida viraria `/pt-br/`, que é a mesma
                 // página com outro endereço — e duas URLs para uma página é o
                 // que faz canônica brigar com canônica.
-                href={rota === "/" ? prefixo || "/" : `${prefixo}${rota}`}
+                href={rota === '/' ? prefixo || '/' : `${prefixo}${rota}`}
                 hrefLang={tag}
                 // `lang` alem de `hrefLang`, e sao coisas diferentes: um fala
                 // do DESTINO, o outro do TEXTO desta linha. Sem ele o leitor de
@@ -118,7 +118,7 @@ export function SeletorDeIdioma({
                 // atual, e o nome do idioma sai irreconhecivel justamente para
                 // quem precisa dele para escolher.
                 lang={tag}
-                aria-current={atual ? "true" : undefined}
+                aria-current={atual ? 'true' : undefined}
               />
             }
             // 44px no toque, como o gatilho da gaveta: errar aqui nao fecha um

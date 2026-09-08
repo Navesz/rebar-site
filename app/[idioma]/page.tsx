@@ -1,5 +1,5 @@
-import { Inicio } from "@/components/paginas/inicio"
-import { idiomaTraduzido, type ParametrosDeIdioma } from "@/lib/parametros"
+import { Inicio } from '@/components/paginas/inicio'
+import { idiomaTraduzido, type ParametrosDeIdioma } from '@/lib/parametros'
 
 /**
  * A home traduzida: `/pt-br` e `/es`.

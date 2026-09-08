@@ -18,14 +18,14 @@
 // Ele reescreve: public/icone-192.png, public/icone-512.png, public/og.png,
 // app/apple-icon.png, app/icon.svg e public/marca.svg.
 
-import { deflateSync } from "node:zlib"
-import { writeFileSync, readFileSync, mkdirSync } from "node:fs"
-import { dirname, join } from "node:path"
-import { fileURLToPath } from "node:url"
+import { deflateSync } from 'node:zlib'
+import { writeFileSync, readFileSync, mkdirSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { FORMAS, LADO, RAIO_DO_LADRILHO } from "../lib/marca.ts"
+import { FORMAS, LADO, RAIO_DO_LADRILHO } from '../lib/marca.ts'
 
-const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..")
+const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..')
 
 // ───────────────────────────────────────────────────────────── cor
 //
@@ -109,7 +109,7 @@ function coberturaDaMarca(px, py, unidadesPorPixel) {
   for (const forma of FORMAS) {
     const d = distanciaAteBarra(px, py, forma.barra)
     const ai = Math.max(0, Math.min(1, 0.5 - d / unidadesPorPixel))
-    a = forma.operacao === "tinta" ? Math.max(a, ai) : Math.min(a, 1 - ai)
+    a = forma.operacao === 'tinta' ? Math.max(a, ai) : Math.min(a, 1 - ai)
   }
   return a
 }
@@ -139,7 +139,7 @@ function letra(nome, x, y, alturaDaCaixa) {
   const meio = (h - t) / 2
 
   switch (nome) {
-    case "R":
+    case 'R':
       return [
         barra(0, 0, t, h),
         barra(0, 0, l, t),
@@ -149,14 +149,14 @@ function letra(nome, x, y, alturaDaCaixa) {
         // proporção da perna da marca — o wordmark é a marca escrita.
         entreBarras(x + l * 0.5, y + h * 0.6, x + l * 0.9, y + h * 0.93, t, r),
       ]
-    case "E":
+    case 'E':
       return [
         barra(0, 0, t, h),
         barra(0, 0, l, t),
         barra(0, meio, l * 0.86, t),
         barra(0, h - t, l, t),
       ]
-    case "B":
+    case 'B':
       return [
         barra(0, 0, t, h),
         barra(0, 0, l, t),
@@ -165,7 +165,7 @@ function letra(nome, x, y, alturaDaCaixa) {
         barra(l - t, meio, t, h - meio),
         barra(0, h - t, l, t),
       ]
-    case "A":
+    case 'A':
       return [
         barra(0, t * 0.9, t, h - t * 0.9),
         barra(0, 0, l, t),
@@ -231,7 +231,7 @@ function crc32(buf) {
 function pedaco(tipo, dados) {
   const tamanho = Buffer.alloc(4)
   tamanho.writeUInt32BE(dados.length)
-  const corpo = Buffer.concat([Buffer.from(tipo, "latin1"), dados])
+  const corpo = Buffer.concat([Buffer.from(tipo, 'latin1'), dados])
   const crc = Buffer.alloc(4)
   crc.writeUInt32BE(crc32(corpo))
   return Buffer.concat([tamanho, corpo, crc])
@@ -251,9 +251,9 @@ function montarPng(largura, altura, rgba) {
   }
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    pedaco("IHDR", ihdr),
-    pedaco("IDAT", deflateSync(linhas, { level: 9 })),
-    pedaco("IEND", Buffer.alloc(0)),
+    pedaco('IHDR', ihdr),
+    pedaco('IDAT', deflateSync(linhas, { level: 9 })),
+    pedaco('IEND', Buffer.alloc(0)),
   ])
 }
 
@@ -361,13 +361,7 @@ function gerarOg(caminho, site) {
   const marcaY = (altura - marcaLado) / 2
   const nome = site.identidade.nome.toUpperCase()
   const alturaDaLetra = 96
-  const { barras } = palavra(
-    nome,
-    400,
-    altura / 2 - alturaDaLetra / 2 - 18,
-    alturaDaLetra,
-    22
-  )
+  const { barras } = palavra(nome, 400, altura / 2 - alturaDaLetra / 2 - 18, alturaDaLetra, 22)
 
   for (let y = 0; y < altura; y++) {
     for (let x = 0; x < largura; x++) {
@@ -399,71 +393,63 @@ function gerarOg(caminho, site) {
 // ───────────────────────────────────────────────────────────── svg
 
 function svgDaMarca({ comLadrilho }) {
-  const tinta = FORMAS.filter((f) => f.operacao === "tinta")
-  const corte = FORMAS.filter((f) => f.operacao === "corte")
+  const tinta = FORMAS.filter((f) => f.operacao === 'tinta')
+  const corte = FORMAS.filter((f) => f.operacao === 'corte')
 
   const rect = (b, cor) => {
     const giro = b.giro
-      ? ` transform="rotate(${b.giro.toFixed(3)} ${(
-          b.x +
-          b.largura / 2
-        ).toFixed(3)} ${(b.y + b.altura / 2).toFixed(3)})"`
-      : ""
+      ? ` transform="rotate(${b.giro.toFixed(3)} ${(b.x + b.largura / 2).toFixed(
+          3,
+        )} ${(b.y + b.altura / 2).toFixed(3)})"`
+      : ''
     return `<rect x="${b.x.toFixed(3)}" y="${b.y.toFixed(3)}" width="${b.largura.toFixed(
-      3
+      3,
     )}" height="${b.altura.toFixed(3)}" rx="${b.raio}" fill="${cor}"${giro}/>`
   }
 
   const marca = [
     `<mask id="nervuras">`,
     `<rect width="${LADO}" height="${LADO}" fill="white"/>`,
-    ...corte.map((f) => rect(f.barra, "black")),
+    ...corte.map((f) => rect(f.barra, 'black')),
     `</mask>`,
     `<g mask="url(#nervuras)">`,
-    ...tinta.map((f) =>
-      rect(f.barra, comLadrilho ? "var(--oxido)" : "currentColor")
-    ),
+    ...tinta.map((f) => rect(f.barra, comLadrilho ? 'var(--oxido)' : 'currentColor')),
     `</g>`,
-  ].join("")
+  ].join('')
 
   const fundo = comLadrilho
     ? `<rect width="${LADO}" height="${LADO}" rx="${RAIO_DO_LADRILHO}" fill="var(--aco)"/>`
-    : ""
+    : ''
 
   const variaveis = comLadrilho
-    ? `<style>:root{--aco:rgb(${ACO.join(" ")});--oxido:rgb(${OXIDO.join(" ")})}</style>`
-    : ""
+    ? `<style>:root{--aco:rgb(${ACO.join(' ')});--oxido:rgb(${OXIDO.join(' ')})}</style>`
+    : ''
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${LADO} ${LADO}">${variaveis}${fundo}${marca}</svg>\n`
 }
 
 // ───────────────────────────────────────────────────────────── porta
 
-const site = JSON.parse(
-  readFileSync(join(RAIZ, "conteudo", "site.json"), "utf8")
-)
+const site = JSON.parse(readFileSync(join(RAIZ, 'conteudo', 'site.json'), 'utf8'))
 
-mkdirSync(join(RAIZ, "public"), { recursive: true })
+mkdirSync(join(RAIZ, 'public'), { recursive: true })
 
 const feitos = [
-  gerarIcone(join(RAIZ, "public", "icone-192.png"), 192),
-  gerarIcone(join(RAIZ, "public", "icone-512.png"), 512),
-  gerarIcone(join(RAIZ, "app", "apple-icon.png"), 180),
-  gerarOg(join(RAIZ, "public", "og.png"), site),
+  gerarIcone(join(RAIZ, 'public', 'icone-192.png'), 192),
+  gerarIcone(join(RAIZ, 'public', 'icone-512.png'), 512),
+  gerarIcone(join(RAIZ, 'app', 'apple-icon.png'), 180),
+  gerarOg(join(RAIZ, 'public', 'og.png'), site),
 ]
 
 // Três tamanhos e não um: 16 é a aba, 32 é a aba em tela retina e o atalho da
 // barra de tarefas, 48 é o atalho na área de trabalho. Deixar o sistema
 // reduzir o de 48 para 16 borra as nervuras num cinza sujo.
-escreverIco(join(RAIZ, "app", "favicon.ico"), [16, 32, 48])
-feitos.push("app/favicon.ico")
+escreverIco(join(RAIZ, 'app', 'favicon.ico'), [16, 32, 48])
+feitos.push('app/favicon.ico')
 
-writeFileSync(join(RAIZ, "app", "icon.svg"), svgDaMarca({ comLadrilho: true }))
-feitos.push("app/icon.svg")
-writeFileSync(
-  join(RAIZ, "public", "marca.svg"),
-  svgDaMarca({ comLadrilho: false })
-)
-feitos.push("public/marca.svg")
+writeFileSync(join(RAIZ, 'app', 'icon.svg'), svgDaMarca({ comLadrilho: true }))
+feitos.push('app/icon.svg')
+writeFileSync(join(RAIZ, 'public', 'marca.svg'), svgDaMarca({ comLadrilho: false }))
+feitos.push('public/marca.svg')
 
-process.stdout.write(`ícones gerados:\n  ${feitos.join("\n  ")}\n`)
+process.stdout.write(`ícones gerados:\n  ${feitos.join('\n  ')}\n`)

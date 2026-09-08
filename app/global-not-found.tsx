@@ -1,14 +1,10 @@
-import type { Metadata, Viewport } from "next"
-import Link from "next/link"
+import type { Metadata, Viewport } from 'next'
+import Link from 'next/link'
 
-import "./globals.css"
-import { Casca } from "@/components/casca"
-import { IDIOMAS, IDIOMA_PADRAO, caminhoDe, textos } from "@/conteudo/carregar"
-import {
-  hreflangDe,
-  metadadosDoNaoEncontrado,
-  viewportPadrao,
-} from "@/lib/metadados"
+import './globals.css'
+import { Casca } from '@/components/casca'
+import { IDIOMAS, IDIOMA_PADRAO, caminhoDe, textos } from '@/conteudo/carregar'
+import { hreflangDe, metadadosDoNaoEncontrado, viewportPadrao } from '@/lib/metadados'
 
 /**
  * A PÁGINA QUE O GITHUB PAGES SERVE PARA TODO ENDEREÇO QUE NÃO EXISTE.
@@ -76,7 +72,7 @@ export const metadata: Metadata = metadadosDoNaoEncontrado(IDIOMA_PADRAO)
 export const viewport: Viewport = viewportPadrao
 
 /** O `id` do parágrafo que dá nome à lista de saídas. */
-const SAIDAS = "saidas-do-nao-encontrado"
+const SAIDAS = 'saidas-do-nao-encontrado'
 
 export default function NaoEncontrado() {
   const t = textos(IDIOMA_PADRAO)
@@ -89,10 +85,7 @@ export default function NaoEncontrado() {
       <div className="mx-auto w-full max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <h1 className="text-h1">{t.rotulos.naoEncontrado}</h1>
 
-        <p
-          id={SAIDAS}
-          className="mt-5 max-w-2xl text-lead text-muted-foreground"
-        >
+        <p id={SAIDAS} className="mt-5 max-w-2xl text-lead text-muted-foreground">
           {t.rotulos.voltarParaOInicio}
         </p>
 
@@ -101,10 +94,7 @@ export default function NaoEncontrado() {
             vem do parágrafo acima por `aria-labelledby` — inventar um rótulo
             só para leitor de tela seria um quarto texto para manter em três
             idiomas, dizendo o que já está escrito na tela. */}
-        <ul
-          aria-labelledby={SAIDAS}
-          className="mt-8 flex list-none flex-wrap gap-3"
-        >
+        <ul aria-labelledby={SAIDAS} className="mt-8 flex list-none flex-wrap gap-3">
           {IDIOMAS.map((outro) => {
             const dele = textos(outro)
             return (
@@ -116,7 +106,7 @@ export default function NaoEncontrado() {
                     pronunciar "Português (Brasil)" com fonemas portugueses no
                     meio de uma página declarada em inglês. */}
                 <Link
-                  href={caminhoDe(outro, "/")}
+                  href={caminhoDe(outro, '/')}
                   hrefLang={hreflangDe(outro)}
                   lang={dele.tagDeIdioma}
                   className="inline-flex min-h-11 items-center rounded-md border border-brand-border px-5 text-sm font-medium text-foreground transition-colors hover:bg-brand-subtle focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"

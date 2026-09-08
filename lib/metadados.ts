@@ -13,17 +13,10 @@
  * quatro páginas de documentação declaravam-se todas a home. Com o helper, a
  * canônica é derivada da rota e não há como esquecer.
  */
-import type { Metadata, Viewport } from "next"
+import type { Metadata, Viewport } from 'next'
 
-import {
-  IDIOMAS,
-  IDIOMA_PADRAO,
-  caminhoDe,
-  site,
-  textos,
-  type Idioma,
-} from "@/conteudo/carregar"
-import { rotaDe, type ChaveDeDoc, type ChaveDeRota } from "@/lib/rotas"
+import { IDIOMAS, IDIOMA_PADRAO, caminhoDe, site, textos, type Idioma } from '@/conteudo/carregar'
+import { rotaDe, type ChaveDeDoc, type ChaveDeRota } from '@/lib/rotas'
 
 /**
  * O `hreflang` de cada idioma, DERIVADO do segmento de URL.
@@ -48,14 +41,10 @@ export const hreflangDe = (idioma: Idioma): string =>
  * `<link rel="canonical">` a forma que redireciona custa um salto a cada visita
  * do robô, além de o buscador ter de decidir sozinho qual das duas é a boa.
  */
-const comBarra = (caminho: string): string =>
-  caminho.endsWith("/") ? caminho : `${caminho}/`
+const comBarra = (caminho: string): string => (caminho.endsWith('/') ? caminho : `${caminho}/`)
 
 /** A canônica e as alternativas de UMA rota, nos três idiomas. */
-function alternativas(
-  idioma: Idioma,
-  chave: ChaveDeRota
-): Metadata["alternates"] {
+function alternativas(idioma: Idioma, chave: ChaveDeRota): Metadata['alternates'] {
   const rota = rotaDe(chave)
   const languages: Record<string, string> = {}
   for (const outro of IDIOMAS) {
@@ -65,7 +54,7 @@ function alternativas(
   // Aponta para o inglês porque o inglês é a raiz do site, e mandar esse
   // visitante para uma rota com prefixo seria oferecer a versão traduzida como
   // se fosse a original.
-  languages["x-default"] = comBarra(caminhoDe(IDIOMA_PADRAO, rota))
+  languages['x-default'] = comBarra(caminhoDe(IDIOMA_PADRAO, rota))
   return { canonical: comBarra(caminhoDe(idioma, rota)), languages }
 }
 
@@ -81,14 +70,14 @@ function aberturaDeGrafo(
   idioma: Idioma,
   chave: ChaveDeRota,
   titulo: string,
-  descricao: string
-): Metadata["openGraph"] {
+  descricao: string,
+): Metadata['openGraph'] {
   const t = textos(idioma)
   return {
-    type: "website",
+    type: 'website',
     // O og quer `pt_BR`; o atributo `lang` do HTML quer `pt-BR`. Mesmo dado,
     // dois formatos — derivado, para o JSON não ter de guardar os dois.
-    locale: t.tagDeIdioma.replace("-", "_"),
+    locale: t.tagDeIdioma.replace('-', '_'),
     url: comBarra(caminhoDe(idioma, rotaDe(chave))),
     siteName: site.identidade.nome,
     title: titulo,
@@ -125,10 +114,10 @@ export function metadadosDaRaiz(idioma: Idioma): Metadata {
     title: { default: t.titulo, template: t.gabaritoDeTitulo },
     description: t.descricao,
     applicationName: site.identidade.nome,
-    alternates: alternativas(idioma, "inicio"),
-    openGraph: aberturaDeGrafo(idioma, "inicio", t.titulo, t.descricao),
+    alternates: alternativas(idioma, 'inicio'),
+    openGraph: aberturaDeGrafo(idioma, 'inicio', t.titulo, t.descricao),
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title: t.titulo,
       description: t.descricao,
       images: [site.meta.og.caminho],
@@ -141,7 +130,7 @@ export function metadadosDaPagina(
   idioma: Idioma,
   chave: ChaveDeRota,
   titulo: string,
-  descricao: string
+  descricao: string,
 ): Metadata {
   return {
     title: titulo,
@@ -149,7 +138,7 @@ export function metadadosDaPagina(
     alternates: alternativas(idioma, chave),
     openGraph: aberturaDeGrafo(idioma, chave, titulo, descricao),
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title: titulo,
       description: descricao,
       images: [site.meta.og.caminho],
@@ -168,12 +157,7 @@ export function metadadosDaPagina(
 export function metadadosDeDoc(idioma: Idioma, chave: ChaveDeDoc): Metadata {
   const t = textos(idioma)
   const pagina = t.paginas?.[chave]
-  return metadadosDaPagina(
-    idioma,
-    chave,
-    pagina?.titulo ?? t.titulo,
-    pagina?.resumo ?? t.descricao
-  )
+  return metadadosDaPagina(idioma, chave, pagina?.titulo ?? t.titulo, pagina?.resumo ?? t.descricao)
 }
 
 /**
@@ -200,7 +184,7 @@ export function metadadosDeDoc(idioma: Idioma, chave: ChaveDeDoc): Metadata {
  */
 export function metadadosDoNaoEncontrado(idioma: Idioma): Metadata {
   const t = textos(idioma)
-  return { title: t.gabaritoDeTitulo.replace("%s", t.rotulos.naoEncontrado) }
+  return { title: t.gabaritoDeTitulo.replace('%s', t.rotulos.naoEncontrado) }
 }
 
 /**
@@ -255,7 +239,7 @@ export function metadadosDoNaoEncontrado(idioma: Idioma): Metadata {
  */
 export const viewportPadrao: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: site.meta.cores.fundo },
-    { media: "(prefers-color-scheme: dark)", color: site.meta.cores.tema },
+    { media: '(prefers-color-scheme: light)', color: site.meta.cores.fundo },
+    { media: '(prefers-color-scheme: dark)', color: site.meta.cores.tema },
   ],
 }

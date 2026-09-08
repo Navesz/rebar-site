@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * A PALETA ⌘K — o gatilho no cabeçalho e o diálogo que ele abre.
@@ -33,28 +33,16 @@
  * apertar, igual nos três idiomas, e traduzi-las seria mentir sobre o teclado.
  */
 
-import Link from "next/link"
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react"
-import { Autocomplete } from "@base-ui/react/autocomplete"
-import { Search } from "lucide-react"
+import Link from 'next/link'
+import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { Autocomplete } from '@base-ui/react/autocomplete'
+import { Search } from 'lucide-react'
 
-import { filtrar, type ItemDeBusca } from "@/lib/busca"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import { filtrar, type ItemDeBusca } from '@/lib/busca'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
 
 /**
  * A tecla modificadora DESTE teclado — e o motivo de ela não sair de um
@@ -87,11 +75,11 @@ const SEM_ASSINATURA = () => () => {}
 function lerModificador(): string {
   const nav = navigator as Navigator & { userAgentData?: { platform?: string } }
   const plataforma = nav.userAgentData?.platform ?? navigator.platform
-  return /mac|iphone|ipad|ipod/i.test(plataforma) ? "⌘" : "Ctrl"
+  return /mac|iphone|ipad|ipod/i.test(plataforma) ? '⌘' : 'Ctrl'
 }
 
 function useTeclaModificadora(): string {
-  return useSyncExternalStore(SEM_ASSINATURA, lerModificador, () => "Ctrl")
+  return useSyncExternalStore(SEM_ASSINATURA, lerModificador, () => 'Ctrl')
 }
 
 /**
@@ -105,7 +93,7 @@ function useTeclaModificadora(): string {
 function ehCampoDeTexto(alvo: EventTarget | null): boolean {
   if (!(alvo instanceof HTMLElement)) return false
   if (alvo.isContentEditable) return true
-  return ["INPUT", "TEXTAREA", "SELECT"].includes(alvo.tagName)
+  return ['INPUT', 'TEXTAREA', 'SELECT'].includes(alvo.tagName)
 }
 
 export function PaletaDeBusca({
@@ -118,7 +106,7 @@ export function PaletaDeBusca({
   className?: string
 }) {
   const [aberto, setAberto] = useState(false)
-  const [consulta, setConsulta] = useState("")
+  const [consulta, setConsulta] = useState('')
   const gatilho = useRef<HTMLButtonElement>(null)
   const campo = useRef<HTMLInputElement>(null)
   const modificador = useTeclaModificadora()
@@ -141,15 +129,15 @@ export function PaletaDeBusca({
    */
   useEffect(() => {
     function aoTeclar(evento: KeyboardEvent) {
-      if (evento.key.toLowerCase() !== "k") return
+      if (evento.key.toLowerCase() !== 'k') return
       if (!evento.metaKey && !evento.ctrlKey) return
       if (!aberto && ehCampoDeTexto(evento.target)) return
       evento.preventDefault()
       setAberto(!aberto)
     }
 
-    document.addEventListener("keydown", aoTeclar)
-    return () => document.removeEventListener("keydown", aoTeclar)
+    document.addEventListener('keydown', aoTeclar)
+    return () => document.removeEventListener('keydown', aoTeclar)
   }, [aberto])
 
   return (
@@ -161,7 +149,7 @@ export function PaletaDeBusca({
       // consulta vazia durante os ~100ms do fade — a pessoa vê a lista trocar
       // de conteúdo enquanto o painel some, o que parece falha de render.
       onOpenChangeComplete={(estaAberto) => {
-        if (!estaAberto) setConsulta("")
+        if (!estaAberto) setConsulta('')
       }}
     >
       <DialogTrigger
@@ -170,8 +158,8 @@ export function PaletaDeBusca({
           <Button
             variant="outline"
             className={cn(
-              "h-9 w-full justify-start gap-2 px-2.5 font-normal text-muted-foreground",
-              className
+              'h-9 w-full justify-start gap-2 px-2.5 font-normal text-muted-foreground',
+              className,
             )}
           />
         }
@@ -199,13 +187,13 @@ export function PaletaDeBusca({
         initialFocus={campo}
         finalFocus={gatilho}
         className={cn(
-          "top-[12vh] flex max-h-[min(32rem,calc(100dvh-16vh))] translate-y-0 flex-col gap-0 overflow-hidden p-0 shadow-overlay sm:max-w-xl",
+          'top-[12vh] flex max-h-[min(32rem,calc(100dvh-16vh))] translate-y-0 flex-col gap-0 overflow-hidden p-0 shadow-overlay sm:max-w-xl',
           // Quem pediu menos movimento recebe o painel já no lugar, sem escala
           // nem deslocamento — a mesma decisão de `revelar.tsx` e da barra de
           // progresso. O `!` existe porque a regra que ele derruba
           // (`data-open:animate-in`) é uma utilitária como esta, e depender da
           // ordem em que o Tailwind as emite seria apostar, não decidir.
-          "motion-reduce:animate-none! motion-reduce:transition-none!"
+          'motion-reduce:animate-none! motion-reduce:transition-none!',
         )}
       >
         {/* O diálogo precisa de nome acessível; visível ele seria redundante
@@ -231,10 +219,7 @@ export function PaletaDeBusca({
           keepHighlight
         >
           <Autocomplete.InputGroup className="flex items-center gap-2.5 border-b border-border px-3.5">
-            <Search
-              aria-hidden
-              className="size-4 shrink-0 text-muted-foreground"
-            />
+            <Search aria-hidden className="size-4 shrink-0 text-muted-foreground" />
             {/*
              * O campo é o primitivo cru, e NÃO `components/ui/input.tsx`. O
              * `Input` desenha borda, altura, cantos e anel de foco próprios —
@@ -278,10 +263,7 @@ export function PaletaDeBusca({
            * um painel arredondado — foi ela que o `ScrollArea` existia para
            * evitar. Uma peça a menos entre o campo e a lista.
            */}
-          <div
-            tabIndex={-1}
-            className="no-scrollbar min-h-0 flex-1 overflow-y-auto"
-          >
+          <div tabIndex={-1} className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
             {/* Este elemento fica SEMPRE montado — é ele que anuncia a
                 mudança para o leitor de tela, e some com `display:none` ou
                 render condicional o anúncio não sai. Quem aparece e some é o
@@ -349,9 +331,7 @@ export function PaletaDeBusca({
                   // funcionando, o que uma lista de `<div>` perde.
                   render={<Link href={item.href} />}
                 >
-                  <span className="truncate text-sm font-medium">
-                    {item.titulo}
-                  </span>
+                  <span className="truncate text-sm font-medium">{item.titulo}</span>
                   {item.secao ? (
                     <span className="shrink-0 text-xs text-brand-subtle-foreground">
                       {item.secao}

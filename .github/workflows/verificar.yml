@@ -65,7 +65,7 @@ jobs:
       # causa aparecer, porque o sintoma apontava para o lockfile e o defeito
       # estava no par de versoes.
       #
-      # Um arquivo, lido pelos dois lados: `nvm use` na maquina, 
+      # Um arquivo, lido pelos dois lados: `nvm use` na maquina,
       # `node-version-file` aqui. E a mesma regra do `basePath` derivado de
       # `meta.urlBase` -- fato que aparece em dois lugares e um so escreve.
       - uses: actions/setup-node@v7

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * O ÍNDICE "NESTA PÁGINA", em duas formas, e o scrollspy que marca onde a
@@ -42,18 +42,14 @@
  *     porque isso é conteúdo e não animação.
  */
 
-import { useState } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { ChevronDown, List } from "lucide-react"
+import { useState } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ChevronDown, List } from 'lucide-react'
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { COM_MOVIMENTO, ENTRADA, useCoreografia } from "@/lib/animacao"
-import { cn } from "@/lib/utils"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { COM_MOVIMENTO, ENTRADA, useCoreografia } from '@/lib/animacao'
+import { cn } from '@/lib/utils'
 
 export type ItemDoIndice = {
   /** O `id` do `<h2>` correspondente — vem de `lib/ancoras.ts`. */
@@ -69,10 +65,10 @@ export type ItemDoIndice = {
  * faixa de larguras em que a trilha aparece sem nunca marcar nada, ou em que os
  * gatilhos medem uma lista escondida.
  */
-const TELA_COM_TRILHA = "(min-width: 80rem)"
+const TELA_COM_TRILHA = '(min-width: 80rem)'
 
 /** O ponto da tela onde um título passa a valer como "seção atual". */
-const LINHA_DE_CORTE = "top center"
+const LINHA_DE_CORTE = 'top center'
 
 export function IndiceDaPagina({
   rotulo,
@@ -88,105 +84,96 @@ export function IndiceDaPagina({
   // array novo a cada render (sai de um `.map` na página), e passá-lo direto
   // faria a coreografia ser destruída e recriada em toda renderização —
   // inclusive no meio de uma rolagem.
-  const assinatura = itens.map((item) => item.id).join(" ")
+  const assinatura = itens.map((item) => item.id).join(' ')
 
   const escopo = useCoreografia<HTMLElement>(
     (mm, raiz) => {
-      mm.add(
-        { larga: TELA_COM_TRILHA, comMovimento: COM_MOVIMENTO },
-        (contexto) => {
-          if (!contexto.conditions?.larga) return
-          const comMovimento = Boolean(contexto.conditions.comMovimento)
+      mm.add({ larga: TELA_COM_TRILHA, comMovimento: COM_MOVIMENTO }, (contexto) => {
+        if (!contexto.conditions?.larga) return
+        const comMovimento = Boolean(contexto.conditions.comMovimento)
 
-          const links = gsap.utils.toArray<HTMLAnchorElement>(
-            "a[data-ancora]",
-            raiz
-          )
-          const marcador = raiz.querySelector<HTMLElement>("[data-marcador]")
-          if (links.length === 0 || !marcador) return
+        const links = gsap.utils.toArray<HTMLAnchorElement>('a[data-ancora]', raiz)
+        const marcador = raiz.querySelector<HTMLElement>('[data-marcador]')
+        if (links.length === 0 || !marcador) return
 
-          // `-1` e não `0`: o primeiro `marcar` tem de POSICIONAR o marcador
-          // sem animar. Deslizar de altura zero no canto superior até o item
-          // certo é uma animação que anuncia a mecânica em vez do conteúdo.
-          let ativo = -1
+        // `-1` e não `0`: o primeiro `marcar` tem de POSICIONAR o marcador
+        // sem animar. Deslizar de altura zero no canto superior até o item
+        // certo é uma animação que anuncia a mecânica em vez do conteúdo.
+        let ativo = -1
 
-          const marcar = (indice: number) => {
-            const alvo = Math.min(Math.max(indice, 0), links.length - 1)
-            if (alvo === ativo) return
-            const primeiraVez = ativo === -1
-            ativo = alvo
+        const marcar = (indice: number) => {
+          const alvo = Math.min(Math.max(indice, 0), links.length - 1)
+          if (alvo === ativo) return
+          const primeiraVez = ativo === -1
+          ativo = alvo
 
-            links.forEach((link, i) => {
-              link.toggleAttribute("data-ativo", i === alvo)
-              // `location` e não `page`: a página atual é a do endereço, que
-              // quem marca é a barra lateral. Aqui o que se marca é o LUGAR
-              // dentro dela, e é esse o token que a ARIA reserva para isso.
-              if (i === alvo) link.setAttribute("aria-current", "location")
-              else link.removeAttribute("aria-current")
-            })
+          links.forEach((link, i) => {
+            link.toggleAttribute('data-ativo', i === alvo)
+            // `location` e não `page`: a página atual é a do endereço, que
+            // quem marca é a barra lateral. Aqui o que se marca é o LUGAR
+            // dentro dela, e é esse o token que a ARIA reserva para isso.
+            if (i === alvo) link.setAttribute('aria-current', 'location')
+            else link.removeAttribute('aria-current')
+          })
 
-            const link = links[alvo]
-            const destino = {
-              y: link.offsetTop,
-              height: link.offsetHeight,
-              opacity: 1,
-            }
-            if (comMovimento && !primeiraVez) {
-              gsap.to(marcador, {
-                ...destino,
-                duration: 0.24,
-                ease: ENTRADA,
-                // Rolagem rápida enfileira uma tween por seção atravessada, e
-                // sem isto elas se somam: o marcador continua andando depois
-                // de a rolagem parar.
-                overwrite: true,
-              })
-            } else {
-              gsap.set(marcador, destino)
-            }
+          const link = links[alvo]
+          const destino = {
+            y: link.offsetTop,
+            height: link.offsetHeight,
+            opacity: 1,
           }
-
-          const gatilhos = links.map((link, i) => {
-            const secao = document.getElementById(link.dataset.ancora ?? "")
-            if (!secao) return null
-            return ScrollTrigger.create({
-              trigger: secao,
-              start: LINHA_DE_CORTE,
-              onEnter: () => marcar(i),
-              // Subindo, quem volta a mandar é a seção ANTERIOR. O `Math.max`
-              // dentro de `marcar` segura o `-1` do primeiro título.
-              onLeaveBack: () => marcar(i - 1),
+          if (comMovimento && !primeiraVez) {
+            gsap.to(marcador, {
+              ...destino,
+              duration: 0.24,
+              ease: ENTRADA,
+              // Rolagem rápida enfileira uma tween por seção atravessada, e
+              // sem isto elas se somam: o marcador continua andando depois
+              // de a rolagem parar.
+              overwrite: true,
             })
-          })
-
-          // O ESTADO INICIAL NÃO SAI DOS CALLBACKS. `onEnter` só dispara quando
-          // a linha é CRUZADA, e quem chega por link direto (`/docs#saida`) ou
-          // recarrega a página no meio dela já está do outro lado de vários
-          // gatilhos sem ter cruzado nenhum — o índice ficaria em branco.
-          const primeiro = gatilhos.find((g) => g !== null)
-          if (!primeiro) return
-          const posicao = primeiro.scroll()
-          let inicial = 0
-          gatilhos.forEach((gatilho, i) => {
-            if (gatilho && posicao >= gatilho.start) inicial = i
-          })
-          marcar(inicial)
+          } else {
+            gsap.set(marcador, destino)
+          }
         }
-      )
+
+        const gatilhos = links.map((link, i) => {
+          const secao = document.getElementById(link.dataset.ancora ?? '')
+          if (!secao) return null
+          return ScrollTrigger.create({
+            trigger: secao,
+            start: LINHA_DE_CORTE,
+            onEnter: () => marcar(i),
+            // Subindo, quem volta a mandar é a seção ANTERIOR. O `Math.max`
+            // dentro de `marcar` segura o `-1` do primeiro título.
+            onLeaveBack: () => marcar(i - 1),
+          })
+        })
+
+        // O ESTADO INICIAL NÃO SAI DOS CALLBACKS. `onEnter` só dispara quando
+        // a linha é CRUZADA, e quem chega por link direto (`/docs#saida`) ou
+        // recarrega a página no meio dela já está do outro lado de vários
+        // gatilhos sem ter cruzado nenhum — o índice ficaria em branco.
+        const primeiro = gatilhos.find((g) => g !== null)
+        if (!primeiro) return
+        const posicao = primeiro.scroll()
+        let inicial = 0
+        gatilhos.forEach((gatilho, i) => {
+          if (gatilho && posicao >= gatilho.start) inicial = i
+        })
+        marcar(inicial)
+      })
     },
-    [assinatura]
+    [assinatura],
   )
 
-  const idDoRotulo = "indice-da-pagina"
+  const idDoRotulo = 'indice-da-pagina'
 
   return (
     <nav
       ref={escopo}
       aria-labelledby={idDoRotulo}
-      className={cn(
-        "sticky top-header hidden w-56 shrink-0 self-start py-10 xl:block",
-        className
-      )}
+      className={cn('sticky top-header hidden w-56 shrink-0 self-start py-10 xl:block', className)}
     >
       <div
         id={idDoRotulo}
@@ -251,7 +238,7 @@ export function IndiceRecolhivel({
   itens: readonly ItemDoIndice[]
   className?: string
 }) {
-  const idDoRotulo = "indice-recolhivel"
+  const idDoRotulo = 'indice-recolhivel'
 
   // CONTROLADO PARA PODER FECHAR SOZINHO. Solto, o `Collapsible` só obedece ao
   // próprio gatilho: a pessoa escolhia uma seção, a página rolava até ela e a
@@ -265,7 +252,7 @@ export function IndiceRecolhivel({
     <Collapsible
       open={aberto}
       onOpenChange={setAberto}
-      className={cn("rounded-xl border border-border/70 xl:hidden", className)}
+      className={cn('rounded-xl border border-border/70 xl:hidden', className)}
     >
       <CollapsibleTrigger
         id={idDoRotulo}

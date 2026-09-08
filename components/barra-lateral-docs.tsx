@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * A BARRA LATERAL DE `/docs`, e ela é a mesma lista nos dois tamanhos de tela:
@@ -18,22 +18,16 @@
  * anunciaria duas páginas atuais na mesma lista.
  */
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { PanelLeft } from "lucide-react"
+import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { PanelLeft } from 'lucide-react'
 
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
-import type { GrupoDeDocs } from "@/components/navegacao-de-docs"
-import type { ChaveDeDoc } from "@/lib/rotas"
-import { cn } from "@/lib/utils"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
+import type { GrupoDeDocs } from '@/components/navegacao-de-docs'
+import type { ChaveDeDoc } from '@/lib/rotas'
+import { cn } from '@/lib/utils'
 
 export type ItemDeDoc = {
   chave: ChaveDeDoc
@@ -56,10 +50,7 @@ export type GrupoRenderizado = {
  * comparação ingênua entre elas falha justamente na configuração publicada, e
  * não em `next dev`.
  */
-function chaveAtiva(
-  grupos: readonly GrupoRenderizado[],
-  caminho: string
-): ChaveDeDoc | undefined {
+function chaveAtiva(grupos: readonly GrupoRenderizado[], caminho: string): ChaveDeDoc | undefined {
   let melhor: ItemDeDoc | undefined
 
   for (const grupo of grupos) {
@@ -111,10 +102,7 @@ function Lista({
             >
               {grupo.rotulo}
             </div>
-            <ul
-              aria-labelledby={idDoRotulo}
-              className="mt-2 flex flex-col border-l border-border"
-            >
+            <ul aria-labelledby={idDoRotulo} className="mt-2 flex flex-col border-l border-border">
               {grupo.itens.map((item) => {
                 const atual = item.chave === ativa
                 return (
@@ -125,12 +113,12 @@ function Lista({
                       // Cor E `aria-current`, as duas: só a cor deixa a barra
                       // muda para leitor de tela e ilegível para quem não
                       // distingue os dois tons.
-                      aria-current={atual ? "page" : undefined}
+                      aria-current={atual ? 'page' : undefined}
                       className={cn(
                         // `min-h-11` são os 44px de alvo de toque, e eles só
                         // caem no desktop, onde o ponteiro é preciso e a lista
                         // apertada mostra mais itens sem rolagem.
-                        "-ml-px flex min-h-11 w-full items-center border-l px-3 text-sm transition-colors lg:min-h-0 lg:py-1.5",
+                        '-ml-px flex min-h-11 w-full items-center border-l px-3 text-sm transition-colors lg:min-h-0 lg:py-1.5',
                         // CONTORNO PARA DENTRO, e não `ring`: o anel do
                         // Tailwind é uma sombra desenhada PARA FORA da caixa, e
                         // a coluna que envolve esta lista rola
@@ -145,10 +133,10 @@ function Lista({
                         // O `focus-visible:rounded-r-md` saiu junto: ele
                         // existia só para arredondar aquele anel, e sem anel
                         // ficaria arredondando nada.
-                        "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
+                        'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring',
                         atual
-                          ? "border-brand font-medium text-brand-subtle-foreground"
-                          : "border-transparent text-muted-foreground hover:border-foreground/30 hover:text-foreground"
+                          ? 'border-brand font-medium text-brand-subtle-foreground'
+                          : 'border-transparent text-muted-foreground hover:border-foreground/30 hover:text-foreground',
                       )}
                     >
                       {item.rotulo}
@@ -219,10 +207,7 @@ export function BarraLateralDocs({
               // O `px-3` FICA, e é essa a razão de puxar pela margem em vez de
               // tirar o padding: ele é a superfície de hover do botão, e um
               // alvo colado no texto não tem por onde ser apontado.
-              <Button
-                variant="ghost"
-                className="-ml-3 h-11 gap-2 px-3 text-sm"
-              />
+              <Button variant="ghost" className="-ml-3 h-11 gap-2 px-3 text-sm" />
             }
           >
             <PanelLeft aria-hidden />
@@ -260,10 +245,7 @@ export function BarraLateralDocs({
             <SheetHeader className="py-3.5">
               <SheetTitle>{rotuloDasSecoes}</SheetTitle>
             </SheetHeader>
-            <nav
-              aria-label={rotuloDasSecoes}
-              className="overflow-y-auto px-2 pb-6"
-            >
+            <nav aria-label={rotuloDasSecoes} className="overflow-y-auto px-2 pb-6">
               <Lista
                 grupos={grupos}
                 ativa={ativa}

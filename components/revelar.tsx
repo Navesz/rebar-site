@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * Revelação de componente ao entrar na tela. É o papel do Motion nesta árvore.
@@ -16,8 +16,8 @@
  * Motion, porque a maior parte desta interface é componente.
  */
 
-import { motion, useReducedMotion } from "motion/react"
-import type { ReactNode } from "react"
+import { motion, useReducedMotion } from 'motion/react'
+import type { ReactNode } from 'react'
 
 export function Revelar({
   children,
@@ -55,7 +55,7 @@ export function Revelar({
       // `once` porque animação que repete a cada rolagem vira ruído no terceiro
       // encontro, e a margem negativa dispara um pouco antes da borda para o
       // elemento não chegar já animado quando a rolagem é rápida.
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, margin: '-80px' }}
       transition={{ duration: 0.45, delay: atraso, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}

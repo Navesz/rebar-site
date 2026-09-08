@@ -1,14 +1,14 @@
-import { notFound } from "next/navigation"
-import { ArrowRight, Info } from "lucide-react"
-import Link from "next/link"
+import { notFound } from 'next/navigation'
+import { ArrowRight, Info } from 'lucide-react'
+import Link from 'next/link'
 
-import { ArtigoDeDoc } from "@/components/artigo-de-doc"
-import { PainelDeCodigo } from "@/components/painel-de-codigo"
-import { Revelar } from "@/components/revelar"
-import { TituloDeSecao } from "@/components/titulo-de-secao"
-import { caminhoDe, textos, type Idioma } from "@/conteudo/carregar"
-import { ancorasDe } from "@/lib/ancoras"
-import { rotaDe } from "@/lib/rotas"
+import { ArtigoDeDoc } from '@/components/artigo-de-doc'
+import { PainelDeCodigo } from '@/components/painel-de-codigo'
+import { Revelar } from '@/components/revelar'
+import { TituloDeSecao } from '@/components/titulo-de-secao'
+import { caminhoDe, textos, type Idioma } from '@/conteudo/carregar'
+import { ancorasDe } from '@/lib/ancoras'
+import { rotaDe } from '@/lib/rotas'
 
 /**
  * A PÁGINA-ASSINATURA: passo numerado à esquerda, comando à direita.
@@ -139,7 +139,7 @@ export function Instalacao({ idioma }: { idioma: Idioma }) {
               mediu, porque estado de hover não sai em auditoria automática.
               O que muda no hover é a elevação e a seta. */}
           <Link
-            href={caminhoDe(idioma, rotaDe("uso"))}
+            href={caminhoDe(idioma, rotaDe('uso'))}
             className="group mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand px-4 text-sm font-medium text-brand-foreground shadow-raised transition-shadow hover:shadow-overlay focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
           >
             {t.rotulos.comecar}

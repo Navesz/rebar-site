@@ -19,19 +19,15 @@
  * repete o título da página e não leva a lugar nenhum novo.
  */
 
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
 
-import { AnteriorProximo } from "@/components/anterior-proximo"
-import {
-  IndiceDaPagina,
-  IndiceRecolhivel,
-  type ItemDoIndice,
-} from "@/components/indice-da-pagina"
-import { Revelar } from "@/components/revelar"
-import { Trilha } from "@/components/trilha"
-import { textos, type Idioma } from "@/conteudo/carregar"
-import type { ChaveDeDoc } from "@/lib/rotas"
-import { cn } from "@/lib/utils"
+import { AnteriorProximo } from '@/components/anterior-proximo'
+import { IndiceDaPagina, IndiceRecolhivel, type ItemDoIndice } from '@/components/indice-da-pagina'
+import { Revelar } from '@/components/revelar'
+import { Trilha } from '@/components/trilha'
+import { textos, type Idioma } from '@/conteudo/carregar'
+import type { ChaveDeDoc } from '@/lib/rotas'
+import { cn } from '@/lib/utils'
 
 export function ArtigoDeDoc({
   idioma,
@@ -39,7 +35,7 @@ export function ArtigoDeDoc({
   titulo,
   resumo,
   indice,
-  largura = "leitura",
+  largura = 'leitura',
   children,
 }: {
   idioma: Idioma
@@ -53,7 +49,7 @@ export function ArtigoDeDoc({
    * é código AO LADO do texto — com o teto de leitura ela nunca teria largura
    * para as duas colunas e voltaria a empilhar em qualquer tela.
    */
-  largura?: "leitura" | "ampla"
+  largura?: 'leitura' | 'ampla'
   children: ReactNode
 }) {
   const t = textos(idioma)
@@ -85,10 +81,7 @@ export function ArtigoDeDoc({
           segunda vez, num tablet deitado. Nas larguras em que o artigo não
           chega a 48rem o teto não tem o que apertar. */}
       <article
-        className={cn(
-          "min-w-0 flex-1 pt-8 pb-20 lg:pt-10",
-          largura === "leitura" && "max-w-3xl"
-        )}
+        className={cn('min-w-0 flex-1 pt-8 pb-20 lg:pt-10', largura === 'leitura' && 'max-w-3xl')}
       >
         <Revelar>
           <Trilha idioma={idioma} chave={chave} />
@@ -101,11 +94,7 @@ export function ArtigoDeDoc({
         </Revelar>
 
         {comIndice ? (
-          <IndiceRecolhivel
-            rotulo={t.rotulos.nestaPagina}
-            itens={indice}
-            className="mt-8"
-          />
+          <IndiceRecolhivel rotulo={t.rotulos.nestaPagina} itens={indice} className="mt-8" />
         ) : null}
 
         <div className="mt-12">{children}</div>
@@ -113,9 +102,7 @@ export function ArtigoDeDoc({
         <AnteriorProximo idioma={idioma} chave={chave} className="mt-16" />
       </article>
 
-      {comIndice ? (
-        <IndiceDaPagina rotulo={t.rotulos.nestaPagina} itens={indice} />
-      ) : null}
+      {comIndice ? <IndiceDaPagina rotulo={t.rotulos.nestaPagina} itens={indice} /> : null}
     </div>
   )
 }

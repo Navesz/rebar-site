@@ -1,7 +1,7 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
 
-import { MolduraDeDocumentacao } from "@/components/moldura-de-documentacao"
-import { idiomaTraduzido, type ParametrosDeIdioma } from "@/lib/parametros"
+import { MolduraDeDocumentacao } from '@/components/moldura-de-documentacao'
+import { idiomaTraduzido, type ParametrosDeIdioma } from '@/lib/parametros'
 
 /**
  * A moldura de `/docs` nos idiomas traduzidos — o gêmeo de
@@ -18,8 +18,6 @@ export default async function LayoutDeDocs({
   params,
 }: Readonly<{ children: ReactNode }> & ParametrosDeIdioma) {
   return (
-    <MolduraDeDocumentacao idioma={await idiomaTraduzido(params)}>
-      {children}
-    </MolduraDeDocumentacao>
+    <MolduraDeDocumentacao idioma={await idiomaTraduzido(params)}>{children}</MolduraDeDocumentacao>
   )
 }

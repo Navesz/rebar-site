@@ -1,12 +1,12 @@
-import { notFound } from "next/navigation"
-import { CornerDownRight, Lightbulb } from "lucide-react"
+import { notFound } from 'next/navigation'
+import { CornerDownRight, Lightbulb } from 'lucide-react'
 
-import { ArtigoDeDoc } from "@/components/artigo-de-doc"
-import { PainelDeCodigo } from "@/components/painel-de-codigo"
-import { Revelar } from "@/components/revelar"
-import { TituloDeSecao } from "@/components/titulo-de-secao"
-import { textos, type Idioma } from "@/conteudo/carregar"
-import { ancorasDe } from "@/lib/ancoras"
+import { ArtigoDeDoc } from '@/components/artigo-de-doc'
+import { PainelDeCodigo } from '@/components/painel-de-codigo'
+import { Revelar } from '@/components/revelar'
+import { TituloDeSecao } from '@/components/titulo-de-secao'
+import { textos, type Idioma } from '@/conteudo/carregar'
+import { ancorasDe } from '@/lib/ancoras'
 
 /**
  * O IDIOMA DA SAIDA DO PROGRAMA, que nao e o da pagina.
@@ -22,7 +22,7 @@ import { ancorasDe } from "@/lib/ancoras"
  * O valor sai do conteudo, e nao de um literal — a mesma regra que vale para
  * todo o resto do site.
  */
-const IDIOMA_DA_SAIDA = textos("pt-br").tagDeIdioma
+const IDIOMA_DA_SAIDA = textos('pt-br').tagDeIdioma
 
 /**
  * A PÁGINA DE USO: um exemplo por seção, o comando e — quando existe — a saída.
@@ -62,13 +62,7 @@ export function Uso({ idioma }: { idioma: Idioma }) {
   }
 
   return (
-    <ArtigoDeDoc
-      idioma={idioma}
-      chave="uso"
-      titulo={p.titulo}
-      resumo={p.resumo}
-      indice={indice}
-    >
+    <ArtigoDeDoc idioma={idioma} chave="uso" titulo={p.titulo} resumo={p.resumo} indice={indice}>
       <div className="flex flex-col gap-14">
         {p.exemplos.map((exemplo, i) => (
           // O `id` VAI NO `<h2>` e não no `<section>`: é o `<h2>` que o

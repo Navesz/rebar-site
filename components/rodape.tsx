@@ -1,6 +1,6 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
 
-import { Marca } from "@/components/marca"
+import { Marca } from '@/components/marca'
 import {
   linkWhatsapp,
   site,
@@ -8,7 +8,7 @@ import {
   type Contato,
   type Idioma,
   type Textos,
-} from "@/conteudo/carregar"
+} from '@/conteudo/carregar'
 
 /**
  * OS RÓTULOS QUE O RODAPÉ SABE LER, e eles atravessam o mapa como SEGUNDO
@@ -18,7 +18,7 @@ import {
  * idioma tem de chegar até ele: sem isso o único link do rodapé saía em
  * português nas 15 rotas (ver `CONTATOS.repositorio`).
  */
-type Rotulos = Textos["rotulos"]
+type Rotulos = Textos['rotulos']
 
 /**
  * O RODAPÉ GLOBAL, e ele serve os três idiomas sem uma linha por idioma.
@@ -80,36 +80,31 @@ const CONTATOS = {
     repositorio && (
       <a href={repositorio.url} rel="noopener noreferrer" target="_blank">
         {rotulos.repositorio}
-        {" · "}
+        {' · '}
         {repositorio.rotulo}
       </a>
     ),
 
   whatsapp: ({ whatsapp }: Contato) =>
     whatsapp && (
-      <a
-        href={linkWhatsapp(whatsapp)}
-        rel="noopener noreferrer"
-        target="_blank"
-      >
+      <a href={linkWhatsapp(whatsapp)} rel="noopener noreferrer" target="_blank">
         {whatsapp.exibicao}
       </a>
     ),
 
-  email: ({ email }: Contato) =>
-    email && <a href={`mailto:${email}`}>{email}</a>,
+  email: ({ email }: Contato) => email && <a href={`mailto:${email}`}>{email}</a>,
 
   endereco: ({ endereco }: Contato) =>
     endereco && (
       <address className="not-italic">
         {endereco.logradouro}
-        {", "}
+        {', '}
         {endereco.bairro}
-        {" — "}
+        {' — '}
         {endereco.cidade}
-        {"/"}
+        {'/'}
         {endereco.uf}
-        {" · "}
+        {' · '}
         {endereco.cep}
       </address>
     ),

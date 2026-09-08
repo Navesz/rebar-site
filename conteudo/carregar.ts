@@ -14,12 +14,12 @@
  * só reprovaria quando alguém pedisse a página espanhola — e no export estático
  * isso é exatamente a rota que ninguém abre em `next dev`.
  */
-import { esquemaSite, esquemaTextos } from "./esquema"
-import type { Compartilhado, Textos } from "./esquema"
-import bruto from "./site.json"
-import brutoEn from "./textos/en.json"
-import brutoEs from "./textos/es.json"
-import brutoPtBr from "./textos/pt-br.json"
+import { esquemaSite, esquemaTextos } from './esquema'
+import type { Compartilhado, Textos } from './esquema'
+import bruto from './site.json'
+import brutoEn from './textos/en.json'
+import brutoEs from './textos/es.json'
+import brutoPtBr from './textos/pt-br.json'
 
 /**
  * OS IDIOMAS DO SITE, na ordem em que aparecem para quem escolhe.
@@ -29,7 +29,7 @@ import brutoPtBr from "./textos/pt-br.json"
  * três literais em vez de `string` — rota com idioma que não existe vira erro
  * de tipo, e não 404 descoberto em produção.
  */
-export const IDIOMAS = ["en", "pt-br", "es"] as const
+export const IDIOMAS = ['en', 'pt-br', 'es'] as const
 
 export type Idioma = (typeof IDIOMAS)[number]
 
@@ -41,7 +41,7 @@ export type Idioma = (typeof IDIOMAS)[number]
  * componente montando o próprio `href` seria a segunda fonte que diverge — e a
  * divergência aqui é link quebrado, que o build não vê.
  */
-export const IDIOMA_PADRAO: Idioma = "en"
+export const IDIOMA_PADRAO: Idioma = 'en'
 
 /**
  * OS QUE LEVAM PREFIXO, derivados por subtração e nunca digitados de novo.
@@ -51,16 +51,16 @@ export const IDIOMA_PADRAO: Idioma = "en"
  * o link existiria e daria 404, sem erro em lugar nenhum.
  */
 export const IDIOMAS_TRADUZIDOS: readonly Idioma[] = IDIOMAS.filter(
-  (idioma) => idioma !== IDIOMA_PADRAO
+  (idioma) => idioma !== IDIOMA_PADRAO,
 )
 
 /** O que é igual nos três idiomas: identidade do negócio e meta técnico. */
-export const site: Compartilhado = esquemaSite(bruto, "site")
+export const site: Compartilhado = esquemaSite(bruto, 'site')
 
 const TEXTOS: Record<Idioma, Textos> = {
-  en: esquemaTextos(brutoEn, "en"),
-  "pt-br": esquemaTextos(brutoPtBr, "pt-br"),
-  es: esquemaTextos(brutoEs, "es"),
+  en: esquemaTextos(brutoEn, 'en'),
+  'pt-br': esquemaTextos(brutoPtBr, 'pt-br'),
+  es: esquemaTextos(brutoEs, 'es'),
 }
 
 /** Todo texto que alguém lê, no idioma pedido. */
@@ -82,7 +82,7 @@ export function textos(idioma: Idioma): Textos {
  */
 export function caminhoDe(idioma: Idioma, rota: string): string {
   if (idioma === IDIOMA_PADRAO) return rota
-  return rota === "/" ? `/${idioma}` : `/${idioma}${rota}`
+  return rota === '/' ? `/${idioma}` : `/${idioma}${rota}`
 }
 
 /**
@@ -100,10 +100,7 @@ export function caminhoDe(idioma: Idioma, rota: string): string {
  * O 404 de ícone de manifesto é silencioso do jeito que o §12.3 descreve: a
  * página abre, o navegador pede o ícone, toma 404 e não conta para ninguém.
  */
-export const caminhoBase = new URL(site.meta.urlBase).pathname.replace(
-  /\/+$/,
-  ""
-)
+export const caminhoBase = new URL(site.meta.urlBase).pathname.replace(/\/+$/, '')
 
 /** Um caminho de `public/` como o navegador tem de pedir. */
 export const publico = (caminho: string): string => `${caminhoBase}${caminho}`
@@ -113,5 +110,5 @@ export type { Compartilhado, Textos }
 // arquivo, nunca do esquema: a porta é uma só. `Contato` é o que faz o mapa do
 // rodapé ser cobrado como total; `Whatsapp` é o bloco já estreitado que
 // `linkWhatsapp` exige — sem ele o botão não compila sem tratar o `null`.
-export type { Contato, Whatsapp } from "./esquema"
-export { linkWhatsapp } from "./esquema"
+export type { Contato, Whatsapp } from './esquema'
+export { linkWhatsapp } from './esquema'

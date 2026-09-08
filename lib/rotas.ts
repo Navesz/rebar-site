@@ -17,15 +17,15 @@
  * dela.
  */
 export const ROTAS = [
-  { chave: "inicio", caminho: "/" },
-  { chave: "docs", caminho: "/docs" },
-  { chave: "instalacao", caminho: "/docs/installation" },
-  { chave: "uso", caminho: "/docs/usage" },
-  { chave: "modulos", caminho: "/docs/modules" },
+  { chave: 'inicio', caminho: '/' },
+  { chave: 'docs', caminho: '/docs' },
+  { chave: 'instalacao', caminho: '/docs/installation' },
+  { chave: 'uso', caminho: '/docs/usage' },
+  { chave: 'modulos', caminho: '/docs/modules' },
 ] as const
 
 export type Rota = (typeof ROTAS)[number]
-export type ChaveDeRota = Rota["chave"]
+export type ChaveDeRota = Rota['chave']
 
 /**
  * As rotas que têm um bloco em `paginas` do conteúdo — todas menos a home.
@@ -34,7 +34,7 @@ export type ChaveDeRota = Rota["chave"]
  * `textos(idioma).paginas` só compila enquanto as duas coincidirem. Rota nova
  * sem bloco de conteúdo é erro de tipo, e não uma página em branco no ar.
  */
-export type ChaveDeDoc = Exclude<ChaveDeRota, "inicio">
+export type ChaveDeDoc = Exclude<ChaveDeRota, 'inicio'>
 
 /**
  * O caminho de uma chave, sem procurar na lista à mão em cada componente.
@@ -48,7 +48,7 @@ const POR_CHAVE = ROTAS.reduce(
     mapa[rota.chave] = rota.caminho
     return mapa
   },
-  {} as Record<ChaveDeRota, string>
+  {} as Record<ChaveDeRota, string>,
 )
 
 export function rotaDe(chave: ChaveDeRota): string {

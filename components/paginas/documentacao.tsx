@@ -1,10 +1,10 @@
-import { notFound } from "next/navigation"
+import { notFound } from 'next/navigation'
 
-import { ArtigoDeDoc } from "@/components/artigo-de-doc"
-import { Revelar } from "@/components/revelar"
-import { TituloDeSecao } from "@/components/titulo-de-secao"
-import { textos, type Idioma } from "@/conteudo/carregar"
-import { ancorasDe } from "@/lib/ancoras"
+import { ArtigoDeDoc } from '@/components/artigo-de-doc'
+import { Revelar } from '@/components/revelar'
+import { TituloDeSecao } from '@/components/titulo-de-secao'
+import { textos, type Idioma } from '@/conteudo/carregar'
+import { ancorasDe } from '@/lib/ancoras'
 
 /**
  * A PÁGINA DE DOCUMENTAÇÃO: seções ancoradas, e não mais um acordeão.
@@ -44,13 +44,7 @@ export function Documentacao({ idioma }: { idioma: Idioma }) {
   }))
 
   return (
-    <ArtigoDeDoc
-      idioma={idioma}
-      chave="docs"
-      titulo={p.titulo}
-      resumo={p.resumo}
-      indice={indice}
-    >
+    <ArtigoDeDoc idioma={idioma} chave="docs" titulo={p.titulo} resumo={p.resumo} indice={indice}>
       <div className="flex flex-col gap-14">
         {p.secoes.map((secao, i) => (
           <section key={secao.titulo}>
@@ -59,9 +53,7 @@ export function Documentacao({ idioma }: { idioma: Idioma }) {
                 {secao.titulo}
               </TituloDeSecao>
 
-              <p className="mt-4 text-body text-muted-foreground">
-                {secao.corpo}
-              </p>
+              <p className="mt-4 text-body text-muted-foreground">{secao.corpo}</p>
 
               {secao.itens.length ? (
                 // Marcador de lista de verdade, e não um ícone de "check" por

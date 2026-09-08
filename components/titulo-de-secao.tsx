@@ -27,10 +27,10 @@
  * o que faz o teclado alcançá-lo.
  */
 
-import type { ReactNode } from "react"
-import { Hash } from "lucide-react"
+import type { ReactNode } from 'react'
+import { Hash } from 'lucide-react'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 export function TituloDeSecao({
   id,
@@ -51,7 +51,7 @@ export function TituloDeSecao({
   children: ReactNode
 }) {
   return (
-    <h2 id={id} className={cn("group", className)}>
+    <h2 id={id} className={cn('group', className)}>
       {children}
       <a
         href={`#${id}`}

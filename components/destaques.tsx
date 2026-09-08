@@ -1,7 +1,7 @@
-import { Revelar } from "@/components/revelar"
-import type { Textos } from "@/conteudo/carregar"
+import { Revelar } from '@/components/revelar'
+import type { Textos } from '@/conteudo/carregar'
 
-type Destaque = Textos["home"]["destaques"][number]
+type Destaque = Textos['home']['destaques'][number]
 
 /**
  * OS DESTAQUES DA HOME, e o que muda entre eles é PESO, não cor.
@@ -39,7 +39,7 @@ const ABERTURA = 2
 const MEIO = 5
 
 /** "01", "02" … O zero à esquerda alinha a coluna e é numeral, não texto. */
-const ordinal = (i: number) => String(i + 1).padStart(2, "0")
+const ordinal = (i: number) => String(i + 1).padStart(2, '0')
 
 export function Destaques({ destaques }: { destaques: readonly Destaque[] }) {
   const abertura = destaques.slice(0, ABERTURA)
@@ -62,17 +62,12 @@ export function Destaques({ destaques }: { destaques: readonly Destaque[] }) {
             <li key={destaque.titulo}>
               <Revelar atraso={i * 0.06}>
                 <div className="flex items-baseline gap-4">
-                  <span
-                    aria-hidden
-                    className="font-mono text-caption text-brand tabular-nums"
-                  >
+                  <span aria-hidden className="font-mono text-caption text-brand tabular-nums">
                     {ordinal(i)}
                   </span>
                   <h2 className="text-h3">{destaque.titulo}</h2>
                 </div>
-                <p className="mt-3 text-body text-muted-foreground">
-                  {destaque.texto}
-                </p>
+                <p className="mt-3 text-body text-muted-foreground">{destaque.texto}</p>
               </Revelar>
             </li>
           ))}
@@ -100,9 +95,7 @@ export function Destaques({ destaques }: { destaques: readonly Destaque[] }) {
                       nos exemplos dela, e lá também é `<h3>`. */}
                   <h3 className="text-h4">{destaque.titulo}</h3>
                 </div>
-                <p className="mt-2 text-caption text-muted-foreground">
-                  {destaque.texto}
-                </p>
+                <p className="mt-2 text-caption text-muted-foreground">{destaque.texto}</p>
               </Revelar>
             </li>
           ))}

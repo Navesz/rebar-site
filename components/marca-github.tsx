@@ -15,10 +15,7 @@
  * GitHub publica para uso em links de volta. Ele herda `currentColor`, então
  * acompanha o tema como o resto dos ícones.
  */
-export function MarcaGitHub({
-  className,
-  ...resto
-}: React.ComponentProps<"svg">) {
+export function MarcaGitHub({ className, ...resto }: React.ComponentProps<'svg'>) {
   return (
     <svg
       viewBox="0 0 16 16"

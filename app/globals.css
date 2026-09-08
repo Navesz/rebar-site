@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -26,7 +26,7 @@
    * pintava um glifo. O fallback existe porque bloco de comando alinhado em
    * fonte proporcional mente sobre o que o terminal mostra.
    */
-  --font-mono: var(--font-mono, ui-monospace, "Cascadia Mono", monospace);
+  --font-mono: var(--font-mono, ui-monospace, 'Cascadia Mono', monospace);
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -131,8 +131,7 @@
   /* Elevação em duas alturas só. Sombra é profundidade, e profundidade com
      sete degraus deixa de informar hierarquia. */
   --shadow-raised: 0 1px 1px var(--elevacao), 0 4px 10px -4px var(--elevacao);
-  --shadow-overlay:
-    0 2px 4px var(--elevacao), 0 16px 40px -12px var(--elevacao);
+  --shadow-overlay: 0 2px 4px var(--elevacao), 0 16px 40px -12px var(--elevacao);
 
   /* O cabeçalho é sticky: vira unidade de espaçamento para o desvio do
      cabeçalho e o `scroll-padding` saírem sempre do MESMO número. */
@@ -346,11 +345,7 @@
 /* A malha tem de MORRER antes da borda: grade que encosta na aresta da tela
    lê como erro de renderização, não como textura. */
 @utility nervura-mascara {
-  --nervura-mascara: radial-gradient(
-    ellipse 85% 65% at 50% 0%,
-    oklch(0 0 0) 25%,
-    transparent 100%
-  );
+  --nervura-mascara: radial-gradient(ellipse 85% 65% at 50% 0%, oklch(0 0 0) 25%, transparent 100%);
   -webkit-mask-image: var(--nervura-mascara);
   mask-image: var(--nervura-mascara);
 }
@@ -391,7 +386,7 @@
   }
 
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  [role='button']:not(:disabled) {
     cursor: pointer;
   }
 

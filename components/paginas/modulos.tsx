@@ -1,14 +1,14 @@
-import { notFound } from "next/navigation"
-import { CircleAlert } from "lucide-react"
+import { notFound } from 'next/navigation'
+import { CircleAlert } from 'lucide-react'
 
-import { ArtigoDeDoc } from "@/components/artigo-de-doc"
-import { PainelDeCodigo } from "@/components/painel-de-codigo"
-import { Revelar } from "@/components/revelar"
-import { TituloDeSecao } from "@/components/titulo-de-secao"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { textos, type Idioma } from "@/conteudo/carregar"
-import { ancorasDe } from "@/lib/ancoras"
+import { ArtigoDeDoc } from '@/components/artigo-de-doc'
+import { PainelDeCodigo } from '@/components/painel-de-codigo'
+import { Revelar } from '@/components/revelar'
+import { TituloDeSecao } from '@/components/titulo-de-secao'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { textos, type Idioma } from '@/conteudo/carregar'
+import { ancorasDe } from '@/lib/ancoras'
 
 /**
  * A REFERÊNCIA DOS MÓDULOS: nome, resumo, comando, os números e o limite.
@@ -75,9 +75,7 @@ export function Modulos({ idioma }: { idioma: Idioma }) {
                   <TituloDeSecao id={ancoras[i]} className="font-mono text-h3">
                     {modulo.nome}
                   </TituloDeSecao>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {modulo.resumo}
-                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{modulo.resumo}</p>
                 </CardHeader>
 
                 {/* `flex-1` para o `mt-auto` do alerta ter contra o que
@@ -94,20 +92,13 @@ export function Modulos({ idioma }: { idioma: Idioma }) {
                   {modulo.numeros.length ? (
                     <dl className="flex flex-wrap gap-x-8 gap-y-4 border-y border-border/60 py-4">
                       {modulo.numeros.map((numero) => (
-                        <div
-                          key={numero.rotulo}
-                          className="flex min-w-0 flex-col-reverse"
-                        >
-                          <dt className="text-caption text-muted-foreground">
-                            {numero.rotulo}
-                          </dt>
+                        <div key={numero.rotulo} className="flex min-w-0 flex-col-reverse">
+                          <dt className="text-caption text-muted-foreground">{numero.rotulo}</dt>
                           {/* `text-h4` (18px): um degrau ABAIXO do nome do
                               módulo e dois ACIMA do rótulo — o valor continua
                               sendo o maior texto do par, sem disputar o
                               cartão com o título. */}
-                          <dd className="font-mono text-h4 tabular-nums">
-                            {numero.valor}
-                          </dd>
+                          <dd className="font-mono text-h4 tabular-nums">{numero.valor}</dd>
                         </div>
                       ))}
                     </dl>
@@ -119,9 +110,7 @@ export function Modulos({ idioma }: { idioma: Idioma }) {
                   <Alert className="mt-auto bg-muted/60 px-3 py-2.5">
                     <CircleAlert aria-hidden />
                     <AlertTitle>{p.rotuloLimite}</AlertTitle>
-                    <AlertDescription className="leading-relaxed">
-                      {modulo.limite}
-                    </AlertDescription>
+                    <AlertDescription className="leading-relaxed">{modulo.limite}</AlertDescription>
                   </Alert>
                 </CardContent>
               </Card>

@@ -16,8 +16,8 @@
  * assim que a moldura sai nos três idiomas em vez de num só.
  */
 
-import { Fragment } from "react"
-import Link from "next/link"
+import { Fragment } from 'react'
+import Link from 'next/link'
 
 import {
   Breadcrumb,
@@ -26,10 +26,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { caminhoDe, textos, type Idioma } from "@/conteudo/carregar"
-import { rotaDe, type ChaveDeDoc } from "@/lib/rotas"
-import { cn } from "@/lib/utils"
+} from '@/components/ui/breadcrumb'
+import { caminhoDe, textos, type Idioma } from '@/conteudo/carregar'
+import { rotaDe, type ChaveDeDoc } from '@/lib/rotas'
+import { cn } from '@/lib/utils'
 
 export function Trilha({
   idioma,
@@ -46,10 +46,8 @@ export function Trilha({
   // mesmo rótulo apareceria duas vezes seguidas, uma como link e outra como
   // degrau final.
   const acima = [
-    { chave: "inicio" as const, rotulo: t.rotulos.navegacao.inicio },
-    ...(chave === "docs"
-      ? []
-      : [{ chave: "docs" as const, rotulo: t.rotulos.navegacao.docs }]),
+    { chave: 'inicio' as const, rotulo: t.rotulos.navegacao.inicio },
+    ...(chave === 'docs' ? [] : [{ chave: 'docs' as const, rotulo: t.rotulos.navegacao.docs }]),
   ]
 
   return (
@@ -71,9 +69,7 @@ export function Trilha({
           // menos em alguns leitores de tela.
           <Fragment key={degrau.chave}>
             <BreadcrumbItem>
-              <BreadcrumbLink
-                render={<Link href={caminhoDe(idioma, rotaDe(degrau.chave))} />}
-              >
+              <BreadcrumbLink render={<Link href={caminhoDe(idioma, rotaDe(degrau.chave))} />}>
                 {degrau.rotulo}
               </BreadcrumbLink>
             </BreadcrumbItem>

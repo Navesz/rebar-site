@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * O SELETOR DE TEMA — e o motivo de ele existir é que o atalho não bastava.
@@ -39,10 +39,10 @@
  * ─────────────────────────────────────────────────────────────────────────
  */
 
-import { useTheme } from "next-themes"
-import { Monitor, Moon, Sun } from "lucide-react"
+import { useTheme } from 'next-themes'
+import { Monitor, Moon, Sun } from 'lucide-react'
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,8 +50,8 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Kbd } from "@/components/ui/kbd"
+} from '@/components/ui/dropdown-menu'
+import { Kbd } from '@/components/ui/kbd'
 
 /**
  * A tecla que `theme-provider.tsx` escuta, escrita como ela aparece gravada no
@@ -59,15 +59,15 @@ import { Kbd } from "@/components/ui/kbd"
  * `paleta-de-busca.tsx`: traduzir seria mentir sobre a tecla que a pessoa tem
  * de apertar.
  */
-const TECLA = "D"
+const TECLA = 'D'
 
 /**
  * Os três valores que `next-themes` entende. Eles são a API da biblioteca, não
  * texto: o rótulo que a pessoa lê vem por `rotulos`, ao lado.
  */
-const CLARO = "light"
-const ESCURO = "dark"
-const SISTEMA = "system"
+const CLARO = 'light'
+const ESCURO = 'dark'
+const SISTEMA = 'system'
 
 export function SeletorDeTema({
   rotulos,
@@ -103,10 +103,7 @@ export function SeletorDeTema({
       {/* `w-auto` derruba o `w-(--anchor-width)` do componente: ancorado num
           botão de 36px, o menu nasceria com 36px de largura. */}
       <DropdownMenuContent align="end" className="w-auto min-w-44">
-        <DropdownMenuRadioGroup
-          value={theme}
-          onValueChange={(valor) => setTheme(String(valor))}
-        >
+        <DropdownMenuRadioGroup value={theme} onValueChange={(valor) => setTheme(String(valor))}>
           {/* O rótulo do grupo é o que dá nome acessível ao conjunto de opções
               (o Base UI liga os dois por `aria-labelledby`). O `<Kbd>` vai
               `aria-hidden` para não entrar nesse nome: quem usa leitor de tela
@@ -120,30 +117,18 @@ export function SeletorDeTema({
           {/* 44px no toque nos tres, pelo mesmo motivo do seletor de idioma:
               o item nasce com 28px e sem folga do vizinho, e o dedo que erra
               troca o tema em vez de fechar o menu. */}
-          <DropdownMenuRadioItem
-            value={CLARO}
-            closeOnClick
-            className="min-h-11 lg:min-h-0"
-          >
+          <DropdownMenuRadioItem value={CLARO} closeOnClick className="min-h-11 lg:min-h-0">
             <Sun aria-hidden />
             {rotulos.claro}
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value={ESCURO}
-            closeOnClick
-            className="min-h-11 lg:min-h-0"
-          >
+          <DropdownMenuRadioItem value={ESCURO} closeOnClick className="min-h-11 lg:min-h-0">
             <Moon aria-hidden />
             {rotulos.escuro}
           </DropdownMenuRadioItem>
           {/* "Sistema" é o padrão de `theme-provider.tsx` e por isso está na
               lista: sem ele, quem trocou uma vez não tem como devolver a
               decisão ao sistema operacional. */}
-          <DropdownMenuRadioItem
-            value={SISTEMA}
-            closeOnClick
-            className="min-h-11 lg:min-h-0"
-          >
+          <DropdownMenuRadioItem value={SISTEMA} closeOnClick className="min-h-11 lg:min-h-0">
             <Monitor aria-hidden />
             {rotulos.sistema}
           </DropdownMenuRadioItem>

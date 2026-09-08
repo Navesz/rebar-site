@@ -1,8 +1,8 @@
-import { AtalhosDaDocumentacao } from "@/components/atalhos-da-documentacao"
-import { Destaques } from "@/components/destaques"
-import { EsteiraDoPortao } from "@/components/esteira-do-portao"
-import { Hero } from "@/components/hero"
-import { textos, type Idioma } from "@/conteudo/carregar"
+import { AtalhosDaDocumentacao } from '@/components/atalhos-da-documentacao'
+import { Destaques } from '@/components/destaques'
+import { EsteiraDoPortao } from '@/components/esteira-do-portao'
+import { Hero } from '@/components/hero'
+import { textos, type Idioma } from '@/conteudo/carregar'
 
 /**
  * A HOME, UMA VEZ, PARA OS TRÊS IDIOMAS.

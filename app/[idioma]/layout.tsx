@@ -1,10 +1,10 @@
-import type { Metadata, Viewport } from "next"
+import type { Metadata, Viewport } from 'next'
 
-import "../globals.css"
-import { Casca } from "@/components/casca"
-import { IDIOMAS_TRADUZIDOS } from "@/conteudo/carregar"
-import { metadadosDaRaiz, viewportPadrao } from "@/lib/metadados"
-import { idiomaTraduzido, type ParametrosDeIdioma } from "@/lib/parametros"
+import '../globals.css'
+import { Casca } from '@/components/casca'
+import { IDIOMAS_TRADUZIDOS } from '@/conteudo/carregar'
+import { metadadosDaRaiz, viewportPadrao } from '@/lib/metadados'
+import { idiomaTraduzido, type ParametrosDeIdioma } from '@/lib/parametros'
 
 /**
  * O LAYOUT RAIZ DOS IDIOMAS TRADUZIDOS: `/pt-br` e `/es`.
@@ -30,9 +30,7 @@ export function generateStaticParams() {
   return IDIOMAS_TRADUZIDOS.map((idioma) => ({ idioma }))
 }
 
-export async function generateMetadata({
-  params,
-}: ParametrosDeIdioma): Promise<Metadata> {
+export async function generateMetadata({ params }: ParametrosDeIdioma): Promise<Metadata> {
   return metadadosDaRaiz(await idiomaTraduzido(params))
 }
 

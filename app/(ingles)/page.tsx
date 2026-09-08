@@ -1,5 +1,5 @@
-import { Inicio } from "@/components/paginas/inicio"
-import { IDIOMA_PADRAO } from "@/conteudo/carregar"
+import { Inicio } from '@/components/paginas/inicio'
+import { IDIOMA_PADRAO } from '@/conteudo/carregar'
 
 /**
  * A home em inglês, servida em `/`.

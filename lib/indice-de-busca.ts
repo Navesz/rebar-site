@@ -33,19 +33,13 @@
  * vezes.
  */
 
-import {
-  IDIOMAS,
-  caminhoDe,
-  textos,
-  type Idioma,
-  type Textos,
-} from "@/conteudo/carregar"
-import { ancorasDe } from "@/lib/ancoras"
-import type { ItemDeBusca } from "@/lib/busca"
-import { ROTAS, type ChaveDeDoc } from "@/lib/rotas"
+import { IDIOMAS, caminhoDe, textos, type Idioma, type Textos } from '@/conteudo/carregar'
+import { ancorasDe } from '@/lib/ancoras'
+import type { ItemDeBusca } from '@/lib/busca'
+import { ROTAS, type ChaveDeDoc } from '@/lib/rotas'
 
 /** O bloco `paginas` já estreitado: ele é opcional e tudo-ou-nada no esquema. */
-type Paginas = NonNullable<Textos["paginas"]>
+type Paginas = NonNullable<Textos['paginas']>
 
 /**
  * Um pedaço de página: o título que vira âncora, o texto que casa E aparece, e
@@ -138,7 +132,7 @@ function montar(idioma: Idioma): ItemDeBusca[] {
     // título indexado é o RÓTULO da navegação e não `home.titulo`, que é o nome
     // do produto: numa lista de resultados "rebar" casaria com tudo e não
     // diria nada.
-    if (rota.chave === "inicio") {
+    if (rota.chave === 'inicio') {
       nivelDePagina.push({
         href,
         titulo: t.rotulos.navegacao.inicio,
@@ -207,7 +201,7 @@ const INDICE: Record<Idioma, ItemDeBusca[]> = IDIOMAS.reduce(
     mapa[idioma] = montar(idioma)
     return mapa
   },
-  {} as Record<Idioma, ItemDeBusca[]>
+  {} as Record<Idioma, ItemDeBusca[]>,
 )
 
 /** O que a paleta ⌘K recebe: o índice do idioma que está na tela, e só ele. */

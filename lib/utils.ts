@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from "clsx"
-import { extendTailwindMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from 'clsx'
+import { extendTailwindMerge } from 'tailwind-merge'
 
 /**
  * O `cn` DO PROJETO — e o ÚNICO, de propósito.
@@ -57,9 +57,7 @@ import { extendTailwindMerge } from "tailwind-merge"
 const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      "font-size": [
-        { text: ["h1", "h2", "h3", "h4", "lead", "body", "caption"] },
-      ],
+      'font-size': [{ text: ['h1', 'h2', 'h3', 'h4', 'lead', 'body', 'caption'] }],
     },
   },
 })

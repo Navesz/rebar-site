@@ -152,7 +152,7 @@ const ALFANUMERICO = /[a-z0-9]/
  * escreve "espanol"; não tolerar não acha nada para ninguém.
  */
 function normalizar(texto: string): string {
-  return texto.normalize("NFD").replace(DIACRITICOS, "").toLowerCase()
+  return texto.normalize('NFD').replace(DIACRITICOS, '').toLowerCase()
 }
 
 /**
@@ -249,9 +249,7 @@ function pontuar(alvo: string, consulta: string): number {
     posicao = indice + 1
   }
 
-  pontos +=
-    (consulta.length / Math.max(alvo.length, consulta.length)) *
-    PESO_DA_COBERTURA
+  pontos += (consulta.length / Math.max(alvo.length, consulta.length)) * PESO_DA_COBERTURA
 
   // O máximo é o casamento perfeito: prefixo, tudo contíguo, cobertura total.
   // A primeira letra não pode ganhar contiguidade (não há letra antes dela),
@@ -286,8 +284,8 @@ function pontuar(alvo: string, consulta: string): number {
  * escreveu, e não numa ordem que muda de navegador para navegador.
  */
 export function filtrar(itens: ItemDeBusca[], consulta: string): ItemDeBusca[] {
-  const alvo = normalizar(consulta).replace(/\s+/g, " ").trim()
-  if (alvo === "") return itens.slice(0, LIMITE)
+  const alvo = normalizar(consulta).replace(/\s+/g, ' ').trim()
+  if (alvo === '') return itens.slice(0, LIMITE)
 
   const pontuados: { item: ItemDeBusca; pontos: number }[] = []
 
@@ -302,7 +300,7 @@ export function filtrar(itens: ItemDeBusca[], consulta: string): ItemDeBusca[] {
       // casou melhor. Se um dia o conteúdo perder a `nota` de um passo, o
       // comando vira também o `trecho` visível e pontua a 0.35 pela linha de
       // cima — o que está certo: ali ele deixou de ser invisível.
-      item.texto ? PESO_DO_TEXTO * pontuar(normalizar(item.texto), alvo) : 0
+      item.texto ? PESO_DO_TEXTO * pontuar(normalizar(item.texto), alvo) : 0,
     )
     if (pontos > 0) pontuados.push({ item, pontos })
   }

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 /**
  * O painel de código do site: uma barra de cromo com abas ou nome de arquivo,
@@ -28,18 +28,13 @@
  * pior do que os dois.
  */
 
-import { useEffect, useRef, useState, type Ref } from "react"
-import { Check, Copy, Terminal } from "lucide-react"
+import { useEffect, useRef, useState, type Ref } from 'react'
+import { Check, Copy, Terminal } from 'lucide-react'
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 export type Aba = { rotulo: string; codigo: string }
 
@@ -48,7 +43,7 @@ export type RotulosDoPainel = { copiar: string; copiado: string }
 
 /** A barra de cima. O `pb` fica com quem chama: com aba ele é zero. */
 const cromo =
-  "flex items-center gap-2 border-b border-code-border bg-code-chrome pr-1.5 pl-3 text-code-chrome-foreground"
+  'flex items-center gap-2 border-b border-code-border bg-code-chrome pr-1.5 pl-3 text-code-chrome-foreground'
 
 export function PainelDeCodigo({
   abas,
@@ -78,13 +73,13 @@ export function PainelDeCodigo({
   }, [copiado])
 
   function copiar() {
-    const texto = abas[ativa]?.codigo ?? ""
+    const texto = abas[ativa]?.codigo ?? ''
     if (navigator.clipboard) {
       navigator.clipboard.writeText(texto).then(
         () => setCopiado(true),
         // Permissão negada não pode virar um "copiado" mentiroso: cai no mesmo
         // recuo de quem não tem a API.
-        () => selecionar()
+        () => selecionar(),
       )
       return
     }
@@ -108,8 +103,8 @@ export function PainelDeCodigo({
   const comCromo = comAbas || Boolean(arquivo)
 
   const painel = cn(
-    "group/painel relative cursor-pointer overflow-hidden rounded-xl border border-code-border bg-code text-code-foreground shadow-raised transition-colors hover:border-code-chrome-foreground/40",
-    className
+    'group/painel relative cursor-pointer overflow-hidden rounded-xl border border-code-border bg-code text-code-foreground shadow-raised transition-colors hover:border-code-chrome-foreground/40',
+    className,
   )
 
   /**
@@ -137,10 +132,10 @@ export function PainelDeCodigo({
    */
   function copiarPeloPainel(evento: React.MouseEvent<HTMLElement>) {
     const alvo = evento.target as HTMLElement
-    if (alvo.closest("button")) return
+    if (alvo.closest('button')) return
 
     const selecao = window.getSelection()
-    if (selecao && !selecao.isCollapsed && selecao.toString().trim() !== "") {
+    if (selecao && !selecao.isCollapsed && selecao.toString().trim() !== '') {
       return
     }
 
@@ -149,7 +144,7 @@ export function PainelDeCodigo({
 
   // Sem cromo o botão flutua sobre o código, como no `comando.tsx` — e aí a
   // linha tem de parar antes dele, senão o primeiro comando passa por baixo.
-  const recuo = comCromo ? "pr-4" : "pr-14"
+  const recuo = comCromo ? 'pr-4' : 'pr-14'
 
   const controle = (
     <>
@@ -161,7 +156,7 @@ export function PainelDeCodigo({
        * status, que é o lugar do anúncio; para quem enxerga, o ícone e a dica.
        */}
       <span role="status" aria-live="polite" className="sr-only">
-        {copiado ? rotulos.copiado : ""}
+        {copiado ? rotulos.copiado : ''}
       </span>
       <TooltipProvider delay={300}>
         <Tooltip>
@@ -188,9 +183,7 @@ export function PainelDeCodigo({
             {copiado ? <Check aria-hidden /> : <Copy aria-hidden />}
             <span className="sr-only">{rotulos.copiar}</span>
           </TooltipTrigger>
-          <TooltipContent>
-            {copiado ? rotulos.copiado : rotulos.copiar}
-          </TooltipContent>
+          <TooltipContent>{copiado ? rotulos.copiado : rotulos.copiar}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </>
@@ -204,13 +197,9 @@ export function PainelDeCodigo({
     return (
       <div className={painel} onClick={copiarPeloPainel}>
         {arquivo ? (
-          <div className={cn(cromo, "py-1.5")}>
-            {prompt ? (
-              <Terminal aria-hidden className="size-3.5 shrink-0" />
-            ) : null}
-            <span className="truncate font-mono text-xs text-code-tab-foreground">
-              {arquivo}
-            </span>
+          <div className={cn(cromo, 'py-1.5')}>
+            {prompt ? <Terminal aria-hidden className="size-3.5 shrink-0" /> : null}
+            <span className="truncate font-mono text-xs text-code-tab-foreground">{arquivo}</span>
             {controle}
           </div>
         ) : (
@@ -222,12 +211,7 @@ export function PainelDeCodigo({
           // os 5,5px que `top-2` deixava o botão acima do centro.
           <div className="absolute top-3.5 right-2 z-10">{controle}</div>
         )}
-        <Corpo
-          codigo={abas[0].codigo}
-          prompt={prompt}
-          recuo={recuo}
-          refDoCodigo={codigo}
-        />
+        <Corpo codigo={abas[0].codigo} prompt={prompt} recuo={recuo} refDoCodigo={codigo} />
       </div>
     )
   }
@@ -244,11 +228,11 @@ export function PainelDeCodigo({
       }}
       // O `Tabs` nasce com `gap-2`, e aqui a barra encosta no código: o painel é
       // uma janela só, não duas peças empilhadas.
-      className={cn(painel, "gap-0")}
+      className={cn(painel, 'gap-0')}
       onClick={copiarPeloPainel}
     >
       {/* `pb-0` para o sublinhado da aba ativa cair EM CIMA do divisor. */}
-      <div className={cn(cromo, "pt-1.5 pb-0")}>
+      <div className={cn(cromo, 'pt-1.5 pb-0')}>
         {prompt ? <Terminal aria-hidden className="size-3.5 shrink-0" /> : null}
         <TabsList
           variant="line"
@@ -310,7 +294,7 @@ function Corpo({
   // Quebrar em linhas é trabalho do prompt. Sem ele o texto entra inteiro no
   // `<pre>`, que já preserva espaço e quebra — e aí a seleção do recuo devolve
   // exatamente os bytes que a prop trouxe, sem um nó a mais no meio.
-  const linhas = prompt ? codigo.split("\n") : null
+  const linhas = prompt ? codigo.split('\n') : null
 
   return (
     <pre
@@ -327,14 +311,11 @@ function Corpo({
           mais longa quando ele é mais largo. */}
       <code
         ref={refDoCodigo}
-        className={cn(
-          "block w-fit min-w-full font-mono",
-          !linhas && cn("pl-4", recuo)
-        )}
+        className={cn('block w-fit min-w-full font-mono', !linhas && cn('pl-4', recuo))}
       >
         {linhas
           ? linhas.map((linha, i) => {
-              const temTexto = linha.trim() !== ""
+              const temTexto = linha.trim() !== ''
               return (
                 // `min-h-[1lh]` porque bloco vazio tem altura ZERO e o intervalo
                 // entre dois comandos sumiria; `1lh` é uma linha deste mesmo
@@ -347,12 +328,9 @@ function Corpo({
                 // largura, medida na home. Realce que cobre tudo não realça
                 // nada, e ainda esquenta uma superfície que o resto do site
                 // trata como grafite frio.
-                <span key={i} className={cn("block min-h-[1lh] pl-4", recuo)}>
+                <span key={i} className={cn('block min-h-[1lh] pl-4', recuo)}>
                   {temTexto ? (
-                    <span
-                      aria-hidden
-                      className="pr-2 text-code-prompt select-none"
-                    >
+                    <span aria-hidden className="pr-2 text-code-prompt select-none">
                       {prompt}
                     </span>
                   ) : null}

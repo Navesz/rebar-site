@@ -1,7 +1,7 @@
-import { CoreografiaDaEsteira } from "@/components/coreografia-da-home"
-import { PainelDeCodigo } from "@/components/painel-de-codigo"
-import { PASSO_DA_ESTEIRA } from "@/components/passos-da-home"
-import { textos, type Idioma } from "@/conteudo/carregar"
+import { CoreografiaDaEsteira } from '@/components/coreografia-da-home'
+import { PainelDeCodigo } from '@/components/painel-de-codigo'
+import { PASSO_DA_ESTEIRA } from '@/components/passos-da-home'
+import { textos, type Idioma } from '@/conteudo/carregar'
 
 /**
  * A ETIQUETA DE IDIOMA DO PLACAR, e ela NÃO acompanha a página.
@@ -23,7 +23,7 @@ import { textos, type Idioma } from "@/conteudo/carregar"
  * usa; ler daqui é ter uma fonte só. Cravado no `.tsx`, ele seria a segunda —
  * e no dia em que a tag mudar, só uma das duas muda, sem nada acender.
  */
-const IDIOMA_DO_PLACAR = textos("pt-br").tagDeIdioma
+const IDIOMA_DO_PLACAR = textos('pt-br').tagDeIdioma
 
 /**
  * A SEÇÃO EM QUE A RÉGUA RODA — e é onde o GSAP se justifica na home.
@@ -121,10 +121,7 @@ export function EsteiraDoPortao({ idioma }: { idioma: Idioma }) {
                 fita é o óxido que a preenche conforme a rolagem. `origin-top`
                 aqui e não no GSAP: a origem da transformação é geometria do
                 elemento, e escrita na classe ela vale mesmo sem o script. */}
-            <div
-              aria-hidden
-              className="absolute inset-y-0 left-0 w-px overflow-hidden bg-border"
-            >
+            <div aria-hidden className="absolute inset-y-0 left-0 w-px overflow-hidden bg-border">
               {/* `motion-reduce:hidden` NÃO É ENFEITE AQUI — é o conserto de
                   uma fita que MENTIA. Quem a preenche é o `.from({ scaleY: 0 })`
                   da partitura, e aquele `.from()` mora dentro do ramo
@@ -182,7 +179,7 @@ export function EsteiraDoPortao({ idioma }: { idioma: Idioma }) {
                         className="overflow-x-auto rounded-lg border border-code-border bg-code px-4 py-3 text-caption text-code-foreground shadow-raised focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
                       >
                         <code className="block w-fit min-w-full">
-                          {exemplo.saida.split("\n").map((linha, l) => (
+                          {exemplo.saida.split('\n').map((linha, l) => (
                             // `min-h-[1lh]` porque bloco vazio tem altura zero
                             // e o intervalo entre dois trechos sumiria; `1lh` é
                             // uma linha deste mesmo elemento.
@@ -203,9 +200,7 @@ export function EsteiraDoPortao({ idioma }: { idioma: Idioma }) {
                   ) : null}
 
                   {exemplo.nota ? (
-                    <p className="mt-3 text-caption text-muted-foreground">
-                      {exemplo.nota}
-                    </p>
+                    <p className="mt-3 text-caption text-muted-foreground">{exemplo.nota}</p>
                   ) : null}
                 </li>
               ))}
