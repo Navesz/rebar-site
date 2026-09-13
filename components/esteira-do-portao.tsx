@@ -116,7 +116,7 @@ export function EsteiraDoPortao({ idioma }: { idioma: Idioma }) {
             <p className="mt-4 text-lead text-muted-foreground">{uso.resumo}</p>
           </div>
 
-          <div className="relative">
+          <div className="relative min-w-0">
             {/* O TRILHO E A FITA. O trilho é a hairline que existe sempre; a
                 fita é o óxido que a preenche conforme a rolagem. `origin-top`
                 aqui e não no GSAP: a origem da transformação é geometria do

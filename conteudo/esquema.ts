@@ -870,6 +870,12 @@ const formaDosTextos = objeto({
 
   home: objeto({
     titulo: texto(4, 90),
+    escultura: objeto({
+      rotulo: texto(3, 60),
+      dica: texto(3, 80),
+      explorar: texto(3, 40),
+      reunir: texto(3, 40),
+    }),
     // Subtítulo e destaques NÃO levam sentinela, e a linha está escrita aqui de
     // propósito: o corte é entre FATO VERIFICÁVEL do negócio (contato,
     // endereço, domínio, e a descrição que viaja no preview do link) e TEXTO DE

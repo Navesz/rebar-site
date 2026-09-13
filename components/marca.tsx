@@ -1,3 +1,5 @@
+import { useId } from 'react'
+
 import { cn } from '@/lib/utils'
 
 import { FORMAS, LADO, type Barra } from '@/lib/marca'
@@ -8,12 +10,6 @@ import { FORMAS, LADO, type Barra } from '@/lib/marca'
 //
 // A tinta é `currentColor`: o símbolo herda a cor de quem o coloca, então o
 // mesmo componente serve o cabeçalho, o rodapé e o hero sem variante de cor.
-
-// As nervuras são recortes, e recorte em SVG pede máscara — que pede um id.
-// O id é fixo, e não gerado: as máscaras de todas as instâncias teriam
-// exatamente o mesmo conteúdo, então uma só resolve a página inteira. Gerar um
-// id por instância custaria transformar isto em componente de cliente.
-const MASCARA = 'marca-nervuras'
 
 function retangulo(barra: Barra, chave: number, preenchimento: string) {
   const giro = barra.giro
@@ -35,6 +31,9 @@ function retangulo(barra: Barra, chave: number, preenchimento: string) {
 }
 
 export function Marca({ className, ...resto }: React.ComponentProps<'svg'>) {
+  // useId também existe no React de servidor para componentes síncronos.
+  // Cada marca referencia a própria máscara, sem repetir ids no documento.
+  const mascara = useId()
   const tinta = FORMAS.filter((f) => f.operacao === 'tinta')
   const corte = FORMAS.filter((f) => f.operacao === 'corte')
 
@@ -46,11 +45,11 @@ export function Marca({ className, ...resto }: React.ComponentProps<'svg'>) {
       className={cn('size-6 shrink-0', className)}
       {...resto}
     >
-      <mask id={MASCARA} maskUnits="userSpaceOnUse">
+      <mask id={mascara} maskUnits="userSpaceOnUse">
         <rect width={LADO} height={LADO} fill="white" />
         {corte.map((f, i) => retangulo(f.barra, i, 'black'))}
       </mask>
-      <g mask={`url(#${MASCARA})`} fill="currentColor">
+      <g mask={`url(#${mascara})`} fill="currentColor">
         {tinta.map((f, i) => retangulo(f.barra, i, 'currentColor'))}
       </g>
     </svg>

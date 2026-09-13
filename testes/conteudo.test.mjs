@@ -134,6 +134,12 @@ const textosMinimos = () => ({
   og: { alt: 'Cartão de compartilhamento da Padaria do Zé' },
   home: {
     titulo: 'Padaria do Zé',
+    escultura: {
+      rotulo: 'Estrutura em cada camada',
+      dica: 'Mova o cursor para mudar o ângulo',
+      explorar: 'Explorar camadas',
+      reunir: 'Reunir estrutura',
+    },
     subtitulo: 'Pães de fermentação natural assados todo dia de manhã, na Vila Mariana.',
     destaques: [
       {

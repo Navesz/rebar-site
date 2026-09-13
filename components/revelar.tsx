@@ -19,6 +19,8 @@
 import { motion, useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
 
+import { cn } from '@/lib/utils'
+
 export function Revelar({
   children,
   atraso = 0,
@@ -35,28 +37,22 @@ export function Revelar({
 
   return (
     <motion.div
-      className={className}
-      // NÃO HÁ `opacity` NO ESTADO INICIAL, e a ausência é o conserto de um
-      // defeito que estava PUBLICADO. `initial` é o que o Motion escreve no
-      // HTML do servidor: com `opacity: 0` ali, as 15 rotas saíam do build
-      // carregando `style="opacity:0;transform:translateY(16px)"` — medido em
-      // `out/docs/index.html`, `out/pt-br/index.html` e `out/index.html`. Quem
-      // abrisse a página sem o JavaScript do Motion ter rodado — rede que
-      // cortou o pedaço, extensão que bloqueou, aba de fundo com o relógio de
-      // quadros estrangulado — via cabeçalho, barra lateral e RODAPÉ, e nada no
-      // meio. Uma documentação em branco que responde 200.
-      //
-      // O deslocamento pode ficar: 16px de desvio é invisível para quem lê, e
-      // some no primeiro quadro para quem tem JS. Opacidade, não — ela é a
-      // diferença entre ler e não ler. A revelação perde o esmaecer e mantém o
-      // movimento, que é o que ela comunicava de fato.
-      initial={reduzido ? false : { y: 16 }}
+      className={cn('revelar-entrada', className)}
+      // O servidor não conhece a preferência de movimento. O recuo inicial
+      // fica no CSS, que já conhece a mídia antes da hidratação; alternar
+      // `initial` aqui produzia atributos diferentes entre servidor e cliente.
+      // O conteúdo permanece visível mesmo se o JavaScript não carregar.
+      initial={false}
       whileInView={{ y: 0 }}
       // `once` porque animação que repete a cada rolagem vira ruído no terceiro
       // encontro, e a margem negativa dispara um pouco antes da borda para o
       // elemento não chegar já animado quando a rolagem é rápida.
       viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.45, delay: atraso, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: reduzido ? 0 : 0.45,
+        delay: reduzido ? 0 : atraso,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       {children}
     </motion.div>

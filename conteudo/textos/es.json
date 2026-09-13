@@ -9,6 +9,12 @@
     "alt": "Tarjeta para compartir de rebar — el código incorrecto no pasa"
   },
   "home": {
+    "escultura": {
+      "rotulo": "Estructura en cada capa",
+      "dica": "Mueve el cursor para cambiar el ángulo",
+      "explorar": "Explorar capas",
+      "reunir": "Reunir estructura"
+    },
     "titulo": "rebar",
     "subtitulo": "Un verificador que se ejecuta sobre cualquier repositorio, un portón que bloquea el commit cuando se ignora una regla, y un generador que crea el próximo proyecto ya del lado correcto de la raya.",
     "destaques": [

@@ -9,6 +9,12 @@
     "alt": "Cartão de compartilhamento de rebar — faz código errado não passar"
   },
   "home": {
+    "escultura": {
+      "rotulo": "Estrutura em cada camada",
+      "dica": "Mova o cursor para mudar o ângulo",
+      "explorar": "Explorar camadas",
+      "reunir": "Reunir estrutura"
+    },
     "titulo": "rebar",
     "subtitulo": "Um checker que roda contra qualquer repositório, um portão que barra o commit quando a regra é ignorada, e um gerador que fabrica o próximo projeto já do lado certo da régua.",
     "destaques": [

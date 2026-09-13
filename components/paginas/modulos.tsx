@@ -57,13 +57,14 @@ export function Modulos({ idioma }: { idioma: Idioma }) {
       {/* `@container` e não breakpoint de janela: com a trilha da direita
           aberta o artigo perde 14rem, e uma media query daria duas colunas de
           card espremidas justamente na largura em que elas não cabem. */}
-      <div className="@container grid gap-6 @3xl:grid-cols-2">
-        {p.itens.map((modulo, i) => (
-          <div key={modulo.nome} className="h-full">
-            <Revelar atraso={Math.min(i, 4) * 0.06} className="h-full">
-              <Card className="h-full gap-5">
-                <CardHeader>
-                  {/* `text-h3` (20–23px) e não `text-h4` (18px): o NOME DO
+      <div className="@container">
+        <div className="grid grid-cols-1 gap-6 @3xl:grid-cols-2">
+          {p.itens.map((modulo, i) => (
+            <div key={modulo.nome} className="h-full min-w-0">
+              <Revelar atraso={Math.min(i, 4) * 0.06} className="h-full">
+                <Card className="h-full gap-5">
+                  <CardHeader>
+                    {/* `text-h3` (20–23px) e não `text-h4` (18px): o NOME DO
                       MÓDULO é o maior texto do cartão. Estava ao contrário —
                       o número da métrica saía em `text-h3` e o nome em
                       `text-h4`, então em /docs/modules o texto que mais
@@ -72,51 +73,54 @@ export function Modulos({ idioma }: { idioma: Idioma }) {
                       página, mas quem procura um módulo procura pelo nome
                       dele; a métrica só faz sentido depois de saber de qual
                       módulo ela é. */}
-                  <TituloDeSecao id={ancoras[i]} className="font-mono text-h3">
-                    {modulo.nome}
-                  </TituloDeSecao>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{modulo.resumo}</p>
-                </CardHeader>
+                    <TituloDeSecao id={ancoras[i]} className="font-mono text-h3">
+                      {modulo.nome}
+                    </TituloDeSecao>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{modulo.resumo}</p>
+                  </CardHeader>
 
-                {/* `flex-1` para o `mt-auto` do alerta ter contra o que
+                  {/* `flex-1` para o `mt-auto` do alerta ter contra o que
                     empurrar: sem ele os quatro cards da grade alinham o topo e
                     deixam o limite em alturas diferentes, que é onde o olho
                     para de comparar módulo com módulo. */}
-                <CardContent className="flex flex-1 flex-col gap-5">
-                  <PainelDeCodigo
-                    abas={[{ rotulo: modulo.nome, codigo: modulo.comando }]}
-                    prompt="$"
-                    rotulos={rotulosDoPainel}
-                  />
+                  <CardContent className="flex flex-1 flex-col gap-5">
+                    <PainelDeCodigo
+                      abas={[{ rotulo: modulo.nome, codigo: modulo.comando }]}
+                      prompt="$"
+                      rotulos={rotulosDoPainel}
+                    />
 
-                  {modulo.numeros.length ? (
-                    <dl className="flex flex-wrap gap-x-8 gap-y-4 border-y border-border/60 py-4">
-                      {modulo.numeros.map((numero) => (
-                        <div key={numero.rotulo} className="flex min-w-0 flex-col-reverse">
-                          <dt className="text-caption text-muted-foreground">{numero.rotulo}</dt>
-                          {/* `text-h4` (18px): um degrau ABAIXO do nome do
+                    {modulo.numeros.length ? (
+                      <dl className="flex flex-wrap gap-x-8 gap-y-4 border-y border-border/60 py-4">
+                        {modulo.numeros.map((numero) => (
+                          <div key={numero.rotulo} className="flex min-w-0 flex-col-reverse">
+                            <dt className="text-caption text-muted-foreground">{numero.rotulo}</dt>
+                            {/* `text-h4` (18px): um degrau ABAIXO do nome do
                               módulo e dois ACIMA do rótulo — o valor continua
                               sendo o maior texto do par, sem disputar o
                               cartão com o título. */}
-                          <dd className="font-mono text-h4 tabular-nums">{numero.valor}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  ) : null}
+                            <dd className="font-mono text-h4 tabular-nums">{numero.valor}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    ) : null}
 
-                  {/* `bg-muted` sobre o `bg-card` do `Alert`: dentro de um
+                    {/* `bg-muted` sobre o `bg-card` do `Alert`: dentro de um
                       `Card` as duas superfícies são a MESMA cor, e o alerta
                       desapareceria no fundo em que está apoiado. */}
-                  <Alert className="mt-auto bg-muted/60 px-3 py-2.5">
-                    <CircleAlert aria-hidden />
-                    <AlertTitle>{p.rotuloLimite}</AlertTitle>
-                    <AlertDescription className="leading-relaxed">{modulo.limite}</AlertDescription>
-                  </Alert>
-                </CardContent>
-              </Card>
-            </Revelar>
-          </div>
-        ))}
+                    <Alert className="mt-auto bg-muted/60 px-3 py-2.5">
+                      <CircleAlert aria-hidden />
+                      <AlertTitle>{p.rotuloLimite}</AlertTitle>
+                      <AlertDescription className="leading-relaxed">
+                        {modulo.limite}
+                      </AlertDescription>
+                    </Alert>
+                  </CardContent>
+                </Card>
+              </Revelar>
+            </div>
+          ))}
+        </div>
       </div>
     </ArtigoDeDoc>
   )

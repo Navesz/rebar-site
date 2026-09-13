@@ -350,6 +350,231 @@
   mask-image: var(--nervura-mascara);
 }
 
+/* As superfícies da escultura são materiais, separados dos tokens de texto:
+   o aço mantém profundidade nos dois temas, sem inverter o objeto. */
+.escultura {
+  --escultura-aco-luz: oklch(0.72 0.023 255);
+  --escultura-aco-meio: oklch(0.39 0.024 258);
+  --escultura-aco-sombra: oklch(0.23 0.023 258);
+  --escultura-oxido-luz: oklch(0.82 0.132 67);
+  --escultura-oxido-meio: oklch(0.65 0.168 45);
+  --escultura-oxido-sombra: oklch(0.43 0.105 39);
+  --giro-x: -12deg;
+  --giro-y: -24deg;
+  --separacao: 0px;
+  position: relative;
+  min-width: 0;
+  margin: 2.5rem 0 0;
+  isolation: isolate;
+}
+
+.escultura[data-separada='true'] {
+  --separacao: 52px;
+}
+
+.escultura-definicoes {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.escultura-cenario {
+  position: relative;
+  height: 19rem;
+  perspective: 900px;
+  pointer-events: none;
+}
+
+.escultura-halo {
+  position: absolute;
+  inset: -5% -10%;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    color-mix(in oklch, var(--brand) 13%, transparent),
+    transparent 67%
+  );
+}
+
+.escultura-orbita {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 88%;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in oklch, var(--brand) 22%, transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(58deg) rotateZ(-28deg);
+}
+
+.escultura-orbita-interna {
+  width: 105%;
+  border-color: color-mix(in oklch, var(--muted-foreground) 16%, transparent);
+  border-style: dashed;
+  transform: translate(-50%, -50%) rotateX(58deg) rotateZ(28deg);
+}
+
+.escultura-sombra {
+  position: absolute;
+  bottom: 2%;
+  left: 23%;
+  width: 58%;
+  height: 12%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in oklch, var(--escultura-aco-sombra) 25%, transparent),
+    transparent 70%
+  );
+  filter: blur(9px);
+  transform: rotate(-8deg);
+}
+
+.escultura-volume {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  width: 15.5rem;
+  aspect-ratio: 1;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateX(var(--giro-x)) rotateY(var(--giro-y)) rotateZ(-9deg);
+}
+
+.escultura-fatia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: var(--escultura-aco-sombra);
+  transform: translateZ(calc(var(--profundidade) + var(--grupo) * var(--separacao)));
+}
+
+.escultura-fatia[data-superficie='aco'] {
+  fill: url('#escultura-aco');
+}
+
+.escultura-fatia[data-superficie='oxido'] {
+  fill: url('#escultura-oxido');
+  stroke: var(--escultura-oxido-luz);
+  stroke-width: 0.22;
+}
+
+.escultura-mira {
+  position: absolute;
+  width: 0.65rem;
+  height: 0.65rem;
+  color: var(--brand-border);
+  opacity: 0.65;
+}
+
+.escultura-mira::before,
+.escultura-mira::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  content: '';
+}
+
+.escultura-mira::after {
+  transform: rotate(90deg);
+}
+
+.escultura-mira-superior {
+  top: 10%;
+  right: 12%;
+}
+
+.escultura-mira-inferior {
+  bottom: 12%;
+  left: 10%;
+}
+
+.escultura-legenda {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.escultura-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.escultura-controle:disabled,
+.escultura-dica {
+  visibility: hidden;
+}
+
+.escultura-dica {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .escultura-dica {
+    visibility: visible;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .revelar-entrada {
+    transform: translateY(16px);
+  }
+
+  .escultura-volume {
+    transition: transform 450ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .escultura-fatia {
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revelar-entrada {
+    transform: none !important;
+  }
+}
+
+@media (width >= 48rem) {
+  .hero-com-escultura {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .hero-conteudo {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+  }
+
+  .escultura {
+    margin: 0 -1rem 0 0;
+  }
+
+  .escultura-cenario {
+    height: 22rem;
+  }
+
+  .escultura-volume {
+    width: clamp(15.5rem, 29vw, 19rem);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

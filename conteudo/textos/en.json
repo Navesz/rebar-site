@@ -9,6 +9,12 @@
     "alt": "rebar share card — wrong code doesn't get through"
   },
   "home": {
+    "escultura": {
+      "rotulo": "Structure in every layer",
+      "dica": "Move your cursor to change the angle",
+      "explorar": "Explore layers",
+      "reunir": "Reassemble"
+    },
     "titulo": "rebar",
     "subtitulo": "A checker that runs against any repository, a gate that blocks the commit when a rule is ignored, and a generator that builds your next project already on the right side of the line.",
     "destaques": [
