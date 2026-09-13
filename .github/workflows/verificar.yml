@@ -1,6 +1,6 @@
 # O portão deste projeto. Dois passos, e os dois rodam igual na sua máquina:
 #   npm run verificar
-#   npx --yes github:Navesz/rebar .
+#   npx --yes github:Navesz/rebar#134f1126e65758781f962681b2e01a7b753c1689 .
 #
 # A MATRIZ EXISTE POR UM MOTIVO MEDIDO. O defeito de portabilidade que matou o
 # projeto anterior — um `execFileSync("npx")` que não existe como executável no
@@ -85,8 +85,12 @@ jobs:
       # A régua do rebar, por cima do que este repositório verifica de si mesmo.
       # Exit 0 é a única aprovação: 1 reprovou, 2 alvo inválido, 3 recorte
       # parcial, 127 o ferramental quebrou — todos derrubam o job.
+      #
+      # FIXADO NUM COMMIT, e não no nome. Sem o `#sha`, cada push no rebar mudava
+      # o veredito deste CI na hora, e código remoto sem revisão rodava aqui.
+      # Para atualizar, troque o sha pelo de um commit da main do rebar.
       - name: régua do rebar
-        run: npx --yes github:Navesz/rebar .
+        run: npx --yes github:Navesz/rebar#134f1126e65758781f962681b2e01a7b753c1689 .
 
   # ─────────────────────────────────────────────────────────────── publicação
   #
