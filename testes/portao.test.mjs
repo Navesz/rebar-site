@@ -318,7 +318,7 @@ test('o package.json declara o que o CI invoca', () => {
   // A regra `ci-gateia` do rebar cobra que o CI ALCANCE o que o repositório
   // tem. O CI roda um comando só, `npm run verificar`; se este script deixar
   // de encadear os outros, o CI passa a aprovar sem ter olhado.
-  for (const nome of ['lint', 'typecheck', 'test']) {
+  for (const nome of ['format:check', 'lint', 'typecheck', 'test']) {
     if (!scripts[nome]) continue
     // Dentro de template literal, `\b` é o caractere BACKSPACE, não a borda de
     // palavra — a regex vira /<bs>lint<bs>/ e nunca casa. Custou uma execução
