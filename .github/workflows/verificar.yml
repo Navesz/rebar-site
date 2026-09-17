@@ -1,6 +1,6 @@
 # O portão deste projeto. Dois passos, e os dois rodam igual na sua máquina:
 #   npm run verificar
-#   npx --yes https://codeload.github.com/Navesz/rebar/tar.gz/134f1126e65758781f962681b2e01a7b753c1689 .
+#   npx --yes https://codeload.github.com/Navesz/rebar/tar.gz/9f78d9b6e02f2d8c22bc5bfb67fbdd23de2ac2bc .
 #
 # A MATRIZ EXISTE POR UM MOTIVO MEDIDO. O defeito de portabilidade que matou o
 # projeto anterior — um `execFileSync("npx")` que não existe como executável no
@@ -94,7 +94,7 @@ jobs:
       # constructor" para essa forma, nos dois sistemas. Para atualizar, troque o
       # sha no fim da URL pelo de um commit da main do rebar.
       - name: régua do rebar
-        run: npx --yes https://codeload.github.com/Navesz/rebar/tar.gz/134f1126e65758781f962681b2e01a7b753c1689 .
+        run: npx --yes https://codeload.github.com/Navesz/rebar/tar.gz/9f78d9b6e02f2d8c22bc5bfb67fbdd23de2ac2bc .
 
   # ─────────────────────────────────────────────────────────────── publicação
   #
