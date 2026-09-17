@@ -141,9 +141,9 @@ jobs:
       # artefato de build no repositório é uma das coisas que o rebar acusa.
       - run: npm run build
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: out
       - id: publicacao
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
