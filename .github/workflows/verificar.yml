@@ -1,6 +1,6 @@
 # O portão deste projeto. Dois passos, e os dois rodam igual na sua máquina:
 #   npm run verificar
-#   npx --yes github:Navesz/rebar .
+#   npx --yes https://codeload.github.com/Navesz/rebar/tar.gz/9f78d9b6e02f2d8c22bc5bfb67fbdd23de2ac2bc .
 #
 # A MATRIZ EXISTE POR UM MOTIVO MEDIDO. O defeito de portabilidade que matou o
 # projeto anterior — um `execFileSync("npx")` que não existe como executável no
@@ -85,8 +85,16 @@ jobs:
       # A régua do rebar, por cima do que este repositório verifica de si mesmo.
       # Exit 0 é a única aprovação: 1 reprovou, 2 alvo inválido, 3 recorte
       # parcial, 127 o ferramental quebrou — todos derrubam o job.
+      #
+      # FIXADO NUM COMMIT, e não no nome. Sem o sha, cada push no rebar mudava o
+      # veredito deste CI na hora, e código remoto sem revisão rodava aqui.
+      #
+      # O tarball do commit, e não `github:Navesz/rebar#<sha>`: medido, o npm 10
+      # que vem com o Node 22 do runner sai com "GitFetcher requires an Arborist
+      # constructor" para essa forma, nos dois sistemas. Para atualizar, troque o
+      # sha no fim da URL pelo de um commit da main do rebar.
       - name: régua do rebar
-        run: npx --yes github:Navesz/rebar .
+        run: npx --yes https://codeload.github.com/Navesz/rebar/tar.gz/9f78d9b6e02f2d8c22bc5bfb67fbdd23de2ac2bc .
 
   # ─────────────────────────────────────────────────────────────── publicação
   #
