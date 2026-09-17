@@ -3,14 +3,14 @@
   "nomeDoIdioma": "English",
   "titulo": "rebar — wrong code doesn't get through",
   "gabaritoDeTitulo": "%s · rebar",
-  "descricao": "A checker, a commit gate and a project generator that stop wrong code from shipping. Zero runtime dependencies, Apache-2.0.",
+  "descricao": "A checker, a prompt-injection scanner, a commit gate and a project generator that stop wrong code from shipping. Zero runtime dependencies, Apache-2.0.",
   "nomeCurto": "rebar",
   "og": {
     "alt": "rebar share card — wrong code doesn't get through"
   },
   "home": {
     "titulo": "rebar",
-    "subtitulo": "A checker that runs against any repository, a gate that blocks the commit when a rule is ignored, and a generator that builds your next project already on the right side of the line.",
+    "subtitulo": "A checker that runs against any repository, a scanner for known prompt-injection signatures, a gate that blocks the commit when a rule is ignored, and a generator that starts your next project passing.",
     "destaques": [
       {
         "titulo": "The problem, measured across 161 commits",
@@ -30,7 +30,7 @@
       },
       {
         "titulo": "The generator: this page came out of it",
-        "texto": "npx github:Navesz/rebar novo my-site creates a static Next app with the gate already inside and an MCP server that serves the rules to whatever AI opens the project. Then it runs the checker on what it just made."
+        "texto": "npx github:Navesz/rebar new my-site creates a static Next app with the gate already inside and an MCP server that serves the rules to whatever AI opens the project. Then it runs the checker on what it just made."
       },
       {
         "titulo": "What is not proven yet",
@@ -55,7 +55,7 @@
         },
         {
           "titulo": "Start a project already on the right side of the line",
-          "comando": "npx github:Navesz/rebar novo padaria-do-ze",
+          "comando": "npx github:Navesz/rebar new padaria-do-ze",
           "nota": "Creates a static Next app with the gate inside, hooks, CI on a Windows and Linux matrix, and an MCP server that serves the rules to whatever AI opens the project."
         },
         {
@@ -77,8 +77,8 @@
         {
           "titulo": "The scoreboard for one repository",
           "comando": "npx github:Navesz/rebar .",
-          "saida": "rebar-check · prumo\n  ✓ editorconfig       tem .editorconfig\n  ✗ dependabot         sem dependabot nem renovate\n  ✓ ci                 tem CI\n  – typecheck          não tem TypeScript\n  11 de 13  ·  1 não se aplica",
-          "nota": "The dash is the third state. Before it existed, an empty folder with an empty .git/ scored 8 of 14 and tied with rebar itself. The checker prints in Brazilian Portuguese."
+          "saida": "rebar-check · prumo\n  ✓ editorconfig       has an .editorconfig\n  ✓ dependabot         automated dependency updates\n  ✓ ci                 has CI\n  ✗ ci-gates           the CI reaches the verification the repository has  the CI does not reach: lint\n  – orphan-schema      no orphan JSON Schema  no .schema.json in the repository\n  14 of 17  ·  1 not applicable  ·  2 warning(s)",
+          "nota": "The dash is the third state. Before it existed, an empty folder with an empty .git/ scored 8 of 14 and tied with rebar itself. An excerpt: five of the rules and the closing line, from a real run on 2026-09-17 against another repository of mine."
         },
         {
           "titulo": "Several repositories at once",
@@ -135,17 +135,21 @@
           "numeros": [
             {
               "rotulo": "rules",
-              "valor": "3"
+              "valor": "17"
             },
             {
-              "rotulo": "all deterministic",
-              "valor": "yes"
+              "rotulo": "deterministic",
+              "valor": "12"
+            },
+            {
+              "rotulo": "heuristic",
+              "valor": "5"
             }
           ]
         },
         {
           "nome": "rebar-new",
-          "comando": "npx github:Navesz/rebar novo my-site",
+          "comando": "npx github:Navesz/rebar new my-site",
           "resumo": "The generator. It emits a static Next app with the gate inside, commit hooks, CI on a Windows and Linux matrix, an MCP server, and a content schema that fails the build when the data is a plausible placeholder.",
           "limite": "One preset only, the site. App and API are blocked by declared non-scope until the site preset is used unmodified on two sites.",
           "numeros": [
@@ -163,11 +167,11 @@
           "numeros": [
             {
               "rotulo": "steps",
-              "valor": "16"
+              "valor": "27"
             },
             {
               "rotulo": "proof cases",
-              "valor": "57"
+              "valor": "190"
             },
             {
               "rotulo": "levels",
