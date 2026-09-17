@@ -3,14 +3,14 @@
   "nomeDoIdioma": "Español",
   "titulo": "rebar — el código incorrecto no pasa",
   "gabaritoDeTitulo": "%s · rebar",
-  "descricao": "Un verificador, un portón de commit y un generador de proyectos que impiden que el código incorrecto llegue a producción. Cero dependencias, Apache-2.0.",
+  "descricao": "Verificador, escáner de prompt injection, portón de commit y generador de proyectos que impiden que el código incorrecto pase. Cero dependencias, Apache-2.0.",
   "nomeCurto": "rebar",
   "og": {
     "alt": "Tarjeta para compartir de rebar — el código incorrecto no pasa"
   },
   "home": {
     "titulo": "rebar",
-    "subtitulo": "Un verificador que se ejecuta sobre cualquier repositorio, un portón que bloquea el commit cuando se ignora una regla, y un generador que crea el próximo proyecto ya del lado correcto de la raya.",
+    "subtitulo": "Un verificador para cualquier repositorio, un escáner de firmas conocidas de prompt injection, un portón que bloquea el commit cuando se ignora una regla, y un generador que ya empieza del lado correcto.",
     "destaques": [
       {
         "titulo": "El problema, medido en 161 commits",
@@ -30,7 +30,7 @@
       },
       {
         "titulo": "El generador: esta página salió de él",
-        "texto": "npx github:Navesz/rebar novo mi-sitio crea un Next estático con el portón ya dentro y un servidor MCP que sirve las reglas a la IA que abra el proyecto. Después pasa la raya por lo que acaba de crear."
+        "texto": "npx github:Navesz/rebar new mi-sitio crea un Next estático con el portón ya dentro y un servidor MCP que sirve las reglas a la IA que abra el proyecto. Después pasa la raya por lo que acaba de crear."
       },
       {
         "titulo": "Lo que todavía no está probado",
@@ -55,7 +55,7 @@
         },
         {
           "titulo": "Empezar un proyecto ya del lado correcto de la raya",
-          "comando": "npx github:Navesz/rebar novo padaria-do-ze",
+          "comando": "npx github:Navesz/rebar new padaria-do-ze",
           "nota": "Crea un Next estático con el portón dentro, hooks, CI en matriz de Windows y Linux, y un servidor MCP que sirve las reglas a la IA que abra el proyecto."
         },
         {
@@ -77,8 +77,8 @@
         {
           "titulo": "El marcador de un repositorio",
           "comando": "npx github:Navesz/rebar .",
-          "saida": "rebar-check · prumo\n  ✓ editorconfig       tem .editorconfig\n  ✗ dependabot         sem dependabot nem renovate\n  ✓ ci                 tem CI\n  – typecheck          não tem TypeScript\n  11 de 13  ·  1 não se aplica",
-          "nota": "El guion es el tercer estado. Antes de existir, una carpeta vacía con un .git/ vacío sacaba 8 de 14 y empataba con el propio rebar. El verificador imprime en portugués de Brasil."
+          "saida": "rebar-check · prumo\n  ✓ editorconfig       has an .editorconfig\n  ✓ dependabot         automated dependency updates\n  ✓ ci                 has CI\n  ✗ ci-gates           the CI reaches the verification the repository has  the CI does not reach: lint\n  – orphan-schema      no orphan JSON Schema  no .schema.json in the repository\n  14 of 17  ·  1 not applicable  ·  2 warning(s)",
+          "nota": "El guion es el tercer estado. Antes de existir, una carpeta vacía con un .git/ vacío sacaba 8 de 14 y empataba con el propio rebar. Es un recorte: cinco reglas y la línea final, de una ejecución real del 17/09/2026 contra otro repositorio mío. El verificador imprime en inglés."
         },
         {
           "titulo": "Varios repositorios de una vez",
@@ -135,17 +135,21 @@
           "numeros": [
             {
               "rotulo": "reglas",
-              "valor": "3"
+              "valor": "17"
             },
             {
-              "rotulo": "todas deterministas",
-              "valor": "sí"
+              "rotulo": "deterministas",
+              "valor": "12"
+            },
+            {
+              "rotulo": "heurísticas",
+              "valor": "5"
             }
           ]
         },
         {
           "nome": "rebar-new",
-          "comando": "npx github:Navesz/rebar novo mi-sitio",
+          "comando": "npx github:Navesz/rebar new mi-sitio",
           "resumo": "El generador. Emite un Next estático con el portón dentro, hooks de commit, CI en matriz de Windows y Linux, servidor MCP y un esquema de contenido que tumba el build cuando el dato es un placeholder plausible.",
           "limite": "Un solo preset, el sitio. App y API están bloqueados por no-alcance declarado hasta que el preset de sitio se use sin modificaciones en dos sitios.",
           "numeros": [
@@ -163,11 +167,11 @@
           "numeros": [
             {
               "rotulo": "pasos",
-              "valor": "16"
+              "valor": "27"
             },
             {
               "rotulo": "casos de prueba",
-              "valor": "57"
+              "valor": "190"
             },
             {
               "rotulo": "niveles",
